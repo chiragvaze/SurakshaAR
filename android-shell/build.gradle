@@ -1,0 +1,11 @@
+// Versions match the Gradle project that Unity 2022.3 exports (AGP 7.4.x / Gradle 7.5.1),
+// so the exported :unityLibrary module builds unchanged inside this shell.
+plugins {
+    id 'com.android.application' version '7.4.2' apply false
+    id 'com.android.library' version '7.4.2' apply false
+    id 'org.jetbrains.kotlin.android' version '1.8.22' apply false
+}
+
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SurakshaAR</string>
+    <!-- Required by the Unity library (UnityPlayer view content description). -->
+    <string name="game_view_content_description">AR training view</string>
+    <string name="ar_launch_failed">AR trainer could not start. Please try again.</string>
+    <string name="ar_bad_result">AR result was invalid and was not saved.</string>
+    <string name="ar_unavailable">AR is not available on this phone (ARCore/camera). Use the phone training instead.</string>
+</resources>

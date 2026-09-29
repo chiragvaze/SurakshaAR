@@ -105,6 +105,37 @@ test('bridge: Android.launchAR(module, lang) is called when present', () => {
   }
 });
 
+test('bridge: onARError reports cancellation, stores nothing, sanitizes the code', () => {
+  freshWorker();
+  let notified = null;
+  SA.bridge.onResult((o) => { notified = o; });
+  assert.deepEqual(globalThis.SurakshaAR.onARError('user_closed'), { ok: false, cancelled: true, error: 'user_closed' });
+  assert.deepEqual(notified, { ok: false, cancelled: true, error: 'user_closed' });
+  assert.equal(globalThis.SurakshaAR.onARError('<script>').error, 'unknown');
+  assert.equal(globalThis.SurakshaAR.onARError(42).error, 'unknown');
+  assert.equal(SA.store.get().attempts.length, 0);
+  SA.bridge.onResult(null);
+});
+
+test('bridge: after AR is unusable on this phone, Start falls back to the web trainer', () => {
+  const calls = [];
+  globalThis.Android = { launchAR: (m, l) => calls.push([m, l]) };
+  try {
+    SA.bridge.resetARAvailability();
+    globalThis.SurakshaAR.onARError('user_closed');
+    assert.equal(SA.bridge.launch('fire_explosion', 'en'), 'ar', 'closing AR keeps AR available');
+    for (const code of ['ar_unsupported', 'camera_denied', 'launch_failed']) {
+      SA.bridge.resetARAvailability();
+      globalThis.SurakshaAR.onARError(code);
+      assert.equal(SA.bridge.launch('fire_explosion', 'en'), 'web', code);
+    }
+    assert.equal(calls.length, 1);
+  } finally {
+    SA.bridge.resetARAvailability();
+    delete globalThis.Android;
+  }
+});
+
 test('bridge: Unity result JSON enters the same pipeline (SurakshaAR.onARResult)', () => {
   freshWorker();
   let notified = null;

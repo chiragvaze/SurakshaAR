@@ -6,6 +6,8 @@
  *                    module: "fire_explosion" | "gas_confined", lang: "en" | "hi" | "sat"
  *   Android -> Web:  window.SurakshaAR.onARResult(json)
  *                    json: {"module":"fire_explosion","score":100,"wrong":0,"completed":true}
+ *                    window.SurakshaAR.onARError(code)   AR closed without a result
+ *                    code: user_closed | ar_unsupported | camera_denied | launch_failed | bad_params | bad_result
  *
  * When window.Android is absent (every Phase 1 browser run), launch() returns "web" and
  * the browser scenario engine runs the same assessment. Both paths end in
@@ -16,9 +18,12 @@
   var SA = root.SA = root.SA || {};
 
   var resultListener = null;
+  // Set when AR cannot run on this phone; later launches use the web trainer instead.
+  var arUnusable = false;
+  var UNUSABLE_CODES = ['ar_unsupported', 'camera_denied', 'launch_failed'];
 
   function isARAvailable() {
-    return !!(root.Android && typeof root.Android.launchAR === 'function');
+    return !arUnusable && !!(root.Android && typeof root.Android.launchAR === 'function');
   }
 
   /** @returns {'ar'|'web'} which trainer was started */
@@ -52,6 +57,16 @@
     }
   }
 
+  /**
+   * Called by the Android shell when AR closes without a result (user closed it, AR
+   * unsupported, camera denied, launch failed...). Never creates an attempt.
+   */
+  function receiveARError(code) {
+    var c = typeof code === 'string' && /^[a-z_]{1,40}$/.test(code) ? code : 'unknown';
+    if (UNUSABLE_CODES.indexOf(c) !== -1) arUnusable = true;
+    return report({ ok: false, cancelled: true, error: c });
+  }
+
   function report(outcome) {
     if (resultListener) resultListener(outcome);
     return outcome;
@@ -61,10 +76,13 @@
     isARAvailable: isARAvailable,
     launch: launch,
     receiveARResult: receiveARResult,
+    receiveARError: receiveARError,
+    resetARAvailability: function () { arUnusable = false; },
     onResult: function (fn) { resultListener = fn; }
   };
 
   // Global entry point the Android shell will call via evaluateJavascript().
   root.SurakshaAR = root.SurakshaAR || {};
   root.SurakshaAR.onARResult = receiveARResult;
+  root.SurakshaAR.onARError = receiveARError;
 })(typeof globalThis !== 'undefined' ? globalThis : window);

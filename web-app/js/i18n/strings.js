@@ -152,6 +152,7 @@
     'err.storageUnavailable': 'This phone cannot save data. Progress will be lost when the app closes.',
     'err.moduleUnavailable': 'This training module is not available.',
     'err.resultRejected': 'The training result could not be accepted. Please train again.',
+    'err.arUnavailable': 'AR training could not run on this phone. Press Start again to train on the phone screen.',
     'err.certFailed': 'The certificate could not be created.',
 
     'sat.notice': 'Santali text is under review. Some text is shown in Hindi.',
@@ -333,6 +334,7 @@
     'err.storageUnavailable': 'यह फ़ोन डेटा सहेज नहीं पा रहा। ऐप बंद होने पर प्रगति मिट जाएगी।',
     'err.moduleUnavailable': 'यह प्रशिक्षण मॉड्यूल उपलब्ध नहीं है।',
     'err.resultRejected': 'प्रशिक्षण परिणाम स्वीकार नहीं हो सका। कृपया फिर से प्रशिक्षण लें।',
+    'err.arUnavailable': 'इस फ़ोन पर AR प्रशिक्षण नहीं चल सका। फ़ोन स्क्रीन पर प्रशिक्षण के लिए फिर से शुरू करें दबाएँ।',
     'err.certFailed': 'प्रमाणपत्र नहीं बन सका।',
 
     'sat.notice': 'संताली अनुवाद की समीक्षा जारी है। कुछ पाठ हिन्दी में दिखाया गया है।',

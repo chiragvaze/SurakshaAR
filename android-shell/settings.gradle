@@ -1,0 +1,25 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+// The Unity AR trainer, exported by unity-ar (menu SurakshaAR > 4. Export Android Library,
+// or build.sh). It is a build artifact and is not committed.
+def unityExport = new File(settingsDir, '../unity-ar/Builds/AndroidExport')
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+        flatDir { dirs new File(unityExport, 'unityLibrary/libs') }
+    }
+}
+
+rootProject.name = 'SurakshaAR'
+include ':app'
+include ':unityLibrary'
+project(':unityLibrary').projectDir = new File(unityExport, 'unityLibrary')

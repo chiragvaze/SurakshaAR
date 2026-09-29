@@ -1,0 +1,66 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.surakshaar.shell'
+    compileSdk 33
+    ndkPath project(':unityLibrary').android.ndkDirectory.absolutePath
+
+    defaultConfig {
+        applicationId 'com.surakshaar.app'
+        minSdk 29
+        targetSdk 33
+        versionCode 2
+        versionName '0.2.0-m1'
+        ndk { abiFilters 'arm64-v8a' }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            // Hackathon sideload build: signed with the debug key. Use a real keystore for store release.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions { jvmTarget = '11' }
+
+    sourceSets {
+        main.assets.srcDirs += "$buildDir/generated/webassets"
+    }
+
+    // Same as Unity's exported launcher: keep Unity data files uncompressed.
+    aaptOptions {
+        noCompress = ['.unity3d', '.ress', '.resource', '.obb', '.bundle', '.unityexp'] + unityStreamingAssets.tokenize(', ')
+        ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~'
+    }
+
+    packagingOptions {
+        jniLibs { useLegacyPackaging true }
+    }
+}
+
+// Copy the unchanged Phase 1 web app into assets/web (single source of truth: ../web-app).
+tasks.register('copyWebApp', Copy) {
+    from("$rootDir/../web-app") {
+        include 'index.html', 'sw.js', 'css/**', 'js/**'
+    }
+    into "$buildDir/generated/webassets/web"
+}
+preBuild.dependsOn 'copyWebApp'
+
+dependencies {
+    implementation project(':unityLibrary')
+    implementation fileTree(dir: project(':unityLibrary').getProjectDir().toString() + '/libs', include: ['*.jar'])
+    implementation 'androidx.activity:activity-ktx:1.7.2'
+    implementation 'androidx.webkit:webkit:1.7.0'
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20231013'
+}

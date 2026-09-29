@@ -122,8 +122,14 @@
 
     // Future Unity result (Phase 2) lands here through the same pipeline as the web trainer.
     SA.bridge.onResult(function (outcome) {
-      if (outcome.ok) navigate('#/result');
-      else ui.toast(SA.i18n.t('err.resultRejected'), 'error');
+      if (outcome.ok) { navigate('#/result'); return; }
+      if (outcome.cancelled) {
+        // AR closed without a result: clear "Opening AR…" and explain if AR can't run here.
+        if (outcome.error !== 'user_closed') ui.toast(SA.i18n.t('err.arUnavailable'), 'error');
+        render({ keepScroll: true });
+        return;
+      }
+      ui.toast(SA.i18n.t('err.resultRejected'), 'error');
     });
 
     root.addEventListener('hashchange', function () { render(); });
