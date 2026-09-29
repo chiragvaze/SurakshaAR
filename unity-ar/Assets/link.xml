@@ -1,0 +1,17 @@
+<!--
+  Keep engine classes that are only created at runtime (GameObject.CreatePrimitive / AddComponent).
+  Without this, Unity's engine code stripping removes them because no scene references them,
+  and on device CreatePrimitive logs "class 'CapsuleCollider' doesn't exist" and option tap
+  targets (BoxCollider) cannot be added.
+-->
+<linker>
+  <assembly fullname="UnityEngine.PhysicsModule">
+    <type fullname="UnityEngine.BoxCollider" preserve="all" />
+    <type fullname="UnityEngine.SphereCollider" preserve="all" />
+    <type fullname="UnityEngine.CapsuleCollider" preserve="all" />
+    <type fullname="UnityEngine.MeshCollider" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.TextRenderingModule">
+    <type fullname="UnityEngine.TextMesh" preserve="all" />
+  </assembly>
+</linker>

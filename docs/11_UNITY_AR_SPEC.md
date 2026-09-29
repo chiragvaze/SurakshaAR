@@ -81,3 +81,41 @@ If AR library merge fails, use the two-app deep-link architecture.
   - Fallback content is out of view when the phone points at the floor; the hint text should say "look ahead".
   - A "referenced script is missing" warning is logged once at startup and needs investigating.
   - The merged manifest contains an INTERNET permission from the ARCore/UnityWebRequest packages.
+
+## Implementation status (Milestone 2: Fire AR on the shared engine)
+- **Engine:**
+  - `Scripts/Scenario/Scenario.cs`: content model, `LocalizedText` fallback, and `ScenarioSession` (shuffled options, one answer per step, shared score formula).
+  - `ScenarioValidator.cs`: same rules as the web app.
+  - `Scripts/AR/ARScenarioController.cs`: module-agnostic flow: place → step → tap → feedback → result → `AndroidBridge.SendResult`.
+- **Layout:**
+  - Three options in a concave arc, radius 0.7 m (±40°), 0.4 m above the floor.
+  - Each option has a thin pole and floor marker, a billboard label and a 0.40 × 0.66 × 0.34 m BoxCollider tap target (`OptionTag`).
+  - A per-step hazard cue sits behind the arc.
+- **Fire props (`PropFactory`), unlit primitives, no textures except text:**
+  - Step 1: exit sign, lift, window; cue: alarm beacon with flames.
+  - Step 2: CO₂ extinguisher (black horn), water bucket, foam extinguisher; cue: electrical panel on fire.
+  - Step 3: crawling figure, upright figure, door with back arrow; cue: smoke layer above clearer air.
+  - Other IDs get a generic marker until their props are added (Gas: Milestone 3).
+- **Feedback:**
+  - The chosen option shows "✓ Correct" (green) or "✕ Not safe" (red) and pulses.
+  - After a wrong answer the safe option is revealed as "✓ Safe answer"; nothing is revealed before an answer.
+  - The bottom panel shows the "why" text with Continue / See result.
+  - Duplicate taps are ignored.
+- **Re-placement:** a tap that misses the options moves the area only while placing, or when it was auto-placed by the fallback.
+- **EditMode tests:** `Assets/Tests/Editor/ScenarioEngineTests.cs` plus `AndroidBridgeTests.cs` (20 tests).
+
+### Milestone 2 device test (2026-09-29, Redmi Note 11 / Android 13)
+- **English Fire, played by hand:**
+  - Round 1 (water at step 2) gave `wrong=1 score=67`, NOT PASSED.
+  - "Train again", then all correct, gave `wrong=0 score=100`, PASSED.
+  - Result JSON matched the contract both times.
+- **Hindi and Santali (launched with `--es lang hi|sat` Intent extras):**
+  - Devanagari is correctly shaped by the native renderer.
+  - The Hindi TTS voice is available.
+  - Santali uses its module title and falls back to Hindi for everything else, without errors.
+- **Invalid module (`--es module machinery`):** shows the error screen; "Back to app" sends `cancel bad_params`. No crash.
+- **Placement:** worked on a detected plane and via fallback. 26–30 FPS during training. No crash-buffer entries.
+- **Fixes found on the device:**
+  - `Assets/link.xml` keeps the collider classes that are only created at runtime; engine stripping had removed them.
+  - The arc was narrowed to ±30° (0.7 m chord) to fit the phone view.
+  - The step hazard cue is moved behind and beside the arc.

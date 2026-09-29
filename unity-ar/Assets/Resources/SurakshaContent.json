@@ -1,0 +1,466 @@
+{
+  "generatedFrom": "docs/25_SCENARIO_CONTENT.json + web-app/js/i18n/strings.js (npm run export:unity) - do not edit",
+  "version": "1.0",
+  "modules": [
+    {
+      "id": "fire_explosion",
+      "title": {
+        "en": "Fire & Explosion",
+        "hi": "आग और विस्फोट",
+        "sat": "आग आर विस्फोट"
+      },
+      "steps": [
+        {
+          "id": "fire_01_exit",
+          "correct": "exit_sign",
+          "options": [
+            "exit_sign",
+            "lift",
+            "window"
+          ],
+          "prompt": {
+            "en": "Fire alarm! Which way do you leave the building?",
+            "hi": "आग का अलार्म! आप इमारत से किस रास्ते बाहर निकलेंगे?",
+            "sat": ""
+          },
+          "why": {
+            "en": "Always use the marked exit route. Lifts can stop during a fire and windows are not safe exits.",
+            "hi": "हमेशा चिह्नित निकास मार्ग का उपयोग करें। आग में लिफ़्ट रुक सकती है और खिड़की सुरक्षित रास्ता नहीं है।",
+            "sat": ""
+          },
+          "optionText": [
+            {
+              "en": "Follow the Exit sign",
+              "hi": "निकास (Exit) चिह्न के पीछे जाएँ",
+              "sat": ""
+            },
+            {
+              "en": "Take the lift",
+              "hi": "लिफ़्ट से जाएँ",
+              "sat": ""
+            },
+            {
+              "en": "Climb out of a window",
+              "hi": "खिड़की से बाहर कूदें",
+              "sat": ""
+            }
+          ]
+        },
+        {
+          "id": "fire_02_extinguisher",
+          "correct": "co2",
+          "options": [
+            "co2",
+            "water",
+            "foam"
+          ],
+          "prompt": {
+            "en": "An electrical panel is on fire. Which extinguisher do you use?",
+            "hi": "बिजली के पैनल में आग लगी है। आप कौन सा अग्निशामक इस्तेमाल करेंगे?",
+            "sat": ""
+          },
+          "why": {
+            "en": "Use CO₂ on electrical fires. Water and foam conduct electricity and can give an electric shock.",
+            "hi": "बिजली की आग पर CO₂ का उपयोग करें। पानी और फ़ोम में बिजली बहती है, इससे करंट लग सकता है।",
+            "sat": ""
+          },
+          "optionText": [
+            {
+              "en": "CO₂ extinguisher",
+              "hi": "CO₂ अग्निशामक",
+              "sat": ""
+            },
+            {
+              "en": "Water",
+              "hi": "पानी",
+              "sat": ""
+            },
+            {
+              "en": "Foam",
+              "hi": "फ़ोम",
+              "sat": ""
+            }
+          ]
+        },
+        {
+          "id": "fire_03_smoke",
+          "correct": "crawl_low",
+          "options": [
+            "crawl_low",
+            "run_upright",
+            "go_back"
+          ],
+          "prompt": {
+            "en": "The corridor is filling with smoke. How do you move?",
+            "hi": "गलियारे में धुआँ भर रहा है। आप कैसे आगे बढ़ेंगे?",
+            "sat": ""
+          },
+          "why": {
+            "en": "Cleaner air stays near the floor. Keep low and keep moving to the exit.",
+            "hi": "साफ़ हवा फ़र्श के पास रहती है। नीचे झुके रहें और निकास की ओर बढ़ते रहें।",
+            "sat": ""
+          },
+          "optionText": [
+            {
+              "en": "Crawl low under the smoke",
+              "hi": "धुएँ के नीचे झुककर रेंगें",
+              "sat": ""
+            },
+            {
+              "en": "Run standing upright",
+              "hi": "सीधे खड़े होकर दौड़ें",
+              "sat": ""
+            },
+            {
+              "en": "Go back inside",
+              "hi": "वापस अंदर जाएँ",
+              "sat": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gas_confined",
+      "title": {
+        "en": "Gas Leak & Confined Space",
+        "hi": "गैस रिसाव और सीमित स्थान",
+        "sat": "गैस रिसाव आर सीमित ठाँव"
+      },
+      "steps": [
+        {
+          "id": "gas_01_zone",
+          "correct": "red_zone",
+          "options": [
+            "red_zone",
+            "open_area",
+            "office"
+          ],
+          "prompt": {
+            "en": "A gas alarm is sounding. Which area is the gas hazard zone?",
+            "hi": "गैस का अलार्म बज रहा है। गैस खतरे का क्षेत्र कौन सा है?",
+            "sat": ""
+          },
+          "why": {
+            "en": "The red-marked zone is where the gas is leaking. Stay out and warn others.",
+            "hi": "लाल चिह्नित क्षेत्र में गैस रिस रही है। उससे दूर रहें और दूसरों को सावधान करें।",
+            "sat": ""
+          },
+          "optionText": [
+            {
+              "en": "Red leak zone",
+              "hi": "लाल रिसाव क्षेत्र",
+              "sat": ""
+            },
+            {
+              "en": "Open area",
+              "hi": "खुला क्षेत्र",
+              "sat": ""
+            },
+            {
+              "en": "Office",
+              "hi": "कार्यालय",
+              "sat": ""
+            }
+          ]
+        },
+        {
+          "id": "gas_02_ppe",
+          "correct": "detector_breathing",
+          "options": [
+            "detector_breathing",
+            "cap_gloves",
+            "no_ppe"
+          ],
+          "prompt": {
+            "en": "You must enter a confined space. What do you wear?",
+            "hi": "आपको एक सीमित स्थान (टैंक/गड्ढा) में जाना है। आप क्या पहनेंगे?",
+            "sat": ""
+          },
+          "why": {
+            "en": "A confined space can have toxic gas or too little oxygen. Carry a gas detector and wear a breathing set.",
+            "hi": "सीमित स्थान में ज़हरीली गैस या कम ऑक्सीजन हो सकती है। गैस डिटेक्टर रखें और श्वास उपकरण पहनें।",
+            "sat": ""
+          },
+          "optionText": [
+            {
+              "en": "Gas detector + breathing set",
+              "hi": "गैस डिटेक्टर + श्वास उपकरण",
+              "sat": ""
+            },
+            {
+              "en": "Cap + gloves",
+              "hi": "टोपी + दस्ताने",
+              "sat": ""
+            },
+            {
+              "en": "No PPE",
+              "hi": "कोई सुरक्षा उपकरण नहीं",
+              "sat": ""
+            }
+          ]
+        },
+        {
+          "id": "gas_03_buddy",
+          "correct": "attendant",
+          "options": [
+            "attendant",
+            "nobody",
+            "phone_later"
+          ],
+          "prompt": {
+            "en": "Who must stay outside while you work in the confined space?",
+            "hi": "जब आप सीमित स्थान के अंदर काम करें, तब बाहर किसे रहना चाहिए?",
+            "sat": ""
+          },
+          "why": {
+            "en": "A standby attendant watches you the whole time and raises the alarm at once if something goes wrong.",
+            "hi": "स्टैंडबाय अटेंडेंट पूरे समय आप पर नज़र रखता है और कुछ गलत होने पर तुरंत अलार्म देता है।",
+            "sat": ""
+          },
+          "optionText": [
+            {
+              "en": "A standby attendant",
+              "hi": "एक स्टैंडबाय अटेंडेंट (सहायक)",
+              "sat": ""
+            },
+            {
+              "en": "Nobody",
+              "hi": "कोई नहीं",
+              "sat": ""
+            },
+            {
+              "en": "Call someone later",
+              "hi": "बाद में किसी को फ़ोन करेंगे",
+              "sat": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "strings": [
+    {
+      "key": "ar.autoPlaceIn",
+      "en": "No floor found yet. Placing automatically in {s} s…",
+      "hi": "अभी फ़र्श नहीं मिला। {s} सेकंड में अपने आप रखा जाएगा…",
+      "sat": ""
+    },
+    {
+      "key": "ar.back",
+      "en": "Back to app",
+      "hi": "ऐप पर लौटें",
+      "sat": ""
+    },
+    {
+      "key": "ar.complete",
+      "en": "Training complete",
+      "hi": "प्रशिक्षण पूरा हुआ",
+      "sat": ""
+    },
+    {
+      "key": "ar.err.badParams",
+      "en": "Unknown training module or language. Returning to the app.",
+      "hi": "अज्ञात प्रशिक्षण मॉड्यूल या भाषा। ऐप पर लौट रहे हैं।",
+      "sat": ""
+    },
+    {
+      "key": "ar.err.cameraDenied",
+      "en": "Camera permission is needed for AR training. Allow Camera for this app in Settings, then try again.",
+      "hi": "AR प्रशिक्षण के लिए कैमरा अनुमति ज़रूरी है। सेटिंग्स में इस ऐप को कैमरा की अनुमति दें और फिर प्रयास करें।",
+      "sat": ""
+    },
+    {
+      "key": "ar.err.content",
+      "en": "Training content could not be loaded.",
+      "hi": "प्रशिक्षण सामग्री लोड नहीं हो सकी।",
+      "sat": ""
+    },
+    {
+      "key": "ar.err.unsupported",
+      "en": "This phone cannot run AR (ARCore). You can train on the phone screen instead.",
+      "hi": "यह फ़ोन AR (ARCore) नहीं चला सकता। आप फ़ोन स्क्रीन पर प्रशिक्षण ले सकते हैं।",
+      "sat": ""
+    },
+    {
+      "key": "ar.exit",
+      "en": "Exit",
+      "hi": "बाहर निकलें",
+      "sat": ""
+    },
+    {
+      "key": "ar.finish",
+      "en": "Finish",
+      "hi": "समाप्त करें",
+      "sat": ""
+    },
+    {
+      "key": "ar.lookAhead",
+      "en": "The training area is in front of you. Look ahead.",
+      "hi": "प्रशिक्षण क्षेत्र आपके सामने है। सामने देखें।",
+      "sat": ""
+    },
+    {
+      "key": "ar.moveHint",
+      "en": "Tap the floor to move the training area.",
+      "hi": "प्रशिक्षण क्षेत्र हटाने के लिए फ़र्श को छुएँ।",
+      "sat": ""
+    },
+    {
+      "key": "ar.placeHint",
+      "en": "Point the phone at the floor. When the amber area appears, tap it to place the training.",
+      "hi": "फ़ोन को फ़र्श की ओर करें। पीला क्षेत्र दिखने पर उसे छूकर प्रशिक्षण रखें।",
+      "sat": ""
+    },
+    {
+      "key": "ar.sending",
+      "en": "Returning to the app…",
+      "hi": "ऐप पर लौट रहे हैं…",
+      "sat": ""
+    },
+    {
+      "key": "ar.standalone",
+      "en": "Test build: no app to return to.",
+      "hi": "टेस्ट बिल्ड: लौटने के लिए कोई ऐप नहीं।",
+      "sat": ""
+    },
+    {
+      "key": "ar.tapOption",
+      "en": "Tap the safest choice.",
+      "hi": "सबसे सुरक्षित विकल्प को छुएँ।",
+      "sat": ""
+    },
+    {
+      "key": "ar.trainAgain",
+      "en": "Train again",
+      "hi": "फिर से प्रशिक्षण लें",
+      "sat": ""
+    },
+    {
+      "key": "assess.continue",
+      "en": "Continue",
+      "hi": "आगे बढ़ें",
+      "sat": ""
+    },
+    {
+      "key": "assess.correct",
+      "en": "Correct · safe choice",
+      "hi": "सही · सुरक्षित चुनाव",
+      "sat": ""
+    },
+    {
+      "key": "assess.exit",
+      "en": "Exit",
+      "hi": "बाहर निकलें",
+      "sat": ""
+    },
+    {
+      "key": "assess.finish",
+      "en": "See result",
+      "hi": "परिणाम देखें",
+      "sat": ""
+    },
+    {
+      "key": "assess.safeAnswer",
+      "en": "Safe answer",
+      "hi": "सुरक्षित उत्तर",
+      "sat": ""
+    },
+    {
+      "key": "assess.step",
+      "en": "Step {n}/{total}",
+      "hi": "चरण {n}/{total}",
+      "sat": ""
+    },
+    {
+      "key": "assess.wrong",
+      "en": "Not safe",
+      "hi": "सुरक्षित नहीं",
+      "sat": ""
+    },
+    {
+      "key": "module.fire_explosion.purpose",
+      "en": "Leave safely during a fire and use the right extinguisher.",
+      "hi": "आग लगने पर सुरक्षित बाहर निकलें और सही अग्निशामक का उपयोग करें।",
+      "sat": ""
+    },
+    {
+      "key": "module.gas_confined.purpose",
+      "en": "Spot a gas leak zone and enter confined spaces safely.",
+      "hi": "गैस रिसाव क्षेत्र पहचानें और सीमित स्थान में सुरक्षित प्रवेश करें।",
+      "sat": ""
+    },
+    {
+      "key": "result.failed",
+      "en": "NOT PASSED",
+      "hi": "अनुत्तीर्ण",
+      "sat": ""
+    },
+    {
+      "key": "result.getCert",
+      "en": "Get Certificate",
+      "hi": "प्रमाणपत्र लें",
+      "sat": ""
+    },
+    {
+      "key": "result.module",
+      "en": "Module",
+      "hi": "मॉड्यूल",
+      "sat": ""
+    },
+    {
+      "key": "result.none",
+      "en": "No result yet. Complete a training module first.",
+      "hi": "अभी कोई परिणाम नहीं। पहले एक प्रशिक्षण मॉड्यूल पूरा करें।",
+      "sat": ""
+    },
+    {
+      "key": "result.passMark",
+      "en": "Pass mark: {mark}",
+      "hi": "उत्तीर्ण अंक: {mark}",
+      "sat": ""
+    },
+    {
+      "key": "result.passed",
+      "en": "PASSED",
+      "hi": "उत्तीर्ण",
+      "sat": ""
+    },
+    {
+      "key": "result.retry",
+      "en": "Train Again",
+      "hi": "फिर से प्रशिक्षण लें",
+      "sat": ""
+    },
+    {
+      "key": "result.score",
+      "en": "Score",
+      "hi": "अंक",
+      "sat": ""
+    },
+    {
+      "key": "result.title",
+      "en": "Result",
+      "hi": "परिणाम",
+      "sat": ""
+    },
+    {
+      "key": "result.worker",
+      "en": "Worker",
+      "hi": "कर्मचारी",
+      "sat": ""
+    },
+    {
+      "key": "result.wrong",
+      "en": "Wrong answers",
+      "hi": "गलत उत्तर",
+      "sat": ""
+    },
+    {
+      "key": "result.wrongOf",
+      "en": "{wrong} of {steps}",
+      "hi": "{steps} में से {wrong}",
+      "sat": ""
+    }
+  ]
+}

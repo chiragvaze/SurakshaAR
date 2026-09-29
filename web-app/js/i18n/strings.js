@@ -157,6 +157,24 @@
 
     'sat.notice': 'Santali text is under review. Some text is shown in Hindi.',
 
+    // ---- AR trainer (Unity; exported by tools/export-unity-content.js) ----
+    'ar.placeHint': 'Point the phone at the floor. When the amber area appears, tap it to place the training.',
+    'ar.autoPlaceIn': 'No floor found yet. Placing automatically in {s} s…',
+    'ar.lookAhead': 'The training area is in front of you. Look ahead.',
+    'ar.tapOption': 'Tap the safest choice.',
+    'ar.moveHint': 'Tap the floor to move the training area.',
+    'ar.complete': 'Training complete',
+    'ar.finish': 'Finish',
+    'ar.trainAgain': 'Train again',
+    'ar.sending': 'Returning to the app…',
+    'ar.standalone': 'Test build: no app to return to.',
+    'ar.exit': 'Exit',
+    'ar.err.cameraDenied': 'Camera permission is needed for AR training. Allow Camera for this app in Settings, then try again.',
+    'ar.err.unsupported': 'This phone cannot run AR (ARCore). You can train on the phone screen instead.',
+    'ar.err.badParams': 'Unknown training module or language. Returning to the app.',
+    'ar.err.content': 'Training content could not be loaded.',
+    'ar.back': 'Back to app',
+
     // ---- Fire & Explosion ----
     'scn.fire_01_exit.prompt': 'Fire alarm! Which way do you leave the building?',
     'scn.fire_01_exit.opt.exit_sign': 'Follow the Exit sign',
@@ -338,6 +356,23 @@
     'err.certFailed': 'प्रमाणपत्र नहीं बन सका।',
 
     'sat.notice': 'संताली अनुवाद की समीक्षा जारी है। कुछ पाठ हिन्दी में दिखाया गया है।',
+
+    'ar.placeHint': 'फ़ोन को फ़र्श की ओर करें। पीला क्षेत्र दिखने पर उसे छूकर प्रशिक्षण रखें।',
+    'ar.autoPlaceIn': 'अभी फ़र्श नहीं मिला। {s} सेकंड में अपने आप रखा जाएगा…',
+    'ar.lookAhead': 'प्रशिक्षण क्षेत्र आपके सामने है। सामने देखें।',
+    'ar.tapOption': 'सबसे सुरक्षित विकल्प को छुएँ।',
+    'ar.moveHint': 'प्रशिक्षण क्षेत्र हटाने के लिए फ़र्श को छुएँ।',
+    'ar.complete': 'प्रशिक्षण पूरा हुआ',
+    'ar.finish': 'समाप्त करें',
+    'ar.trainAgain': 'फिर से प्रशिक्षण लें',
+    'ar.sending': 'ऐप पर लौट रहे हैं…',
+    'ar.standalone': 'टेस्ट बिल्ड: लौटने के लिए कोई ऐप नहीं।',
+    'ar.exit': 'बाहर निकलें',
+    'ar.err.cameraDenied': 'AR प्रशिक्षण के लिए कैमरा अनुमति ज़रूरी है। सेटिंग्स में इस ऐप को कैमरा की अनुमति दें और फिर प्रयास करें।',
+    'ar.err.unsupported': 'यह फ़ोन AR (ARCore) नहीं चला सकता। आप फ़ोन स्क्रीन पर प्रशिक्षण ले सकते हैं।',
+    'ar.err.badParams': 'अज्ञात प्रशिक्षण मॉड्यूल या भाषा। ऐप पर लौट रहे हैं।',
+    'ar.err.content': 'प्रशिक्षण सामग्री लोड नहीं हो सकी।',
+    'ar.back': 'ऐप पर लौटें',
 
     'scn.fire_01_exit.prompt': 'आग का अलार्म! आप इमारत से किस रास्ते बाहर निकलेंगे?',
     'scn.fire_01_exit.opt.exit_sign': 'निकास (Exit) चिह्न के पीछे जाएँ',

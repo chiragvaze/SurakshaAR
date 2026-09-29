@@ -8,14 +8,14 @@ using UnityEngine.Android;
 namespace SurakshaAR
 {
     /// <summary>
-    /// Start-up sequence: read launch params -> camera permission -> ARCore availability -> start session.
-    /// Every failure shows a clear message instead of crashing, and lets the user go back.
-    /// Camera frames are only used locally by ARCore; nothing is recorded or uploaded.
+    /// Start-up sequence: launch params -> content -> camera permission -> ARCore availability
+    /// -> start session. Every failure shows a clear message instead of crashing; "Back to app"
+    /// returns a reason code to the shell (cancelAR). Camera frames stay on-device (ARCore only).
     /// </summary>
     public class ARBootstrap : MonoBehaviour
     {
         public ARSession session;
-        public SmokeTestHUD hud;
+        public ARScenarioController controller;
 
         IEnumerator Start()
         {
@@ -23,10 +23,10 @@ namespace SurakshaAR
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
             AndroidBridge.ReadLaunchParams();
-            hud.SetLaunchInfo(AndroidBridge.Module, AndroidBridge.Language, AndroidBridge.LaunchedByShell);
+            if (!controller.LoadContent(AndroidBridge.Module, AndroidBridge.Language)) yield break;
             if (AndroidBridge.InvalidLaunchParams)
             {
-                hud.ShowError("Unknown training module or language requested. Returning to the app.", "bad_params");
+                controller.Fail("ar.err.badParams", "bad_params");
                 yield break;
             }
 
@@ -42,30 +42,26 @@ namespace SurakshaAR
                 while (granted == null) yield return null;
                 if (!granted.Value)
                 {
-                    hud.ShowError("Camera permission is needed for AR training. Allow Camera for this app in Settings > Apps, then try again.", "camera_denied");
+                    controller.Fail("ar.err.cameraDenied", "camera_denied");
                     yield break;
                 }
             }
 #endif
 
             if (ARSession.state == ARSessionState.None || ARSession.state == ARSessionState.CheckingAvailability)
-            {
                 yield return ARSession.CheckAvailability();
-            }
 
             if (ARSession.state == ARSessionState.NeedsInstall)
-            {
-                // Google Play Services for AR missing/outdated. Installing needs network.
-                yield return ARSession.Install();
-            }
+                yield return ARSession.Install(); // Google Play Services for AR missing/outdated (needs network)
 
             if (ARSession.state == ARSessionState.Unsupported || ARSession.state == ARSessionState.NeedsInstall)
             {
-                hud.ShowError("This phone does not support ARCore (or Google Play Services for AR is not installed).", "ar_unsupported");
+                controller.Fail("ar.err.unsupported", "ar_unsupported");
                 yield break;
             }
 
             session.enabled = true;
+            controller.OnSessionStarted();
         }
     }
 }

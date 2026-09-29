@@ -1,17 +1,17 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
 namespace SurakshaAR
 {
     /// <summary>
-    /// Places content in AR (docs/11_UNITY_AR_SPEC.md "Placement"):
-    ///  - tap on a detected horizontal plane -> raycast -> anchor attached to that plane;
-    ///  - no usable horizontal plane within ~3 s of tracking -> auto-place ~1.5 m ahead.
-    /// A later tap on a real plane re-places the content, so fallback never blocks the demo.
-    /// Milestone 1 places a simple test object; Milestone 2 will place the scenario root.
+    /// Places the training area in AR (docs/11_UNITY_AR_SPEC.md "Placement"):
+    ///  - TryPlaceAt(screen point): raycast on a horizontal plane -> anchor attached to that plane;
+    ///  - no horizontal plane within ~3 s of tracking -> auto-place ~1.5 m ahead (fallback).
+    /// Verified on device in Milestone 1. Taps are routed here by ARScenarioController so that
+    /// a tap on an answer option never moves the training area.
     /// </summary>
     public class ARPlacementController : MonoBehaviour
     {
@@ -23,18 +23,17 @@ namespace SurakshaAR
         public ARAnchorManager anchorManager;
         public Camera arCamera;
 
-        [Header("Content")]
-        public GameObject contentPrefab;
+        [Header("Content (re-parented under the anchor)")]
+        public Transform content;
 
         [Header("Fallback")]
         public float fallbackDelaySeconds = 3f;
         public float fallbackDistance = 1.5f;
         [Tooltip("How far below the camera the fallback content is placed (camera is ~hand height).")]
-        public float fallbackDrop = 0.6f;
+        public float fallbackDrop = 1.0f;
 
         public PlacementMode Mode { get; private set; } = PlacementMode.None;
-        public GameObject PlacedContent { get; private set; }
-        public bool FallbackOnlyTest { get; private set; }
+        public event Action<PlacementMode> Placed;
 
         static readonly List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
         ARAnchor m_Anchor;
@@ -47,27 +46,24 @@ namespace SurakshaAR
                 if (planeManager == null || !planeManager.enabled) return 0;
                 int n = 0;
                 foreach (var plane in planeManager.trackables)
-                {
                     if (plane.alignment == PlaneAlignment.HorizontalUp && plane.trackingState == TrackingState.Tracking) n++;
-                }
                 return n;
             }
         }
 
         /// <summary>Seconds left before automatic fallback placement (negative when not counting).</summary>
         public float FallbackCountdown =>
-            Mode == PlacementMode.None && m_TrackingSince >= 0f ? fallbackDelaySeconds - (Time.time - m_TrackingSince) : -1f;
+            Mode == PlacementMode.None && m_TrackingSince >= 0f && HorizontalPlaneCount == 0
+                ? fallbackDelaySeconds - (Time.time - m_TrackingSince) : -1f;
 
         void Update()
         {
             if (ARSession.state != ARSessionState.SessionTracking)
             {
-                m_TrackingSince = -1f;
+                if (Mode == PlacementMode.None) m_TrackingSince = -1f;
                 return;
             }
             if (m_TrackingSince < 0f) m_TrackingSince = Time.time;
-
-            if (!FallbackOnlyTest && TryGetTap(out Vector2 screenPos)) TryPlaceOnPlane(screenPos);
 
             if (Mode == PlacementMode.None && HorizontalPlaneCount == 0 && Time.time - m_TrackingSince >= fallbackDelaySeconds)
             {
@@ -75,35 +71,15 @@ namespace SurakshaAR
             }
         }
 
-        static bool TryGetTap(out Vector2 position)
+        /// <summary>Place (or move) the content onto a horizontal plane under a screen point.</summary>
+        public bool TryPlaceAt(Vector2 screenPos)
         {
-            position = default;
-            if (Input.touchCount > 0)
-            {
-                Touch touch = Input.GetTouch(0);
-                if (touch.phase != TouchPhase.Began) return false;
-                if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId)) return false;
-                position = touch.position;
-                return true;
-            }
-#if UNITY_EDITOR
-            if (Input.GetMouseButtonDown(0) && (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()))
-            {
-                position = Input.mousePosition;
-                return true;
-            }
-#endif
-            return false;
-        }
-
-        bool TryPlaceOnPlane(Vector2 screenPos)
-        {
+            if (ARSession.state != ARSessionState.SessionTracking) return false;
             if (!raycastManager.Raycast(screenPos, s_Hits, TrackableType.PlaneWithinPolygon)) return false;
             foreach (var hit in s_Hits)
             {
                 var plane = planeManager.GetPlane(hit.trackableId);
                 if (plane == null || plane.alignment != PlaneAlignment.HorizontalUp) continue;
-
                 ARAnchor anchor = anchorManager != null ? anchorManager.AttachAnchor(plane, hit.pose) : null;
                 if (anchor == null) anchor = CreateFreeAnchor(hit.pose);
                 SetContent(anchor, PlacementMode.Plane);
@@ -132,33 +108,19 @@ namespace SurakshaAR
 
         void SetContent(ARAnchor anchor, PlacementMode mode)
         {
+            content.SetParent(anchor.transform, false);
+            content.localPosition = Vector3.zero;
             if (m_Anchor != null && m_Anchor != anchor) Destroy(m_Anchor.gameObject);
             m_Anchor = anchor;
 
-            if (PlacedContent == null) PlacedContent = Instantiate(contentPrefab);
-            PlacedContent.transform.SetParent(anchor.transform, false);
-            PlacedContent.transform.localPosition = Vector3.zero;
-
-            // Face the user (yaw only) so labels/options are readable.
-            Vector3 toCamera = Vector3.ProjectOnPlane(arCamera.transform.position - anchor.transform.position, Vector3.up);
-            if (toCamera.sqrMagnitude > 1e-4f) PlacedContent.transform.rotation = Quaternion.LookRotation(-toCamera.normalized, Vector3.up);
+            // Face away from the user (yaw only): local -Z points at the user, +Z is "further away".
+            Vector3 away = Vector3.ProjectOnPlane(anchor.transform.position - arCamera.transform.position, Vector3.up);
+            if (away.sqrMagnitude > 1e-4f) content.rotation = Quaternion.LookRotation(away.normalized, Vector3.up);
+            content.gameObject.SetActive(true);
 
             Mode = mode;
             Debug.Log($"[Placement] placed via {mode}");
-        }
-
-        /// <summary>Clear placement; optionally hide planes to exercise the fallback path.</summary>
-        public void ResetPlacement(bool fallbackOnlyTest)
-        {
-            FallbackOnlyTest = fallbackOnlyTest;
-            if (m_Anchor != null) Destroy(m_Anchor.gameObject);
-            m_Anchor = null;
-            PlacedContent = null; // destroyed with its anchor parent
-            Mode = PlacementMode.None;
-            m_TrackingSince = ARSession.state == ARSessionState.SessionTracking ? Time.time : -1f;
-
-            planeManager.enabled = !fallbackOnlyTest;
-            foreach (var plane in planeManager.trackables) plane.gameObject.SetActive(!fallbackOnlyTest);
+            Placed?.Invoke(mode);
         }
     }
 }

@@ -113,11 +113,12 @@ namespace SurakshaAR.EditorTools
 
             var planeFill = Material("PlaneFill", "Sprites/Default", new Color(0.94f, 0.64f, 0.01f, 0.25f));
             var planeEdge = Material("PlaneEdge", "Sprites/Default", new Color(0.94f, 0.64f, 0.01f, 0.9f));
-            var cubeMat = Material("TestCube", "Unlit/Color", new Color(0.94f, 0.64f, 0.01f, 1f));
-            var stripeMat = Material("TestCubeStripe", "Unlit/Color", new Color(0.06f, 0.08f, 0.10f, 1f));
+            // Templates for runtime props/labels: referencing them from the scene keeps the shaders in the build.
+            var opaque = Material("PropOpaque", "Unlit/Color", Color.white);
+            var translucent = Material("PropTranslucent", "Sprites/Default", Color.white);
+            var text = Material("TextLabel", "Unlit/Transparent", Color.white);
 
             var planePrefab = CreatePlanePrefab(planeFill, planeEdge);
-            var cubePrefab = CreateTestObjectPrefab(cubeMat, stripeMat);
 
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
@@ -157,19 +158,26 @@ namespace SurakshaAR.EditorTools
             var raycastManager = originGo.AddComponent<ARRaycastManager>();
             var anchorManager = originGo.AddComponent<ARAnchorManager>();
 
-            // Trainer logic + HUD.
+            // Trainer: placement + one scenario engine + HUD + narrator + start-up sequence.
             var trainerGo = new GameObject("AR Trainer");
             var placement = trainerGo.AddComponent<ARPlacementController>();
             placement.raycastManager = raycastManager;
             placement.planeManager = planeManager;
             placement.anchorManager = anchorManager;
             placement.arCamera = cam;
-            placement.contentPrefab = cubePrefab;
-            var hud = trainerGo.AddComponent<SmokeTestHUD>();
-            hud.placement = placement;
+            var hud = trainerGo.AddComponent<TrainerHUD>();
+            var narrator = trainerGo.AddComponent<Narrator>();
+            var controller = trainerGo.AddComponent<ARScenarioController>();
+            controller.placement = placement;
+            controller.hud = hud;
+            controller.narrator = narrator;
+            controller.arCamera = cam;
+            controller.opaqueTemplate = opaque;
+            controller.translucentTemplate = translucent;
+            controller.textTemplate = text;
             var bootstrap = trainerGo.AddComponent<ARBootstrap>();
             bootstrap.session = session;
-            bootstrap.hud = hud;
+            bootstrap.controller = controller;
 
             var eventSystem = new GameObject("EventSystem");
             eventSystem.AddComponent<EventSystem>();
@@ -218,36 +226,6 @@ namespace SurakshaAR.EditorTools
             var prefab = PrefabUtility.SaveAsPrefabAsset(go, "Assets/Prefabs/ARPlaneVisual.prefab");
             UnityEngine.Object.DestroyImmediate(go);
             return prefab;
-        }
-
-        /// <summary>20 cm amber cube with a dark stripe (so rotation/stability is visible), resting on the surface.</summary>
-        static GameObject CreateTestObjectPrefab(Material cubeMat, Material stripeMat)
-        {
-            var root = new GameObject("TestObject");
-            var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.name = "Cube";
-            cube.transform.SetParent(root.transform, false);
-            cube.transform.localScale = Vector3.one * 0.2f;
-            cube.transform.localPosition = new Vector3(0, 0.1f, 0);
-            Unlit(cube, cubeMat);
-            var stripe = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            stripe.name = "Stripe";
-            UnityEngine.Object.DestroyImmediate(stripe.GetComponent<BoxCollider>());
-            stripe.transform.SetParent(root.transform, false);
-            stripe.transform.localScale = new Vector3(0.205f, 0.04f, 0.205f);
-            stripe.transform.localPosition = new Vector3(0, 0.1f, 0);
-            Unlit(stripe, stripeMat);
-            var prefab = PrefabUtility.SaveAsPrefabAsset(root, "Assets/Prefabs/TestObject.prefab");
-            UnityEngine.Object.DestroyImmediate(root);
-            return prefab;
-        }
-
-        static void Unlit(GameObject go, Material mat)
-        {
-            var mr = go.GetComponent<MeshRenderer>();
-            mr.sharedMaterial = mat;
-            mr.shadowCastingMode = ShadowCastingMode.Off;
-            mr.receiveShadows = false;
         }
 
         // ------------------------------------------------------------------ builds
