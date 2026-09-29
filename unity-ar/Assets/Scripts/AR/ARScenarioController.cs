@@ -176,8 +176,6 @@ namespace SurakshaAR
             if (m_Phase == Phase.Placing)
             {
                 StartStep();
-                if (mode == ARPlacementController.PlacementMode.Fallback)
-                    hud.ShowHint(T("ar.lookAhead") + "\n" + T("ar.tapOption"));
             }
             else if (m_Phase == Phase.Asking || m_Phase == Phase.Feedback)
             {
@@ -212,8 +210,11 @@ namespace SurakshaAR
             UpdateHeader();
             string prompt = step.prompt.Get(m_Lang);
             hud.SetPrompt(prompt);
-            if (placement.Mode != ARPlacementController.PlacementMode.Fallback || m_Session.StepIndex > 0)
-                hud.ShowHint(T("ar.tapOption") + (placement.Mode == ARPlacementController.PlacementMode.Fallback ? "\n" + T("ar.moveHint") : ""));
+            // Every step sets its own hint (also after "Train again", which reuses the placed area).
+            bool fallback = placement.Mode == ARPlacementController.PlacementMode.Fallback;
+            string hint = T("ar.tapOption");
+            if (fallback) hint = (m_Session.StepIndex == 0 ? T("ar.lookAhead") + "\n" : "") + hint + "\n" + T("ar.moveHint");
+            hud.ShowHint(hint);
             narrator.Say(prompt, step.prompt.ResolvedLanguage(m_Lang));
         }
 

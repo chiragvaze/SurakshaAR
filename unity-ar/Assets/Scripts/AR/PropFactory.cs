@@ -67,6 +67,17 @@ namespace SurakshaAR
     {
         static Font s_Font;
 
+        /// <summary>Option/step IDs with a dedicated prop (anything else falls back to a generic marker).</summary>
+        public static readonly string[] KnownOptionIds =
+        {
+            "exit_sign", "lift", "window", "co2", "water", "foam", "crawl_low", "run_upright", "go_back",
+            "red_zone", "open_area", "office", "detector_breathing", "cap_gloves", "no_ppe", "attendant", "nobody", "phone_later"
+        };
+        public static readonly string[] KnownContextIds =
+        {
+            "fire_01_exit", "fire_02_extinguisher", "fire_03_smoke", "gas_01_zone", "gas_02_ppe", "gas_03_buddy"
+        };
+
         // ------------------------------------------------------------------ options
 
         public static GameObject BuildOption(string optionId, Palette p)
@@ -119,6 +130,66 @@ namespace SurakshaAR
                     Part(PrimitiveType.Cube, root, Vector3.zero, new Vector3(0.18f, 0.30f, 0.03f), p.Solid(new Color(0.45f, 0.28f, 0.15f)));
                     TextQuad(root, "↩", new Vector3(0, 0.02f, -0.02f), 0.13f, Color.white, Color.clear, p, 120);
                     break;
+                // ---------------- Gas Leak & Confined Space ----------------
+                case "red_zone":
+                    // Red hazard zone: red floor disc, leaking pipe, gas cloud, warning sign.
+                    Part(PrimitiveType.Cylinder, root, new Vector3(0, -0.13f, 0), new Vector3(0.30f, 0.01f, 0.30f), p.Glass(new Color(0.76f, 0.16f, 0.18f, 0.75f)));
+                    Part(PrimitiveType.Cylinder, root, new Vector3(0, -0.07f, 0.02f), new Vector3(0.04f, 0.13f, 0.04f), p.Solid(new Color(0.55f, 0.55f, 0.58f)), new Vector3(0, 0, 90));
+                    GasCloud(root, p, new Vector3(0.02f, 0.02f, 0f), 0.9f);
+                    TextQuad(root, "⚠ GAS", new Vector3(0, 0.13f, -0.02f), 0.16f, Color.white, Palette.Red, p, 60, true, 10, 12f);
+                    break;
+                case "open_area":
+                    // Open outdoor area: grass patch + tree + sun.
+                    Part(PrimitiveType.Cylinder, root, new Vector3(0, -0.13f, 0), new Vector3(0.30f, 0.01f, 0.30f), p.Solid(new Color(0.36f, 0.62f, 0.30f)));
+                    Part(PrimitiveType.Cylinder, root, new Vector3(-0.04f, -0.06f, 0.02f), new Vector3(0.03f, 0.07f, 0.03f), p.Solid(new Color(0.45f, 0.30f, 0.16f)));
+                    Part(PrimitiveType.Sphere, root, new Vector3(-0.04f, 0.06f, 0.02f), new Vector3(0.16f, 0.14f, 0.16f), p.Solid(new Color(0.20f, 0.52f, 0.25f)));
+                    Part(PrimitiveType.Sphere, root, new Vector3(0.10f, 0.12f, 0.03f), Vector3.one * 0.06f, p.Solid(new Color(1f, 0.82f, 0.2f)));
+                    break;
+                case "office":
+                    // Office: desk with monitor + chair.
+                    var wood = p.Solid(new Color(0.55f, 0.38f, 0.22f));
+                    Part(PrimitiveType.Cube, root, new Vector3(0, -0.02f, 0), new Vector3(0.28f, 0.015f, 0.14f), wood);
+                    Part(PrimitiveType.Cube, root, new Vector3(-0.12f, -0.08f, 0), new Vector3(0.015f, 0.11f, 0.12f), wood);
+                    Part(PrimitiveType.Cube, root, new Vector3(0.12f, -0.08f, 0), new Vector3(0.015f, 0.11f, 0.12f), wood);
+                    Part(PrimitiveType.Cube, root, new Vector3(0, 0.05f, 0.03f), new Vector3(0.12f, 0.08f, 0.01f), p.Solid(Palette.Seam));
+                    Part(PrimitiveType.Cube, root, new Vector3(0, 0.05f, 0.024f), new Vector3(0.105f, 0.065f, 0.002f), p.Solid(new Color(0.35f, 0.6f, 0.85f)));
+                    Part(PrimitiveType.Cube, root, new Vector3(0, -0.07f, -0.10f), new Vector3(0.08f, 0.012f, 0.08f), p.Solid(Palette.Slate));
+                    Part(PrimitiveType.Cube, root, new Vector3(0, -0.02f, -0.14f), new Vector3(0.08f, 0.10f, 0.012f), p.Solid(Palette.Slate));
+                    break;
+                case "detector_breathing":
+                    // Portable gas detector (left) + breathing set: cylinder, hose, face mask (right).
+                    GasDetector(root, p, new Vector3(-0.09f, 0f, -0.01f));
+                    BreathingSet(root, p, new Vector3(0.07f, 0f, 0.01f));
+                    break;
+                case "cap_gloves":
+                    // Hard hat + pair of work gloves: not enough for a confined space.
+                    HardHat(root, p, new Vector3(0, 0.03f, 0), new Color(1f, 0.85f, 0.1f));
+                    Glove(root, p, new Vector3(-0.08f, -0.10f, -0.02f), -20f);
+                    Glove(root, p, new Vector3(0.08f, -0.10f, -0.02f), 20f);
+                    break;
+                case "no_ppe":
+                    // Worker with no protective equipment at all.
+                    Person(root, p, Vector3.zero, lying: false, body: new Color(0.45f, 0.55f, 0.75f), helmet: false);
+                    TextQuad(root, "✕", new Vector3(0.11f, 0.10f, -0.03f), 0.08f, Palette.Red, Color.clear, p, 110);
+                    break;
+                case "attendant":
+                    // Standby attendant in hi-vis with a radio, standing at the entry point.
+                    Person(root, p, Vector3.zero, lying: false);
+                    Part(PrimitiveType.Cube, root, new Vector3(0.07f, 0.02f, -0.04f), new Vector3(0.025f, 0.05f, 0.015f), p.Solid(Palette.Seam));
+                    Part(PrimitiveType.Cylinder, root, new Vector3(0.075f, 0.06f, -0.04f), new Vector3(0.004f, 0.02f, 0.004f), p.Solid(Palette.Seam));
+                    break;
+                case "nobody":
+                    // Empty post: a faint outline where the attendant should be.
+                    Person(root, p, Vector3.zero, lying: false, body: new Color(0.8f, 0.8f, 0.8f, 0.25f), helmet: false, ghost: true);
+                    TextQuad(root, "?", new Vector3(0, 0.02f, -0.06f), 0.10f, Palette.Amber, Color.clear, p, 140);
+                    break;
+                case "phone_later":
+                    // Mobile phone + clock: help is only planned for later.
+                    Part(PrimitiveType.Cube, root, new Vector3(-0.05f, 0f, 0f), new Vector3(0.08f, 0.15f, 0.012f), p.Solid(Palette.Seam));
+                    Part(PrimitiveType.Cube, root, new Vector3(-0.05f, 0.005f, -0.007f), new Vector3(0.068f, 0.12f, 0.002f), p.Solid(new Color(0.3f, 0.55f, 0.8f)));
+                    Part(PrimitiveType.Cylinder, root, new Vector3(0.08f, 0.03f, 0f), new Vector3(0.10f, 0.008f, 0.10f), p.Solid(Color.white), new Vector3(90, 0, 0));
+                    TextQuad(root, "⏰", new Vector3(0.08f, 0.03f, -0.012f), 0.08f, Palette.Seam, Color.clear, p, 120);
+                    break;
                 default:
                     Part(PrimitiveType.Cylinder, root, new Vector3(0, -0.08f, 0), new Vector3(0.16f, 0.04f, 0.16f), p.Solid(Palette.Slate));
                     Part(PrimitiveType.Sphere, root, new Vector3(0, 0.03f, 0), new Vector3(0.12f, 0.12f, 0.12f), p.Solid(Palette.Amber));
@@ -135,14 +206,69 @@ namespace SurakshaAR
             TextQuad(root, text, new Vector3(0, -0.01f, -0.053f), 0.08f, textColor, Color.clear, p, 64);
         }
 
-        static void Person(Transform root, Palette p, Vector3 offset, bool lying)
+        static void Person(Transform root, Palette p, Vector3 offset, bool lying, Color? body = null, bool helmet = true, bool ghost = false)
         {
-            var body = Part(PrimitiveType.Capsule, root, offset, new Vector3(0.08f, 0.10f, 0.08f), p.Solid(Palette.Amber),
+            Color bodyColor = body ?? Palette.Amber;
+            Material bodyMat = ghost ? p.Glass(bodyColor) : p.Solid(bodyColor);
+            var bodyGo = Part(PrimitiveType.Capsule, root, offset, new Vector3(0.08f, 0.10f, 0.08f), bodyMat,
                 lying ? new Vector3(0, 0, 90) : new Vector3(0, 0, -12));
             Vector3 head = lying ? offset + new Vector3(-0.15f, 0.01f, 0) : offset + new Vector3(0.03f, 0.15f, 0);
-            Part(PrimitiveType.Sphere, root, head, Vector3.one * 0.07f, p.Solid(new Color(0.55f, 0.38f, 0.26f)));
-            Part(PrimitiveType.Sphere, root, head + new Vector3(0, 0.02f, 0), new Vector3(0.075f, 0.04f, 0.075f), p.Solid(Color.white)); // helmet
-            body.name = "Body";
+            Part(PrimitiveType.Sphere, root, head, Vector3.one * 0.07f, ghost ? bodyMat : p.Solid(new Color(0.55f, 0.38f, 0.26f)));
+            if (helmet) Part(PrimitiveType.Sphere, root, head + new Vector3(0, 0.02f, 0), new Vector3(0.075f, 0.04f, 0.075f), p.Solid(Color.white));
+            bodyGo.name = "Body";
+        }
+
+        static void GasCloud(Transform parent, Palette p, Vector3 at, float size)
+        {
+            var group = new GameObject("GasCloud").transform;
+            group.SetParent(parent, false);
+            group.localPosition = at;
+            group.localScale = Vector3.one * size;
+            var gas = p.Glass(new Color(0.72f, 0.85f, 0.25f, 0.45f));
+            Part(PrimitiveType.Sphere, group, new Vector3(0, 0, 0), new Vector3(0.12f, 0.09f, 0.10f), gas).AddComponent<Flicker>();
+            Part(PrimitiveType.Sphere, group, new Vector3(0.07f, 0.04f, 0.01f), new Vector3(0.09f, 0.07f, 0.08f), gas).AddComponent<Flicker>().phase = 1.7f;
+            Part(PrimitiveType.Sphere, group, new Vector3(-0.06f, 0.05f, -0.01f), new Vector3(0.08f, 0.06f, 0.07f), gas).AddComponent<Flicker>().phase = 3.1f;
+        }
+
+        static void GasDetector(Transform parent, Palette p, Vector3 at)
+        {
+            var g = new GameObject("GasDetector").transform;
+            g.SetParent(parent, false);
+            g.localPosition = at;
+            Part(PrimitiveType.Cube, g, Vector3.zero, new Vector3(0.08f, 0.13f, 0.035f), p.Solid(new Color(1f, 0.8f, 0.05f)));
+            Part(PrimitiveType.Cube, g, new Vector3(0, 0.025f, -0.018f), new Vector3(0.06f, 0.045f, 0.002f), p.Solid(Palette.Seam));
+            TextQuad(g, "O₂ H₂S", new Vector3(0, 0.025f, -0.020f), 0.055f, new Color(0.4f, 1f, 0.5f), Color.clear, p, 56);
+            Part(PrimitiveType.Sphere, g, new Vector3(0, -0.035f, -0.018f), new Vector3(0.02f, 0.02f, 0.006f), p.Solid(Palette.Red));
+        }
+
+        static void BreathingSet(Transform parent, Palette p, Vector3 at)
+        {
+            var g = new GameObject("BreathingSet").transform;
+            g.SetParent(parent, false);
+            g.localPosition = at;
+            Part(PrimitiveType.Cylinder, g, new Vector3(0.03f, -0.01f, 0.02f), new Vector3(0.07f, 0.12f, 0.07f), p.Solid(new Color(0.2f, 0.45f, 0.8f)));
+            Part(PrimitiveType.Cylinder, g, new Vector3(0.03f, 0.125f, 0.02f), new Vector3(0.03f, 0.02f, 0.03f), p.Solid(Palette.Seam));
+            Part(PrimitiveType.Sphere, g, new Vector3(-0.04f, 0.07f, -0.03f), new Vector3(0.08f, 0.09f, 0.04f), p.Solid(Palette.Seam)); // face mask
+            Part(PrimitiveType.Sphere, g, new Vector3(-0.04f, 0.08f, -0.05f), new Vector3(0.055f, 0.035f, 0.01f), p.Glass(new Color(0.7f, 0.9f, 1f, 0.7f))); // visor
+            Part(PrimitiveType.Cylinder, g, new Vector3(-0.005f, 0.04f, -0.005f), new Vector3(0.012f, 0.05f, 0.012f), p.Solid(Palette.Seam), new Vector3(0, 0, 45)); // hose
+        }
+
+        static void HardHat(Transform parent, Palette p, Vector3 at, Color color)
+        {
+            Part(PrimitiveType.Sphere, parent, at, new Vector3(0.14f, 0.09f, 0.14f), p.Solid(color));
+            Part(PrimitiveType.Cylinder, parent, at + new Vector3(0, -0.005f, -0.01f), new Vector3(0.17f, 0.004f, 0.17f), p.Solid(color));
+        }
+
+        static void Glove(Transform parent, Palette p, Vector3 at, float roll)
+        {
+            var mat = p.Solid(new Color(0.95f, 0.5f, 0.1f));
+            var g = new GameObject("Glove").transform;
+            g.SetParent(parent, false);
+            g.localPosition = at;
+            g.localEulerAngles = new Vector3(0, 0, roll);
+            Part(PrimitiveType.Cube, g, Vector3.zero, new Vector3(0.06f, 0.08f, 0.025f), mat);
+            Part(PrimitiveType.Cube, g, new Vector3(0.038f, 0.005f, 0), new Vector3(0.018f, 0.04f, 0.022f), mat);
+            Part(PrimitiveType.Cube, g, new Vector3(0, -0.05f, 0), new Vector3(0.065f, 0.025f, 0.028f), p.Solid(new Color(0.3f, 0.3f, 0.32f)));
         }
 
         // ------------------------------------------------------------------ step context (hazard cues)
@@ -170,6 +296,31 @@ namespace SurakshaAR
                     Part(PrimitiveType.Cube, root, new Vector3(0, 1.15f, -0.2f), new Vector3(1.8f, 0.9f, 0.9f), p.Glass(new Color(0.18f, 0.18f, 0.2f, 0.55f)));
                     Part(PrimitiveType.Cube, root, new Vector3(0, 0.75f, -0.2f), new Vector3(1.8f, 0.1f, 0.9f), p.Glass(new Color(0.3f, 0.3f, 0.32f, 0.3f)));
                     Flames(root, p, new Vector3(-0.4f, 0, 0.2f), 0.9f);
+                    break;
+                case "gas_01_zone":
+                    // Gas alarm (blinking) off to the side. No free-floating gas cloud here: it could sit
+                    // behind a wrong option (e.g. Office) and wrongly suggest that is the hazard zone.
+                    Part(PrimitiveType.Cylinder, root, new Vector3(-0.55f, 0.35f, 0), new Vector3(0.03f, 0.35f, 0.03f), p.Solid(new Color(0.5f, 0.5f, 0.5f)));
+                    Part(PrimitiveType.Cube, root, new Vector3(-0.55f, 0.74f, 0), new Vector3(0.16f, 0.12f, 0.06f), p.Solid(new Color(1f, 0.82f, 0.1f)));
+                    Part(PrimitiveType.Sphere, root, new Vector3(-0.55f, 0.83f, 0), Vector3.one * 0.07f, p.Solid(Palette.Red)).AddComponent<Flicker>().mode = Flicker.Mode.Blink;
+                    break;
+                case "gas_02_ppe":
+                case "gas_03_buddy":
+                    // Confined-space entry: manhole with a yellow/black warning sign.
+                    Part(PrimitiveType.Cylinder, root, new Vector3(0, 0.03f, 0), new Vector3(0.50f, 0.03f, 0.50f), p.Solid(new Color(0.45f, 0.45f, 0.48f)));
+                    Part(PrimitiveType.Cylinder, root, new Vector3(0, 0.062f, 0), new Vector3(0.40f, 0.003f, 0.40f), p.Solid(new Color(0.05f, 0.05f, 0.06f)));
+                    Part(PrimitiveType.Cylinder, root, new Vector3(0.55f, 0.30f, 0), new Vector3(0.025f, 0.30f, 0.025f), p.Solid(new Color(0.5f, 0.5f, 0.5f)));
+                    TextQuad(root, "⚠ CONFINED SPACE", new Vector3(0.55f, 0.64f, -0.02f), 0.30f, Palette.Seam, Palette.Amber, p, 52, true, 14, 10f);
+                    if (stepId == "gas_03_buddy")
+                    {
+                        // A worker is inside: helmet visible in the opening, rope leading out.
+                        HardHat(root, p, new Vector3(0, 0.08f, 0), Color.white);
+                        Part(PrimitiveType.Cylinder, root, new Vector3(-0.28f, 0.07f, 0), new Vector3(0.008f, 0.14f, 0.008f), p.Solid(new Color(1f, 0.55f, 0.1f)), new Vector3(0, 0, 80));
+                    }
+                    else
+                    {
+                        GasCloud(root, p, new Vector3(0, 0.12f, 0), 1.2f);
+                    }
                     break;
                 default:
                     Object.Destroy(root.gameObject);

@@ -119,3 +119,23 @@ If AR library merge fails, use the two-app deep-link architecture.
   - `Assets/link.xml` keeps the collider classes that are only created at runtime; engine stripping had removed them.
   - The arc was narrowed to ±30° (0.7 m chord) to fit the phone view.
   - The step hazard cue is moved behind and beside the arc.
+
+## Implementation status (Milestone 3: Gas Leak & Confined Space AR)
+- **Gas props (`PropFactory`), same engine and layout as Fire:**
+  - Step 1: red leak zone (red disc, leaking pipe, gas cloud, "⚠ GAS"), open area (grass, tree, sun), office (desk, monitor, chair). Cue: gas alarm with blinking light, off to the side.
+  - Step 2: gas detector (O₂/H₂S display) + breathing set (cylinder, mask, hose); hard hat + gloves; worker with no PPE ("✕"). Cue: manhole with a "⚠ CONFINED SPACE" sign and gas inside.
+  - Step 3: standby attendant in hi-vis with a radio; empty post (faint outline, "?"); phone + clock. Cue: manhole with a worker's helmet in the opening and a rope leading out.
+- Step 1 deliberately has no free-floating gas cloud: it could sit behind a wrong option (Office) and imply that option is the hazard.
+- **Shared-engine fix:** every step now sets its own bottom hint, so "Train again" after an auto-placed area no longer shows the previous result card. Fire and Gas both use this path.
+- **Tests:** 26 EditMode tests. New ones check that every scenario option/step has a dedicated prop under the 5k-triangle budget, that Gas scores 100 and 67 with the contract JSON, and that Gas has Hindi text with the Santali→Hindi fallback.
+
+### Milestone 3 device test (2026-09-29, Redmi Note 11 / Android 13)
+- **Gas, played by hand:**
+  - Round with two wrong answers: `score=33`.
+  - All wrong (office, no_ppe, nobody): `score=0`.
+  - All correct (red_zone, detector_breathing, attendant): `score=100`.
+  - After "Train again": red_zone ✓, cap_gloves ✕, attendant ✓ gave `score=67`.
+  - Every payload was `{"module":"gas_confined","score":N,"wrong":N,"completed":true}`.
+- **Hindi Gas:** correctly shaped text; the Hindi TTS voice is usable.
+- **Fire regression:** exit ✓, water ✕, crawl low ✓ gave `score=67`, with the same props and layout as Milestone 2.
+- 27–30 FPS during Gas and Fire training. No crash-buffer entries. APK 17.4 MB with CAMERA and VIBRATE permissions only.
