@@ -67,6 +67,11 @@ Dashboard -> local/seeded worker data
 4. Gradle release build.
 5. Dashboard deployment.
 
+As implemented (Phase 2 Milestone 4, D-028/D-029):
+- Gradle reads the Unity export in place and copies `web-app/` into the build assets, so steps 2–3 need no manual copying.
+- Only the debug build has been built and validated so far. The release build and the dashboard deployment are pending (P3-M4, P3-M5).
+- The dashboard is currently a screen inside the web app (D-016).
+
 ## Architecture fallback
 If Unity Library integration fails by the hour-10 milestone:
 - keep Unity AR as a separate app;

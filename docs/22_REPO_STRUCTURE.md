@@ -59,6 +59,10 @@ web-app/
 ```
 `unity-ar/`, `android-shell/` and `dashboard/` are created in the phases that need them. The Phase 1 dashboard is a `web-app` screen (D-016).
 
+As of `phase2-complete`, `unity-ar/` and `android-shell/` exist. **`dashboard/` has not been created**: the dashboard is `web-app/#/dashboard`. The tree above also omits `25_SCENARIO_CONTENT.json`, which is in `docs/`.
+
+`sw.js` registration fails inside the APK and is non-blocking; there, the app is served from the APK assets instead (D-034).
+
 ## `android-shell/` (Phase 2, Milestone 4)
 ```text
 android-shell/

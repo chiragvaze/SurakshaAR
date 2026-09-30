@@ -40,3 +40,13 @@ The dashboard is primarily a compliance/risk demonstration, not a production wor
 - Refresher Due = `days_since >= 7`. A completed refresher is a new attempt and resets `days_since`.
 - The dashboard shows the 8 seeded workers plus this phone's worker, labelled "this phone", once they have trained. Rows are sorted by risk.
 - **Simulate +7 Days** adds 7 days to `retention.demoOffsetMs` (D-014), capped at 52 weeks. **Reset time** sets it back to 0. The worker home screen's Retention Guard card uses the same logical time.
+
+## Physical verification (P3-M1, 2026-09-30, Redmi Note 11, inside the APK, airplane mode)
+- **Dashboard:** works, with 9 workers (8 seeded plus this phone's worker).
+- **After +7 days:**
+  - This phone's worker went from 0 Green to 35 Amber.
+  - Red count went from 2 to 5 (JH-1003, JH-1004 and JH-1008).
+  - Refresher Due went from 2 workers to all 9.
+  - The Home Retention Guard card showed Amber, risk 35, Refresher Due.
+  - Every value matched the formula.
+- **Reset time:** restored every row and tile exactly, and disabled the Reset button again. See D-033.

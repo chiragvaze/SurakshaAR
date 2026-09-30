@@ -12,6 +12,21 @@
 | Time runs out | protect Fire AR, offline certificate, Hindi, dashboard risk and demo |
 | Scope expands | defer roadmap features |
 
+## Status of fallbacks and open risks (as of 2026-09-30)
+- **Unity Library merge:** succeeded, so the two-app deep-link fallback was not needed (D-028).
+- **Plane detection:** the auto-place fallback is verified on the phone. P3-M1 used it in both Fire and Gas because no floor plane was found. The presenter should point the phone ahead.
+- **Santali audio:** Hindi TTS voice plus Santali text (D-026). Santali text itself still mostly falls back to Hindi; only the greeting and module titles are Santali (D-018).
+- **QR live scan:** not built. Paste and Use Last Certificate are in place and verified on the phone.
+- **Frame drops:** not needed. About 29.9 FPS sustained (Phase 2 M5).
+- **Device lacks ARCore:** the fallback is code-reviewed and unit-tested only. The web app switches to the on-screen trainer after `ar_unsupported`, `camera_denied` or `launch_failed` (D-023).
+- **Open risks:**
+  - D-032, the ARCore crash when the first camera prompt is denied. Mitigation: grant the camera before the demo.
+  - After a camera denial, AR stays off until the app restarts.
+  - D-034, the offline-cache registration failure (non-blocking).
+  - The debug-signed APK, with the release build untested.
+  - Only one phone model has been tested.
+  - The ARCore and Hindi TTS dependencies on the demo phone.
+
 ## Never cut
 - Fire AR
 - signed QR offline verification

@@ -139,3 +139,34 @@ With the Android shell, Start launches AR and no longer creates a web assessment
 - **Recovery:** Android then restarted the app, as it does after a permission change. The web app reloaded with all data intact. The next denied launch showed our "camera permission needed" message and returned `camera_denied`, and the web app fell back to the on-screen trainer.
 - **Why:** XR Plug-in Management initializes ARCore at startup (`InitManagerOnStart`) while our bootstrap is still requesting the permission.
 - **Fix (after the freeze):** initialize the XR loader manually only after the camera permission is granted. It is not changed during the freeze: it alters Unity's startup order, and the failure is contained and recoverable.
+- **Status after P3-M1 (2026-09-30): still OPEN.**
+  - It was not triggered during P3-M1, because camera permission was granted before the demo.
+  - A related limitation also remains: after `camera_denied`, the web app keeps using the on-screen trainer until the app restarts (D-023). There is no in-app "try AR again".
+  - The planned fix is Phase 3 Milestone 2 (P3-M2), which has not started.
+
+## D-033 — P3-M1: full demo journey validated offline on the phone (2026-09-30)
+- **Result: PASS.** The complete 26-step demo journey ran as one continuous session.
+- **Device and build:**
+  - Redmi Note 11, Android 13, Google Play Services for AR 1.56.
+  - The installed APK was `com.surakshaar.app` 0.4.0-m4. Its SHA-256 matched the `phase2-complete` build byte for byte.
+- **Setup:**
+  - App storage was cleared and the camera permission was granted before the run.
+  - The Hindi TTS voice was available and heard.
+  - Airplane mode was ON with Wi-Fi OFF, and there was no active network.
+- **Physically verified for the first time inside the APK:**
+  - the supervisor dashboard;
+  - **Simulate +7 Days** (risk rises, workers turn red);
+  - Refresher Due;
+  - the Home Retention Guard card;
+  - **Reset time**.
+- **No code changes were needed.** The `phase2-complete` implementation was used unchanged.
+- **Observed but deliberately deferred:** the offline-cache (service-worker) registration fails inside the APK (D-034). It is non-blocking.
+- **D-032 stays open.**
+- Full results: `12_ANDROID_BUILD_SPEC.md`, section "Phase 3 Milestone 1 (P3-M1) validation".
+
+## D-034 — Known issue: the offline-cache (service-worker) registration fails inside the APK (P3-M1)
+- **What happens:** at every launch, the web app registers `sw.js` because the page is served over `https://appassets.androidplatform.net`. Precaching then fails, and the WebView console logs `Uncaught (in promise) TypeError: Failed to execute 'addAll' on 'Cache': Request failed`.
+- **Impact:** none observed. The page is served from inside the APK by `WebViewAssetLoader`, so the app loads and works fully offline without the service worker. No error is shown to the user.
+- **Consequence:** the service-worker offline cache is **not** functional inside the APK and must not be described as working there. It still serves its original purpose for phone-browser/PWA runs over http(s).
+- **Stale comments:** comments in `web-app/js/app.js` and `web-app/sw.js` say the service worker is not used for Android assets. That no longer matches the Milestone 4 `https://appassets…` origin.
+- **Decision:** non-blocking technical debt. It is not fixed in the documentation-only P3 update. A fix belongs in a later code milestone, for example not registering the service worker when running inside the Android shell.

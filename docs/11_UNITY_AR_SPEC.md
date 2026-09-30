@@ -33,6 +33,8 @@ Expected conceptual scripts:
 ## Data
 Scenario files can be read from StreamingAssets via UnityWebRequest.
 
+As implemented: content is exported to `Assets/Resources/SurakshaContent.json` and loaded with `Resources.Load`, not from StreamingAssets (D-024).
+
 ## Performance
 - models <5k tris
 - textures <=1024
@@ -81,6 +83,10 @@ If AR library merge fails, use the two-app deep-link architecture.
   - Fallback content is out of view when the phone points at the floor; the hint text should say "look ahead".
   - A "referenced script is missing" warning is logged once at startup and needs investigating.
   - The merged manifest contains an INTERNET permission from the ARCore/UnityWebRequest packages.
+- **Follow-up (status as of 2026-09-30):**
+  - The "look ahead" hint was added. It is `ar.lookAhead`, shown on the first step after an automatic placement.
+  - The INTERNET permission is removed (D-027).
+  - The "referenced script is missing" warning has **not** been recorded as investigated or resolved.
 
 ## Implementation status (Milestone 2: Fire AR on the shared engine)
 - **Engine:**
