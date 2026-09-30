@@ -36,7 +36,7 @@ Show risk increase and `Refresher Due`.
 Anything not needed for these seven steps is secondary.
 
 ## Demo runbook (P3-M4 submission package)
-This order was run end-to-end offline on the Redmi Note 11 with the debug APK (P3-M1, D-033). It was run again as a 24-step smoke test on the **release APK** (P3-M2, D-035). A timed rehearsal and the demo video are still pending (P3-M5).
+This order was run end-to-end offline on the Redmi Note 11 with the debug APK (P3-M1, D-033). It was run again as a 24-step smoke test on the **release APK** (P3-M2, D-035). The timed rehearsal on the release APK passed in P3-M5, taking about 3 min 43 s with no blocking issues (D-039). The demo video is recorded by the team.
 
 ### Presentation constraints
 - **Use the release APK:** `app-release.apk`, SHA-256 `e69b221623d34397c86dec0a4be369f7040384da12dc5353d0eb7c83d9276fd0`.

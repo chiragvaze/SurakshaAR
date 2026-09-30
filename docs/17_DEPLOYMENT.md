@@ -53,7 +53,7 @@ Freeze new features before the final testing/video window.
 - The APK dashboard adds the phone's own worker and attempts.
 - They are **not synchronised**, and there is no cloud sync (D-003, D-004).
 
-## Final submission checklist (P3-M4, as of 2026-09-30)
+## Final submission checklist (FINAL FREEZE, 2026-09-30, D-039)
 `[x]` means evidence exists (the source is in brackets). `[ ]` means not done yet.
 
 ### Technical
@@ -70,26 +70,26 @@ Freeze new features before the final testing/video window.
 - [x] Dashboard URL: https://chiragvaze.github.io/SurakshaAR/#/dashboard (deployed and verified in P3-M4; seeded workers only).
 
 ### Demo
-- [ ] Final demo phone chosen and prepared (checklist in `19_DEMO_SCRIPT.md`). The Redmi Note 11 test phone has the release APK, with test data still on it.
-- [ ] Camera permission granted on the final phone, after clearing storage.
-- [ ] ARCore on the final phone. It is installed on the test phone (1.56); recheck on the final phone.
-- [ ] Hindi TTS on the final phone. It is available on the test phone; recheck.
-- [ ] Airplane mode ON and Wi-Fi OFF on the final phone.
-- [ ] Demo data reset: storage cleared, and the +7 offset reset.
+- [x] Final demo phone prepared: the Redmi Note 11, with the release APK (SHA-256 matching on the device) and no debug build (P3-M5).
+- [x] Camera permission granted after clearing storage (P3-M5).
+- [x] ARCore: Google Play Services for AR 1.56, installed and enabled (P3-M5).
+- [x] Hindi TTS usable (`hi usable=true` in both P3-M5 AR runs).
+- [x] Airplane mode ON, Wi-Fi OFF, no active network (P3-M5).
+- [x] Demo data reset: storage cleared after the rehearsal, Hindi selected, demo worker Ramesh Kumar / JH-2001 ready, and no attempts or certificates (P3-M5).
 - [x] 3–5 minute script: `19_DEMO_SCRIPT.md`, demo order and constraints (P3-M4).
-- [ ] Timed rehearsal.
-- [ ] Demo video (3–5 minutes).
+- [x] Timed rehearsal: 27 steps on the release APK, about 3 min 43 s, no blocking issues (P3-M5).
+- [ ] Demo video (3–5 minutes). The recording sequence is prepared (P3-M5); the video is recorded by the team.
 
-### Evidence (physically verified on the Redmi Note 11, recorded in `12_ANDROID_BUILD_SPEC.md`)
-- [x] Fire AR (Hindi, 100) (P3-M1, P3-M2)
-- [x] Gas AR (Hindi, 100) (P3-M1, P3-M2)
-- [x] Scoring: 100, 67 and 33, with no certificate below 70 (Phase 2 M2–M5; P3-M1/M2)
-- [x] Certificate (P3-M1, P3-M2)
-- [x] QR (P3-M1, P3-M2)
-- [x] Tamper gives INVALID; restore gives VALID (P3-M1, P3-M2)
-- [x] Dashboard (P3-M1, P3-M2)
-- [x] +7 days (P3-M1, P3-M2)
-- [x] Refresher Due (P3-M1, P3-M2)
-- [x] Reset time (P3-M1, P3-M2)
+### Evidence (physically verified on the Redmi Note 11: P3-M1/M2 in `12_ANDROID_BUILD_SPEC.md`, P3-M5 in D-039)
+- [x] Fire AR (Hindi, 100) (P3-M1, P3-M2, P3-M5)
+- [x] Gas AR (Hindi, 100) (P3-M1, P3-M2, P3-M5)
+- [x] Scoring: 100, 67 and 33, with no certificate below 70 (Phase 2 M2–M5; P3-M1/M2/M5)
+- [x] Certificate (P3-M1, P3-M2, P3-M5)
+- [x] QR (P3-M1, P3-M2, P3-M5)
+- [x] Tamper gives INVALID; restore gives VALID (P3-M1, P3-M2, P3-M5)
+- [x] Dashboard (P3-M1, P3-M2, P3-M5)
+- [x] +7 days (P3-M1, P3-M2, P3-M5)
+- [x] Refresher Due (P3-M1, P3-M2, P3-M5)
+- [x] Reset time (P3-M1, P3-M2, P3-M5)
 
 The records are written logs and measurements. Screenshots from P3-M2 exist only on the build machine and the phone, not in the repository. The demo video is the planned visual evidence.

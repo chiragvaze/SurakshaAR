@@ -171,11 +171,11 @@ Advanced PPE CV, AI coach, production backend, cloud sync, production signing in
 ## 16. Implementation status (as of 2026-09-30)
 - **Phase 1:** complete.
 - **Phase 2:** complete and frozen at git tag `phase2-complete`. It also delivered the single-APK Android integration planned for Phase 3 (D-028).
-- **Phase 3:** in progress, not complete.
+- **Phase 3:** COMPLETE / FINAL FREEZE (D-039, tag `v1.0.0-sih-final`).
   - **P3-M1 (full demo-journey validation) is COMPLETE: PASS** (D-033). The whole §13 critical demo journey ran offline, in airplane mode, on a physical Redmi Note 11 with the frozen APK. That includes the dashboard, +7 days, Refresher Due and Reset time.
   - **P3-M2 (release build validation) is COMPLETE: PASS** (D-035). A locally signed, non-production release APK passed the same offline journey on the phone.
   - **P3-M3 (robustness and Santali decision) is COMPLETE: PASS WITH DEFERRALS** (D-036). The D-032 fix is deferred; there is no approved Santali content, so the fallback stays.
   - **P3-M4 (submission package) is COMPLETE: PASS** (D-037, D-038): documentation cleanup, the demo runbook, the demo-phone and submission checklists, and the public dashboard at https://chiragvaze.github.io/SurakshaAR/#/dashboard (seeded workers only, no sync with phones).
-  - **P3-M5 is PENDING:** the final demo phone, a timed rehearsal, the demo video and the final freeze.
+  - **P3-M5 is COMPLETE: PASS** (D-039): the final demo phone, the release-APK rehearsal (about 3 min 43 s, no blocking issues) and the final freeze. The video is recorded by the team.
   - Deferred until after the hackathon: the D-032 fix, and Santali (until approved text exists).
 - Milestone status: `21_PHASE_PLAN.md`. Known issues: `24_DECISION_LOG.md` (D-031, D-032, D-034) and `18_FALLBACKS_AND_RISKS.md`.

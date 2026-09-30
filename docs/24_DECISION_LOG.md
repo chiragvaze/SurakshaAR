@@ -285,3 +285,33 @@ Investigation and decision only. **No product code changed**, and the P3-M2 rele
   - No console errors.
 - **Scope:** the public site shows **seeded demo data only**, stored in each visitor's browser. It is **not** the phone's data and does not sync with the APK. No cloud sync exists (D-003, D-004).
 - **D-034 is unchanged:** it concerns the APK's WebView only. On GitHub Pages, the service worker works as designed.
+
+## D-039 — FINAL FREEZE: SurakshaAR SIH 2026 final frozen prototype (2026-09-30)
+- **P3-M5: PASS.** Phase 3 is **COMPLETE / FINAL FREEZE**. Final tag: `v1.0.0-sih-final`. No further development.
+- **Authoritative release APK** (unchanged since P3-M2, not rebuilt):
+  - `app-release.apk`, `com.surakshaar.app` 0.4.0-m4 (versionCode 4);
+  - 22,798,055 bytes, SHA-256 `e69b221623d34397c86dec0a4be369f7040384da12dc5353d0eb7c83d9276fd0`;
+  - arm64-v8a, minSdk 29, targetSdk 34;
+  - CAMERA and VIBRATE only, no INTERNET, not debuggable;
+  - APK Signature Scheme v2 with the local prototype key (not production or store signing).
+  - The checksum was verified again at the freeze.
+- **Physical validation:** Redmi Note 11 (2201117TI), Android 13, Google Play Services for AR 1.56, in airplane mode with Wi-Fi off. The installed APK's SHA-256 matched the release.
+- **Timed rehearsal on the release APK:** all 27 steps passed, in about **3 min 43 s** from the icon tap to Reset time.
+  - Fire 100 → certificate → QR → VALID → INVALID → VALID → Gas 100 → dashboard → +7 days → Refresher Due → Reset time.
+  - Timings: first frame 1.2 s; AR camera ready 4.9 s (Fire) and 3.6 s (Gas). Fire's automatic placement took about 18 s after tapping Start; Gas took about 8 s.
+  - **No blocking issues.** There were 0 crashes or ANRs.
+- **Final phone state:**
+  - release APK only, camera granted, Hindi selected;
+  - demo worker Ramesh Kumar / JH-2001 ready, with no attempts or certificates;
+  - airplane mode ON.
+- **Public dashboard:** https://chiragvaze.github.io/SurakshaAR/#/dashboard, verified over HTTPS.
+  - 8 seeded workers; +7 days gives 5 Red and 8 Refresher due; Reset time restores the baseline.
+  - It holds seeded data only, with no sync with phones.
+- **Automated tests:** web 72/72, shell 6/6, Unity 26/26 (P3-M5).
+- **Known limitations, unchanged and not fixed:**
+  - **D-032** is deferred (grant camera permission before launching AR).
+  - **D-034** remains open for the APK only.
+  - **Santali** remains the Hindi fallback (D-036).
+  - **Certificate signing** remains demo-only.
+  - **One physical device** remains the tested hardware.
+- **Not part of the freeze:** the 3–5 minute demo video, which the team records using the sequence prepared in P3-M5.

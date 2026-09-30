@@ -132,7 +132,7 @@ Only the worker name and worker ID are collected. Everything is stored on the de
 |---|---|---|
 | 1 | Web/business layer | Complete |
 | 2 | Unity AR + single-APK Android shell | Complete, frozen at git tag `phase2-complete` |
-| 3 | Validation, release and submission | **In progress.** P3-M1 PASS, P3-M2 PASS, P3-M3 PASS WITH DEFERRALS, P3-M4 (submission package + public dashboard) PASS. P3-M5 (final phone, rehearsal, video, freeze) pending. |
+| 3 | Validation, release and submission | **COMPLETE / FINAL FREEZE** (tag `v1.0.0-sih-final`). P3-M1 PASS, P3-M2 PASS, P3-M3 PASS WITH DEFERRALS, P3-M4 PASS, P3-M5 PASS. The full release demo was rehearsed in about 3 min 43 s. |
 
 Milestones: [`docs/21_PHASE_PLAN.md`](docs/21_PHASE_PLAN.md). Decisions and known issues: [`docs/24_DECISION_LOG.md`](docs/24_DECISION_LOG.md).
 
