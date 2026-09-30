@@ -24,7 +24,7 @@ Status as of 2026-09-30. `[x]` means verified, with the evidence noted. `[ ]` me
   - Non-blocking: the D-034 offline-cache console error.
 - [x] Core flow works offline. (Phase 2 M5; P3-M1)
 - [x] No production credentials committed. (Only the disclosed demo HMAC secret, D-005/D-012)
-- [x] README is complete. (P3-M4: capabilities, device validation, release APK identity, limitations. The dashboard URL is still to be added if one is deployed.)
+- [x] README is complete. (P3-M4: capabilities, device validation, release APK identity, limitations and the public dashboard URL.)
 - [x] Repository is reproducible. (Phase 2 M5 rebuild using only Unity's toolchain)
 
 ## Demo
@@ -32,4 +32,4 @@ Status as of 2026-09-30. `[x]` means verified, with the evidence noted. `[ ]` me
 - [ ] Airplane-mode test rehearsed. (Run during Phase 2 M5 and P3-M1; the final rehearsal is pending)
 - [ ] Tamper test rehearsed. (Run during Phase 2 M5 and P3-M1; the final rehearsal is pending)
 - [ ] APK installed on demo phone. (The release APK is installed and validated on the test phone, P3-M2. The final demo phone and a cleared storage state are pending.)
-- [ ] Dashboard accessible. (Works inside the APK. The hosted URL is **not deployed**: the repository is private and Pages is not enabled; see `17_DEPLOYMENT.md`.)
+- [x] Dashboard accessible. (Inside the APK, and publicly at https://chiragvaze.github.io/SurakshaAR/#/dashboard with the seeded workers only; verified in P3-M4, `17_DEPLOYMENT.md`.)

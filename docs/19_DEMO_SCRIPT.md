@@ -81,7 +81,7 @@ Complete this just before the demo. Do not reset the test phone until the final 
 - [ ] Airplane mode is ON and Wi-Fi is OFF.
 - [ ] Optional: the app is opened once to confirm the Welcome screen, with language and worker left for the live demo. Alternatively, pre-select Hindi and pre-create the demo worker, and start the demo at Home.
 - [ ] The certificate flow is ready: nothing is issued until **Get Certificate** is tapped during the demo.
-- [ ] The dashboard is reachable from Home, below the modules. There is no hosted URL (see `17_DEPLOYMENT.md`).
+- [ ] The dashboard is reachable from Home, below the modules. This is the APK dashboard, with the phone's data.
 - [ ] Leftover test files are removed if not needed: for example `/sdcard/p3m2cs/` timing screenshots from P3-M2.
 - [ ] The known-good APK copy is kept on the computer, and not deleted.
 
@@ -89,3 +89,7 @@ Complete this just before the demo. Do not reset the test phone until the final 
 - **Finish** returns the score to the app; **Train again** restarts AR, and **Exit** leaves AR without saving an attempt.
 - The QR is verified on the same phone. Scanning it with another phone's camera only shows the text payload.
 - The certificate signature is demo-only (an HMAC secret inside the app). Say so if asked.
+- **Public dashboard for evaluators:** https://chiragvaze.github.io/SurakshaAR/#/dashboard
+  - It opens in any browser, and asks for a language on the first visit.
+  - It shows the **8 seeded workers only**, with working Simulate +7 Days and Reset time.
+  - It is **not** the phone's data, and it is not synchronised with the APK. Use the APK dashboard in the live demo.

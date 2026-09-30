@@ -267,3 +267,21 @@ Investigation and decision only. **No product code changed**, and the P3-M2 rele
   - a timed rehearsal and the demo video;
   - the dashboard URL and public repository, if approved;
   - the final freeze.
+- **Update (same day):** the owner made the repository public, and the dashboard was deployed to GitHub Pages (D-038). P3-M4 is now COMPLETE: PASS.
+
+## D-038 — P3-M4: the existing static web app is published on GitHub Pages (2026-09-30)
+- **Public dashboard: https://chiragvaze.github.io/SurakshaAR/#/dashboard.** This is the URL reported by GitHub for the deployment and verified live.
+- **How:**
+  - Pages source is **GitHub Actions**. `.github/workflows/pages.yml` publishes only `web-app/index.html`, `sw.js`, `css/` and `js/`, the same file set as the APK.
+  - There is no build step, no new dependencies and no new frontend tooling.
+  - The first run, `36751977536` for commit `7439947`, succeeded.
+- **No product code changed:**
+  - All paths are relative, and the hash routes and service worker work unchanged under the `/SurakshaAR/` subpath.
+  - The APK was not rebuilt. The P3-M2 release APK (`e69b2216…d9276fd0`) stays the known-good build.
+- **Verified live** (headless Edge 154):
+  - Home, CSS and scripts load. The service worker activates on the HTTPS origin and precaches 28 files.
+  - The dashboard shows 8 seeded workers.
+  - +7 days: 5 Red, 8 Refresher due. Reset time restores the baseline.
+  - No console errors.
+- **Scope:** the public site shows **seeded demo data only**, stored in each visitor's browser. It is **not** the phone's data and does not sync with the APK. No cloud sync exists (D-003, D-004).
+- **D-034 is unchanged:** it concerns the APK's WebView only. On GitHub Pages, the service worker works as designed.

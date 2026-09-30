@@ -23,7 +23,7 @@ Supervisors also get a view of retention risk and refresher due dates. The full 
 | Certificate after a pass, with a locally generated **QR** | Works |
 | **Offline verification:** VALID; one changed character gives **INVALID** (tamper detection) | Works (demo signature, see security) |
 | **Retention Guard** risk score (Green / Amber / Red) on the worker's home screen | Works |
-| **Supervisor dashboard:** 8 seeded workers + this phone's worker | Works inside the app. **No hosted URL yet** (see below). |
+| **Supervisor dashboard:** 8 seeded workers + this phone's worker | Works inside the app. A public copy with the seeded workers is on GitHub Pages (see below). |
 | **Simulate +7 Days**: risk rises and **Refresher Due** appears; **Reset time** | Works |
 
 Not built, by design: a backend or cloud sync, live QR camera scanning, AI or PPE detection, and more safety domains (see [`docs/23_ROADMAP.md`](docs/23_ROADMAP.md)).
@@ -34,6 +34,19 @@ Not built, by design: a backend or cloud sync, live QR camera scanning, AI or PP
 - **P3-M2:** the same journey as a 24-step smoke test on the **release APK**.
 - **Result:** every step passed. There were no crashes during the validated flow, and saved data survived AR sessions and a cold relaunch. Details: [`docs/12_ANDROID_BUILD_SPEC.md`](docs/12_ANDROID_BUILD_SPEC.md), decision log D-033 and D-035.
 - **Automated tests:** web 72/72, shell 6/6, Unity 26/26.
+
+## Public dashboard
+**https://chiragvaze.github.io/SurakshaAR/#/dashboard** (site root: https://chiragvaze.github.io/SurakshaAR/)
+
+| | Public dashboard (GitHub Pages) | APK dashboard |
+|---|---|---|
+| What it is | The same static `web-app/`, published by `.github/workflows/pages.yml` | The same dashboard screen, running inside the Android app |
+| Workers shown | **8 seeded demo workers only** | 8 seeded workers **plus this phone's worker** and their real attempts |
+| Data | Stored in the visitor's own browser | Stored on the phone |
+| Sync | **None.** The two are not connected, and there is no cloud sync. | None (offline-first) |
+| Simulate +7 Days / Reset time | Works | Works |
+
+On a first visit, the site asks for a language, then opens the dashboard.
 
 ## Release APK (known-good build)
 | | |
@@ -59,7 +72,7 @@ Install with `adb install app-release.apk`. If a debug build is installed, unins
 - **Hindi TTS dependency:** without a Hindi text-to-speech voice, AR is text-only.
 - **One physical phone model tested** (Redmi Note 11).
 - If no floor plane is found, AR content is **placed automatically** about 3 s later. Point the phone ahead.
-- **Dashboard URL:** not currently deployed. The dashboard is fully usable inside the app, or locally with `npm start` → `http://127.0.0.1:5173/#/dashboard`.
+- **The public dashboard shows seeded demo data only.** It is not synchronised with any phone (see above).
 
 ## Demo
 The 3–5 minute demo order, presenter constraints and the final demo-phone checklist are in [`docs/19_DEMO_SCRIPT.md`](docs/19_DEMO_SCRIPT.md). The submission checklist is in [`docs/17_DEPLOYMENT.md`](docs/17_DEPLOYMENT.md).
@@ -119,7 +132,7 @@ Only the worker name and worker ID are collected. Everything is stored on the de
 |---|---|---|
 | 1 | Web/business layer | Complete |
 | 2 | Unity AR + single-APK Android shell | Complete, frozen at git tag `phase2-complete` |
-| 3 | Validation, release and submission | **In progress.** P3-M1 PASS, P3-M2 PASS, P3-M3 PASS WITH DEFERRALS. P3-M4 (submission package) in progress. P3-M5 (final phone, rehearsal, video, freeze) pending. |
+| 3 | Validation, release and submission | **In progress.** P3-M1 PASS, P3-M2 PASS, P3-M3 PASS WITH DEFERRALS, P3-M4 (submission package + public dashboard) PASS. P3-M5 (final phone, rehearsal, video, freeze) pending. |
 
 Milestones: [`docs/21_PHASE_PLAN.md`](docs/21_PHASE_PLAN.md). Decisions and known issues: [`docs/24_DECISION_LOG.md`](docs/24_DECISION_LOG.md).
 
