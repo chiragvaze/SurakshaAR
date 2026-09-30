@@ -27,9 +27,10 @@
     var status = h('div', { class: 'briefing__status', role: 'status' });
 
     function start(fresh) {
-      if (fresh || !session) SA.training.startSession(moduleId);
+      // AR (Android shell) runs its own session in Unity; only the browser trainer needs a web session.
       var mode = SA.bridge.launch(moduleId, ctx.lang);
       if (mode === 'ar') { status.textContent = t('briefing.arOpening'); return; }
+      if (fresh || !session) SA.training.startSession(moduleId);
       ctx.navigate('#/assess/' + moduleId);
     }
 

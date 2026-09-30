@@ -104,3 +104,27 @@ This fits the documented fallback "Hindi audio, then text-only". A mute button i
 An `IPostGenerateGradleAndroidProject` hook (`Assets/Editor/StripInternetPermission.cs`) removes the INTERNET permission that Unity injects. The AR trainer uses no network features.
 
 Final permissions: CAMERA (AR) and VIBRATE (haptic tick on a correct answer).
+
+## D-028 — Single-APK integration: WebView shell + Unity as a Library (Milestone 4)
+- **App:** `android-shell/` produces `com.surakshaar.app`. `MainActivity` hosts the unchanged `web-app/`: Gradle copies it into `assets/web`, and `WebViewAssetLoader` serves it at `https://appassets.androidplatform.net/assets/web/`. This is a secure origin with localStorage, no `file://` and no network.
+- **Unity process:** Unity runs in `ARUnityActivity`, a subclass of `UnityPlayerActivity`, in its own process (`:unity`). `UnityPlayerActivity.onDestroy()` ends its process, and the separate process keeps the WebView and its storage alive. Verified on device: the main PID was unchanged across AR sessions.
+- **Result handoff:** the result returns through `setResult()` / `registerForActivityResult`, which works across processes.
+- **Two-app fallback:** the documented deep-link fallback (D-009) was **not needed**; the Unity-as-a-Library integration works.
+- **Permissions:** CAMERA and VIBRATE only. The Unity export's own launcher activity is removed with `tools:node="remove"`.
+
+## D-029 — Building without Android Studio
+`android-shell/build.sh` uses only what Unity 2022.3.62f3's Android support installs:
+- OpenJDK 11, the SDK (platforms 34–36, build-tools 34.0.0), and NDK r23b;
+- Gradle 7.5.1, run from `gradle-launcher-7.5.1.jar` because Unity ships no `bin/gradle` script;
+- AGP 7.4.2, the same version as Unity's export.
+
+Build settings that had to be pinned:
+- `buildToolsVersion '34.0.0'`: AGP would otherwise require the uninstalled 30.0.3.
+- `-Pandroid.aapt2FromMavenOverride`: uses Unity's aapt2 instead of downloading one.
+- `local.properties` with `sdk.dir` only: the Unity library sets `ndkPath`, and AGP rejects both being set (CXX1100).
+- The nested `unityLibrary:*.androidlib` modules are included explicitly.
+
+Downloaded once at build time: the Kotlin Gradle plugin 1.8.22 and `androidx.activity`/`androidx.webkit`. AGP 7.4.2 was already cached by Unity.
+
+## D-030 — Web briefing creates a browser session only for the browser trainer
+With the Android shell, Start launches AR and no longer creates a web assessment session first. Closing AR therefore never leaves a phantom "In progress" card. Without the shell, or after AR is unusable (D-023), the browser trainer behaves as before.

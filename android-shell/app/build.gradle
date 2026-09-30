@@ -5,15 +5,16 @@ plugins {
 
 android {
     namespace 'com.surakshaar.shell'
-    compileSdk 33
-    ndkPath project(':unityLibrary').android.ndkDirectory.absolutePath
+    // Same compile SDK as the exported Unity library (installed with Unity's Android support).
+    compileSdk 36
+    buildToolsVersion '34.0.0'   // the build-tools installed with Unity (AGP 7.4 would default to 30.0.3)
 
     defaultConfig {
         applicationId 'com.surakshaar.app'
         minSdk 29
-        targetSdk 33
-        versionCode 2
-        versionName '0.2.0-m1'
+        targetSdk 34
+        versionCode 4
+        versionName '0.4.0-m4'
         ndk { abiFilters 'arm64-v8a' }
     }
 
@@ -42,6 +43,7 @@ android {
     }
 
     packagingOptions {
+        doNotStrip '*/arm64-v8a/*.so'   // Unity ships its own stripped native libraries
         jniLibs { useLegacyPackaging true }
     }
 }

@@ -58,3 +58,18 @@ web-app/
 └── tools/                # serve.js (dev server), sync-scenarios.js
 ```
 `unity-ar/`, `android-shell/` and `dashboard/` are created in the phases that need them. The Phase 1 dashboard is a `web-app` screen (D-016).
+
+## `android-shell/` (Phase 2, Milestone 4)
+```text
+android-shell/
+├── build.sh                 # builds with Unity's JDK/SDK/NDK/Gradle (no Android Studio)
+├── settings.gradle          # :app + :unityLibrary (../unity-ar/Builds/AndroidExport)
+└── app/src/main/
+    ├── AndroidManifest.xml  # MainActivity (launcher), ARUnityActivity (:unity process)
+    ├── java/com/surakshaar/shell/
+    │   ├── MainActivity.kt      # WebView + WebViewAssetLoader + Android.launchAR bridge
+    │   ├── ARUnityActivity.kt   # Unity host: returnARResult / cancelAR
+    │   └── BridgeContract.kt    # whitelist, result sanitizing, safe JS calls
+    └── res/                     # strings, vector launcher icon
+```
+The web app is **not** copied into this folder. Gradle copies `../web-app` into build assets at build time.
