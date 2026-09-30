@@ -128,3 +128,14 @@ Downloaded once at build time: the Kotlin Gradle plugin 1.8.22 and `androidx.act
 
 ## D-030 — Web briefing creates a browser session only for the browser trainer
 With the Android shell, Start launches AR and no longer creates a web assessment session first. Closing AR therefore never leaves a phantom "In progress" card. Without the shell, or after AR is unusable (D-023), the browser trainer behaves as before.
+
+## D-031 — Signing for the SIH prototype (Milestone 5)
+- **Demo / sideload (current):** the APK is signed with the Android **debug key** from Unity's JDK/SDK toolchain (`assembleDebug`). This is adequate for installing on demo phones with `adb install` or by copying the APK. No store, no upload.
+- **Store distribution (not done):** needs a dedicated release keystore kept outside the repository, `assembleRelease` with a real `signingConfig`, and Play App Signing.
+- **Decision:** no production key is created for the prototype, and nothing is uploaded. Debug-signed builds must not be presented as production releases.
+
+## D-032 — Known issue: ARCore native crash when camera permission is first denied (Milestone 5)
+- **What happened:** on a fresh install, denying the very first camera prompt caused one native crash (SIGSEGV) inside Google's `libarcore_c.so` (Google Play Services for AR). It was in the isolated `:unity` process, about 11 s after the denial.
+- **Recovery:** Android then restarted the app, as it does after a permission change. The web app reloaded with all data intact. The next denied launch showed our "camera permission needed" message and returned `camera_denied`, and the web app fell back to the on-screen trainer.
+- **Why:** XR Plug-in Management initializes ARCore at startup (`InitManagerOnStart`) while our bootstrap is still requesting the permission.
+- **Fix (after the freeze):** initialize the XR loader manually only after the camera permission is granted. It is not changed during the freeze: it alters Unity's startup order, and the failure is contained and recoverable.
