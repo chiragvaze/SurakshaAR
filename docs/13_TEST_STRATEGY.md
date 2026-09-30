@@ -53,14 +53,14 @@ A shared scenario engine means every change to scoring/content must run both Fir
   - Web: 72 tests (`web-app`, `npm test`).
   - Shell: 6 JVM tests (`android-shell/build.sh test`).
   - Unity: 26 EditMode tests.
-  - All three pass. P3-M1 ran them before and after the device run.
+  - All three pass. P3-M1 ran them before and after the device run, and P3-M2 after its build-configuration change.
 - **Device, AR and integration layers:**
   - Physically validated on one phone, the Redmi Note 11 (Android 13, ARCore 1.56).
   - Phase 2 Milestones 1–5 covered AR, the result bridge, offline use, performance and clean install (`11_UNITY_AR_SPEC.md`, `12_ANDROID_BUILD_SPEC.md`).
   - **P3-M1** was the full demo journey inside the APK, including the +7 → dashboard integration path (D-033).
+  - **P3-M2** repeated the demo journey as a 24-step offline smoke test on the locally signed **release** APK. Nothing behaved differently (D-035).
 - **Not yet covered:**
   - a low-end device, or any second phone model;
-  - the release build;
   - the unsupported-device and launch-failure paths (code-reviewed and unit-tested only);
   - camera denial after a D-032 fix.
 - **Security layer:**

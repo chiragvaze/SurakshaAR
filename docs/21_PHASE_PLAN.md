@@ -58,7 +58,8 @@ Exit: final DoD.
 | Milestone | Scope | Status |
 |---|---|---|
 | P3-M1 | Full demo-journey validation on the physical phone, no code changes | **COMPLETE: PASS** (2026-09-30, D-033). Dashboard, +7 days, Refresher Due and Reset time were physically verified inside the APK. |
-| P3-M2 | Camera-permission startup fix (D-032) | Pending (optional) |
-| P3-M3 | Santali content | Pending. Only if native-speaker-approved text is supplied (D-018). |
-| P3-M4 | Release APK (build and test the `release` build type) plus README/documentation cleanup | Pending. README and status docs were partly refreshed in the P3-M1 documentation update. The full cleanup, the release build and its test are still to do. |
-| P3-M5 | Dashboard URL, timed rehearsal, demo video, final freeze | Pending |
+| P3-M2 | Release build validation: build and sign the `release` build type with a local key, then run the offline smoke test on the phone | **COMPLETE: PASS** (2026-09-30, D-035). It behaves the same as P3-M1. |
+| (not yet numbered) | Camera-permission startup fix (D-032) | Pending (optional). The P3-M1 proposal called this "P3-M2"; that number went to the release validation instead. |
+| (not yet numbered) | Santali content | Pending. Only if native-speaker-approved text is supplied (D-018). |
+| (not yet numbered) | README/documentation cleanup | Pending. The README and status docs were refreshed after P3-M1 and P3-M2; a full cleanup is still to do. |
+| (not yet numbered) | Dashboard URL, timed rehearsal, demo video, final freeze | Pending |

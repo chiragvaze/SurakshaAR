@@ -30,6 +30,12 @@
 | Unity assets under 60 MB | Not measured separately. The whole APK, Unity included, is 25.3 MB. | Phase 2 M5 |
 | Memory | AR process 360–411 MB PSS, no upward trend | Phase 2 M5 |
 
+**Release APK (P3-M2, D-035):**
+- APK size: 22.8 MB (22,798,055 bytes).
+- Cold-start first frame: 0.95 s and 0.76 s. The Welcome render time can't be measured in the release build, because in-page timing requires WebView debugging, which release turns off.
+- First usable AR view: Fire 5.0 s; Gas 4.0 s and 3.6 s.
+- FPS was not re-measured for the release build. The Unity native code is the same export, and IL2CPP compiles in its Release configuration for both builds.
+
 Only one phone model has been measured.
 
 ## Frame-drop fallback

@@ -39,6 +39,7 @@ Anything not needed for these seven steps is secondary.
 This order ran end-to-end offline on the Redmi Note 11 with the frozen APK (D-033). A timed rehearsal and the demo video are still pending (P3-M5).
 
 ### Before the demo
+0. Install the validated **release** APK, `app-release.apk` (P3-M2, D-035). If a debug build is installed, uninstall it first, because the signing keys differ.
 1. Clear app storage: Android **Settings → Apps → SurakshaAR → Storage → Clear storage**, or `adb shell pm clear com.surakshaar.app`. Clearing also removes the camera permission.
 2. Grant the camera permission before starting, so the first camera prompt is never denied (D-032).
 3. Check that Google Play Services for AR is installed and enabled. Installing or updating it needs internet, so do this before going offline.

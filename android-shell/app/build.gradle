@@ -18,11 +18,30 @@ android {
         ndk { abiFilters 'arm64-v8a' }
     }
 
+    // Local release key (P3-M2): -PsurakshaarSigning=<keystore.properties outside the repo> with
+    // storeFile (relative to that file), storePassword, keyAlias, keyPassword. Never commit these.
+    // Without it, release falls back to the debug key as before (D-031). Not a store/production key.
+    def signingPropsPath = project.findProperty('surakshaarSigning')
+    signingConfigs {
+        if (signingPropsPath) {
+            def propsFile = file(signingPropsPath)
+            def props = new Properties()
+            propsFile.withInputStream { props.load(it) }
+            release {
+                def ks = new File(props.getProperty('storeFile'))
+                storeFile ks.isAbsolute() ? ks : new File(propsFile.parentFile, props.getProperty('storeFile'))
+                storeType 'pkcs12'
+                storePassword props.getProperty('storePassword')
+                keyAlias props.getProperty('keyAlias')
+                keyPassword props.getProperty('keyPassword')
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
-            // Hackathon sideload build: signed with the debug key. Use a real keystore for store release.
-            signingConfig signingConfigs.debug
+            signingConfig signingPropsPath ? signingConfigs.release : signingConfigs.debug
         }
     }
 

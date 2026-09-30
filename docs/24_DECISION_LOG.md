@@ -133,6 +133,9 @@ With the Android shell, Start launches AR and no longer creates a web assessment
 - **Demo / sideload (current):** the APK is signed with the Android **debug key** from Unity's JDK/SDK toolchain (`assembleDebug`). This is adequate for installing on demo phones with `adb install` or by copying the APK. No store, no upload.
 - **Store distribution (not done):** needs a dedicated release keystore kept outside the repository, `assembleRelease` with a real `signingConfig`, and Play App Signing.
 - **Decision:** no production key is created for the prototype, and nothing is uploaded. Debug-signed builds must not be presented as production releases.
+- **Update (P3-M2, 2026-09-30):**
+  - The validated sideload APK is now the **release** build, signed with a **local, non-production prototype key** (D-035), instead of the debug key.
+  - Store distribution is still not done: no production key, no Play App Signing, nothing uploaded.
 
 ## D-032 — Known issue: ARCore native crash when camera permission is first denied (Milestone 5)
 - **What happened:** on a fresh install, denying the very first camera prompt caused one native crash (SIGSEGV) inside Google's `libarcore_c.so` (Google Play Services for AR). It was in the isolated `:unity` process, about 11 s after the denial.
@@ -143,6 +146,9 @@ With the Android shell, Start launches AR and no longer creates a web assessment
   - It was not triggered during P3-M1, because camera permission was granted before the demo.
   - A related limitation also remains: after `camera_denied`, the web app keeps using the on-screen trainer until the app restarts (D-023). There is no in-app "try AR again".
   - The planned fix is Phase 3 Milestone 2 (P3-M2), which has not started.
+- **Status after P3-M2 (release build): still OPEN.**
+  - It was not exercised: the camera was granted in advance, and camera denial was deliberately not tested.
+  - "P3-M2" ended up being used for the release-build validation (D-035). This fix is still pending, as a later milestone that has not been numbered yet.
 
 ## D-033 — P3-M1: full demo journey validated offline on the phone (2026-09-30)
 - **Result: PASS.** The complete 26-step demo journey ran as one continuous session.
@@ -170,3 +176,31 @@ With the Android shell, Start launches AR and no longer creates a web assessment
 - **Consequence:** the service-worker offline cache is **not** functional inside the APK and must not be described as working there. It still serves its original purpose for phone-browser/PWA runs over http(s).
 - **Stale comments:** comments in `web-app/js/app.js` and `web-app/sw.js` say the service worker is not used for Android assets. That no longer matches the Milestone 4 `https://appassets…` origin.
 - **Decision:** non-blocking technical debt. It is not fixed in the documentation-only P3 update. A fix belongs in a later code milestone, for example not registering the service worker when running inside the Android shell.
+- **Status after P3-M2 (release build): still OPEN.**
+  - The release WebView does not forward console messages to logcat, so the error could not be observed there. It is **not** shown to be gone, and the code path is unchanged.
+  - The release app loaded and worked fully offline (D-035).
+
+## D-035 — P3-M2: release build validated offline on the phone (2026-09-30)
+- **Result: PASS.** The release APK behaves the same as the validated debug APK (P3-M1, D-033).
+- **Changes:** build configuration only; no product code.
+  - `app/build.gradle`: an optional release `signingConfig`, read from a `keystore.properties` file given with `-PsurakshaarSigning`. Without it, release still falls back to the debug key.
+  - `build.sh`: a `release` option that requires `SURAKSHAAR_SIGNING`.
+  - Root `.gitignore`: `*.p12`, `*.jks`, `*.keystore`, `keystore.properties`.
+- **Key:**
+  - Local PKCS12 keystore, alias `surakshaar-sih-prototype` (RSA-2048, valid until 2054, CN marked "not production").
+  - Stored at `%USERPROFILE%\.surakshaar-signing\`, outside the repository and outside OneDrive.
+  - No password is in any tracked file. It is not a store key and not production signing (D-031).
+- **APK:**
+  - `app-release.apk`: 22,798,055 bytes, SHA-256 `e69b2216…d9276fd0`.
+  - `com.surakshaar.app` 0.4.0-m4 (version unchanged), arm64-v8a, minSdk 29.
+  - CAMERA and VIBRATE only; not debuggable; APK Signature Scheme v2.
+- **Install:** it could not be installed over the debug build (`INSTALL_FAILED_UPDATE_INCOMPATIBLE`, signatures differ), so the debug build was uninstalled first.
+  - A phone moving between debug and release builds must always uninstall first, which also deletes the app's saved data.
+- **Validation:**
+  - Redmi Note 11, Android 13, ARCore 1.56, Hindi TTS; airplane mode ON, Wi-Fi OFF.
+  - The 24-step smoke test passed: Fire and Gas 100, certificate, QR, VALID / INVALID / VALID, dashboard, +7 days, Refresher Due, Reset time. Persistence after a cold relaunch also passed.
+  - Web 72/72, shell 6/6, Unity 26/26.
+- **Differences from P3-M1:** none functional.
+  - Cold start and AR start-up were the same or slightly faster.
+  - Release-only: WebView debugging and console logging are off, as intended for a non-debug build.
+- **Still open:** D-032 and D-034.

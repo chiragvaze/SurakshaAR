@@ -173,9 +173,10 @@ Advanced PPE CV, AI coach, production backend, cloud sync, production signing in
 - **Phase 2:** complete and frozen at git tag `phase2-complete`. It also delivered the single-APK Android integration planned for Phase 3 (D-028).
 - **Phase 3:** in progress, not complete.
   - **P3-M1 (full demo-journey validation) is COMPLETE: PASS** (D-033). The whole §13 critical demo journey ran offline, in airplane mode, on a physical Redmi Note 11 with the frozen APK. That includes the dashboard, +7 days, Refresher Due and Reset time.
-  - Still pending:
-    - P3-M2: the D-032 camera-denial fix;
-    - P3-M3: Santali approval;
-    - P3-M4: the release build and documentation cleanup;
-    - P3-M5: the dashboard URL, a timed rehearsal, the demo video and the final freeze.
+  - **P3-M2 (release build validation) is COMPLETE: PASS** (D-035). A locally signed, non-production release APK passed the same offline journey on the phone.
+  - Still pending, in milestones not yet numbered:
+    - the D-032 camera-denial fix;
+    - Santali approval;
+    - documentation cleanup;
+    - the dashboard URL, a timed rehearsal, the demo video and the final freeze.
 - Milestone status: `21_PHASE_PLAN.md`. Known issues: `24_DECISION_LOG.md` (D-031, D-032, D-034) and `18_FALLBACKS_AND_RISKS.md`.

@@ -23,7 +23,9 @@
   - D-032, the ARCore crash when the first camera prompt is denied. Mitigation: grant the camera before the demo.
   - After a camera denial, AR stays off until the app restarts.
   - D-034, the offline-cache registration failure (non-blocking).
-  - The debug-signed APK, with the release build untested.
+  - The release APK is signed with a **local, non-production** key (P3-M2, D-035).
+    - The keystore exists only on the development machine; if it is lost, later updates can't be installed over this APK without uninstalling first.
+    - Store distribution would need a proper release and Play App Signing setup (D-031).
   - Only one phone model has been tested.
   - The ARCore and Hindi TTS dependencies on the demo phone.
 

@@ -31,5 +31,5 @@ Status as of 2026-09-30. `[x]` means verified, with the evidence noted. `[ ]` me
 - [ ] 3–5 minute script rehearsed. (The full journey was run in P3-M1; a timed rehearsal is pending, P3-M5)
 - [ ] Airplane-mode test rehearsed. (Run during Phase 2 M5 and P3-M1; the final rehearsal is pending)
 - [ ] Tamper test rehearsed. (Run during Phase 2 M5 and P3-M1; the final rehearsal is pending)
-- [ ] APK installed on demo phone. (Installed on the test phone; the final demo phone and a cleared storage state are pending)
+- [ ] APK installed on demo phone. (The release APK is installed and validated on the test phone, P3-M2. The final demo phone and a cleared storage state are pending.)
 - [ ] Dashboard accessible. (Works inside the APK; the hosted dashboard URL from `17_DEPLOYMENT.md` is pending)

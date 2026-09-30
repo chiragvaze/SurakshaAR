@@ -32,7 +32,7 @@ Freeze new features before the final testing/video window.
 
 | Artifact | Status |
 |---|---|
-| APK | A **debug**-signed APK exists and is validated on the phone: `android-shell/app/build/outputs/apk/debug/app-debug.apk`, 25.3 MB (Phase 2 M5, P3-M1). The release build is **pending** (P3-M4, D-031). |
+| APK | A **release** APK, signed with a local non-production key, is validated on the phone: `android-shell/app/build/outputs/apk/release/app-release.apk`, 22.8 MB, SHA-256 `e69b2216…d9276fd0` (P3-M2, D-035). This is the one to hand out for sideloading. The debug APK (25.3 MB) was validated in Phase 2 M5 and P3-M1. No store or Play App Signing (D-031). |
 | Public repository | The Git remote is `github.com/chiragvaze/SurakshaAR`. Its public visibility has not been confirmed in these docs. |
 | README | Refreshed after P3-M1. The final release and demo details are pending (P3-M4). |
 | Dashboard URL | **Pending** (P3-M5). The dashboard works inside the APK (P3-M1). A hosted copy would show only the seeded workers, because browser storage is separate per site. |

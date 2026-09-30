@@ -69,7 +69,7 @@ Dashboard -> local/seeded worker data
 
 As implemented (Phase 2 Milestone 4, D-028/D-029):
 - Gradle reads the Unity export in place and copies `web-app/` into the build assets, so steps 2–3 need no manual copying.
-- Only the debug build has been built and validated so far. The release build and the dashboard deployment are pending (P3-M4, P3-M5).
+- Both the debug build and a locally signed release build have been built and validated on the phone (release: P3-M2, D-035). The dashboard deployment is pending.
 - The dashboard is currently a screen inside the web app (D-016).
 
 ## Architecture fallback

@@ -84,4 +84,4 @@ Release APK installs and launches on target device.
 | TC-017 Unity fallback | PASS (phone) | Phase 2 M1–M3. P3-M1 used it in both runs because no plane was detected. |
 | TC-018 Unity result | PASS (phone) | Phase 2 M4/M5; P3-M1 |
 | TC-019 Low FPS | Not triggered | No low-FPS condition seen: about 29.9 FPS sustained in Phase 2 M5 |
-| TC-020 APK | **Partial** | The **debug** APK installs and launches (Phase 2 M5 clean install, P3-M1). The **release** APK has not been built or tested (P3-M4). |
+| TC-020 APK | PASS (phone) | The **release** APK, signed with a local non-production key, installs and launches, and passed the full 24-step offline smoke test (P3-M2, D-035). The debug APK also passes (Phase 2 M5, P3-M1). |

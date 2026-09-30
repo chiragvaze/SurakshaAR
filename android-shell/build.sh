@@ -5,6 +5,8 @@
 #   ./build.sh            assembleDebug   -> app/build/outputs/apk/debug/app-debug.apk
 #   ./build.sh test       JVM unit tests (BridgeContract)
 #   ./build.sh install    assembleDebug + adb install -r
+#   ./build.sh release    assembleRelease signed with a local key -> app/build/outputs/apk/release/app-release.apk
+#                         needs SURAKSHAAR_SIGNING=<path to keystore.properties kept outside the repo>
 #
 # Prerequisite: unity-ar/build.sh export  (creates ../unity-ar/Builds/AndroidExport)
 set -euo pipefail
@@ -38,5 +40,9 @@ case "${1:-debug}" in
   debug)   gradle --no-daemon "${GRADLE_ARGS[@]}" assembleDebug && echo "APK: $(pwd)/app/build/outputs/apk/debug/app-debug.apk" ;;
   test)    gradle --no-daemon "${GRADLE_ARGS[@]}" :app:testDebugUnitTest ;;
   install) gradle --no-daemon "${GRADLE_ARGS[@]}" assembleDebug && "$ADB" install -r app/build/outputs/apk/debug/app-debug.apk ;;
-  *) echo "usage: $0 [debug|test|install]" >&2; exit 2 ;;
+  release)
+    [[ -f "${SURAKSHAAR_SIGNING:-}" ]] || { echo "Set SURAKSHAAR_SIGNING to the keystore.properties file (kept outside the repo)" >&2; exit 1; }
+    gradle --no-daemon "${GRADLE_ARGS[@]}" "-PsurakshaarSigning=$(to_win "$SURAKSHAAR_SIGNING")" assembleRelease \
+      && echo "APK: $(pwd)/app/build/outputs/apk/release/app-release.apk" ;;
+  *) echo "usage: $0 [debug|test|install|release]" >&2; exit 2 ;;
 esac

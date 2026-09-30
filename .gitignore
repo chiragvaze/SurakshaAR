@@ -2,3 +2,8 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+# Signing material stays on the developer machine (P3-M2); never commit keys or passwords.
+*.jks
+*.keystore
+*.p12
+keystore.properties
