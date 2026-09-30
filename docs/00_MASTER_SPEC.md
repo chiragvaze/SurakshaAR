@@ -174,9 +174,8 @@ Advanced PPE CV, AI coach, production backend, cloud sync, production signing in
 - **Phase 3:** in progress, not complete.
   - **P3-M1 (full demo-journey validation) is COMPLETE: PASS** (D-033). The whole §13 critical demo journey ran offline, in airplane mode, on a physical Redmi Note 11 with the frozen APK. That includes the dashboard, +7 days, Refresher Due and Reset time.
   - **P3-M2 (release build validation) is COMPLETE: PASS** (D-035). A locally signed, non-production release APK passed the same offline journey on the phone.
-  - Still pending, in milestones not yet numbered:
-    - the D-032 camera-denial fix;
-    - Santali approval;
-    - documentation cleanup;
-    - the dashboard URL, a timed rehearsal, the demo video and the final freeze.
+  - **P3-M3 (robustness and Santali decision) is COMPLETE: PASS WITH DEFERRALS** (D-036). The D-032 fix is deferred; there is no approved Santali content, so the fallback stays.
+  - **P3-M4 (submission package) is IN PROGRESS** (D-037): documentation cleanup, the demo runbook, and the demo-phone and submission checklists. **The dashboard URL is not currently deployed**, because the repository is private and GitHub Pages is not enabled.
+  - **P3-M5 is PENDING:** the final demo phone, a timed rehearsal, the demo video and the final freeze.
+  - Deferred until after the hackathon: the D-032 fix, and Santali (until approved text exists).
 - Milestone status: `21_PHASE_PLAN.md`. Known issues: `24_DECISION_LOG.md` (D-031, D-032, D-034) and `18_FALLBACKS_AND_RISKS.md`.

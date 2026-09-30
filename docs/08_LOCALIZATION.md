@@ -21,6 +21,10 @@
 - Scenario text keys: `scn.<stepId>.prompt`, `scn.<stepId>.opt.<optionId>`, `scn.<stepId>.why` (D-010). Module titles come from `25_SCENARIO_CONTENT.json`.
 - English and Hindi are complete; a unit test enforces Hindi completeness.
 - Santali is partial pending native-speaker review (D-018). Missing strings fall back to Hindi, and the home screen shows a notice when Santali is selected.
+- P3-M3 (D-036) found **no native-speaker-approved Santali content** in the repository.
+  - Existing Santali: 1 greeting, 2 module titles and the picker label. None of it has an approval record.
+  - There is no Santali audio.
+  - The fallback stays unchanged, and no translations are to be invented. The demo is presented in Hindi.
 
 ## Future
 The supplied deck discusses additional Jharkhand languages. Those are roadmap scope unless explicitly promoted into the prototype.

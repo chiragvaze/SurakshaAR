@@ -149,6 +149,7 @@ With the Android shell, Start launches AR and no longer creates a web assessment
 - **Status after P3-M2 (release build): still OPEN.**
   - It was not exercised: the camera was granted in advance, and camera denial was deliberately not tested.
   - "P3-M2" ended up being used for the release-build validation (D-035). This fix is still pending, as a later milestone that has not been numbered yet.
+- **P3-M3 investigation (read-only): DEFERRED, still OPEN.** See D-036.
 
 ## D-033 — P3-M1: full demo journey validated offline on the phone (2026-09-30)
 - **Result: PASS.** The complete 26-step demo journey ran as one continuous session.
@@ -204,3 +205,65 @@ With the Android shell, Start launches AR and no longer creates a web assessment
   - Cold start and AR start-up were the same or slightly faster.
   - Release-only: WebView debugging and console logging are off, as intended for a non-debug build.
 - **Still open:** D-032 and D-034.
+
+## D-036 — P3-M3: D-032 fix deferred; Santali stays on the fallback (2026-09-30)
+Investigation and decision only. **No product code changed**, and the P3-M2 release APK (SHA-256 `e69b2216…d9276fd0`) stays the known-good build.
+
+### D-032: DEFER (Option B)
+**Start-up sequence, from the code:**
+1. `XRGeneralSettings` (XR Management 4.4.1, `InitManagerOnStart = true`, set by `SurakshaBuild.cs`) calls `InitializeLoaderSync()` as soon as the Unity player loads.
+2. `ARCoreLoader.Initialize()` creates the 11 ARCore subsystems. The `ARCoreSessionSubsystem` provider's constructor calls the native `UnityARCore_session_construct(...)`.
+3. So a native ARCore session exists before the scene runs.
+4. `ARBootstrap.Start()` then asks for the camera (`Permission.RequestUserPermission`). Only after a grant does it run `ARSession.CheckAvailability()` and set `session.enabled = true`, which is when the session resumes.
+5. On a denial, `controller.Fail("ar.err.cameraDenied", "camera_denied")` shows the message. **Back to app** then calls `ARUnityActivity.cancelAR` → `finish()`.
+6. The web app (`bridge.js`) marks AR as unusable until the app is reloaded (D-023).
+
+**Crash evidence (Milestone 5 tombstone):**
+- SIGSEGV `SEGV_MAPERR` on thread `Thread-23` of `com.surakshaar.app:unity`, at 10:01:25.4, with a process uptime of 16 s.
+- All app-side frames are inside Google's closed-source `libarcore_c.so` (frames #00–#07), on an ARCore-owned worker thread (`__pthread_start`). There are no Unity or app frames.
+- It happened about 9 s after the denial, while the Settings app's permission screen was open (10:01:27.5), and about 1 s before the system killed the main app for **PERMISSION CHANGE** (10:01:26).
+- The next denied launch showed the message and returned `camera_denied` **without** crashing.
+
+**Most likely cause:**
+- Most likely trigger: Google's ARCore reacting to the camera permission being changed in Settings, with a constructed but never-resumed native session sitting in the backgrounded `:unity` process.
+- Not proven: the first-denial / start-up-order explanation in D-032. Only one crash was ever observed, and the faulting code can't be inspected.
+
+**Why defer:**
+- The candidate fix is to turn off `InitManagerOnStart` and start the XR loader by hand after a grant. That changes the start-up of **every** AR launch, including the proven camera-granted path.
+- The AR Foundation managers (camera, plane, raycast, anchor) bind to their subsystems when they are enabled, so they would also need re-enabling after a manual start.
+- That is not a small, low-risk change, and it can't be tested reliably because the crash was never reproduced.
+
+**Workaround (proven in P3-M1 and P3-M2):** grant the camera permission before launching AR. The fix is recommended for after the hackathon.
+
+### Santali: NO APPROVED CONTENT (Option B)
+**Found in the repository:**
+- web `sat` dictionary: 1 string, `home.greeting` = `जोहार, {name}`;
+- `25_SCENARIO_CONTENT.json`: 2 module titles, `आग आर विस्फोट` and `गैस रिसाव आर सीमित ठाँव`;
+- the language-picker label `ᱥᱟᱱᱛᱟᱲᱤ · संताली`;
+- `SurakshaContent.json`: 69 Santali slots, of which only the 2 titles are filled. The other 67 are empty and fall back to Hindi by design.
+- There are no audio assets.
+
+**Approval evidence:** none. There is no native-speaker approval, reviewer, source or sign-off anywhere. D-018 describes the existing strings only as "reasonable confidence", and `08_LOCALIZATION.md` still requires native-speaker review.
+
+**Decision:**
+- Nothing is added or changed, and no Santali safety wording is invented or machine-translated.
+- The fallback (sat → hi → en), the Hindi voice for Santali (D-026) and the home-screen "under review" notice stay as they are.
+- Santali stays a documented known limitation. **For the demo, present in Hindi.**
+
+## D-037 — P3-M4: submission package preparation started (2026-09-30)
+- **Scope:** documentation and checklists only. **No product implementation changes**, and no APK was rebuilt.
+- **Known-good build:** still the P3-M2 release APK, SHA-256 `e69b221623d34397c86dec0a4be369f7040384da12dc5353d0eb7c83d9276fd0` (D-035).
+- **Carried over:** D-032 stays deferred and open, D-034 stays open, and Santali stays deferred with the Hindi fallback (D-036).
+- **Done in P3-M4:**
+  - evaluator-facing README;
+  - demo runbook, presentation constraints and final demo-phone checklist (`19_DEMO_SCRIPT.md`);
+  - final submission checklist (`17_DEPLOYMENT.md`);
+  - factual status corrections.
+- **Dashboard:** **not currently deployed.** No deployment configuration exists, the GitHub repository is **private**, and GitHub Pages is not enabled.
+  - Smallest path: the owner makes the repository public (also a stated submission requirement), then `web-app/` is published with a Pages workflow or a `gh-pages` branch.
+  - Nothing was published: this is an outward-facing change that needs the owner's approval.
+- **Remaining work (P3-M5):**
+  - final demo phone preparation;
+  - a timed rehearsal and the demo video;
+  - the dashboard URL and public repository, if approved;
+  - the final freeze.

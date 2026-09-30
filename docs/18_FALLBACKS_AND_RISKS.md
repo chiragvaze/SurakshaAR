@@ -20,7 +20,9 @@
 - **Frame drops:** not needed. About 29.9 FPS sustained (Phase 2 M5).
 - **Device lacks ARCore:** the fallback is code-reviewed and unit-tested only. The web app switches to the on-screen trainer after `ar_unsupported`, `camera_denied` or `launch_failed` (D-023).
 - **Open risks:**
-  - D-032, the ARCore crash when the first camera prompt is denied. Mitigation: grant the camera before the demo.
+  - D-032, the ARCore crash when the first camera prompt is denied. The fix is deferred until after the hackathon (D-036). Mitigation: grant camera permission before launching AR.
+  - Santali: no approved content exists (D-036). Present the demo in Hindi.
+  - Submission gaps (P3-M4, D-037): the **dashboard URL is not deployed**, and the **GitHub repository is private**, although `17_DEPLOYMENT.md` requires a public one. Both need the owner's decision. For the live demo, the in-app dashboard needs neither.
   - After a camera denial, AR stays off until the app restarts.
   - D-034, the offline-cache registration failure (non-blocking).
   - The release APK is signed with a **local, non-production** key (P3-M2, D-035).

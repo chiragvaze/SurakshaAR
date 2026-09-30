@@ -2,40 +2,81 @@
 
 **SIH 2026 · PS 26041 — AR-Based Vocational Training Simulator for Industrial Safety in Jharkhand's Mining & Manufacturing Sector**
 
-Offline-first safety training prototype:
-- Hindi / Santali / English
-- Fire & Explosion and Gas Leak & Confined Space modules
-- scored assessments
-- a locally signed QR certificate that can be verified without network
-- a Retention Guard with a +7-day demo
-- a seeded supervisor dashboard
+## Problem
+Safety instruction for mining and manufacturing workers in Jharkhand is often passive and hard to repeat, and it leaves no verifiable record. SurakshaAR is a phone-based prototype built around three things:
+- short, repeatable AR practice of safe actions;
+- a scored assessment;
+- a signed certificate that can be verified **offline**.
 
-The specification lives in [`docs/`](docs/README.md). Start with [`docs/00_MASTER_SPEC.md`](docs/00_MASTER_SPEC.md).
+Supervisors also get a view of retention risk and refresher due dates. The full specification is in [`docs/`](docs/README.md); start with [`docs/00_MASTER_SPEC.md`](docs/00_MASTER_SPEC.md).
 
-## Status
+## What works (validated on a physical phone)
+| Capability | State |
+|---|---|
+| **Fire & Explosion AR:** 3 scored steps (exit sign, CO₂ extinguisher, crawl low) | Works |
+| **Gas Leak & Confined Space AR:** 3 scored steps (red leak zone, gas detector + breathing set, standby attendant) | Works |
+| Scored assessment: `score = round(100 × (steps − wrong) / steps)`, pass at ≥ 70 | Works |
+| **Hindi** text, including in AR, and Hindi **voice** (Android offline text-to-speech) | Works. The voice needs a Hindi TTS voice on the phone. |
+| English | Works |
+| **Santali** | **Limited.** Only the greeting and the two module titles are Santali; everything else falls back to Hindi (see limitations). |
+| Fully **offline** operation, in airplane mode | Works |
+| Certificate after a pass, with a locally generated **QR** | Works |
+| **Offline verification:** VALID; one changed character gives **INVALID** (tamper detection) | Works (demo signature, see security) |
+| **Retention Guard** risk score (Green / Amber / Red) on the worker's home screen | Works |
+| **Supervisor dashboard:** 8 seeded workers + this phone's worker | Works inside the app. **No hosted URL yet** (see below). |
+| **Simulate +7 Days**: risk rises and **Refresher Due** appears; **Reset time** | Works |
 
-| Phase | Scope | State |
-|---|---|---|
-| 1 | Web/business layer (`web-app/`) | Complete |
-| 2 | Unity AR (`unity-ar/`) and single-APK Android shell (`android-shell/`) | Complete, frozen at git tag `phase2-complete` |
-| 3 | Validation, release and demo | In progress. **P3-M1 (full demo-journey validation on the phone): COMPLETE, PASS. P3-M2 (release build validation): COMPLETE, PASS.** Pending: the D-032 fix, Santali approval, documentation cleanup, the dashboard URL, a timed rehearsal, the demo video and the final freeze. |
+Not built, by design: a backend or cloud sync, live QR camera scanning, AI or PPE detection, and more safety domains (see [`docs/23_ROADMAP.md`](docs/23_ROADMAP.md)).
 
-**P3-M1 (2026-09-30):** the complete demo journey was run offline on a physical Redmi Note 11 (Android 13, ARCore 1.56) with the frozen APK, in airplane mode:
-- language → worker → Fire AR (Hindi, 100) → certificate → QR → VALID → tamper → INVALID → VALID;
-- Gas AR (Hindi, 100);
-- supervisor dashboard → **Simulate +7 Days** (risk rises, Refresher Due) → **Reset time**.
+## Device validation
+- **Phone:** Redmi Note 11 (2201117TI), **Android 13**, **Google Play Services for AR 1.56**, all tests in airplane mode with Wi-Fi off.
+- **P3-M1:** the full demo journey on the debug APK.
+- **P3-M2:** the same journey as a 24-step smoke test on the **release APK**.
+- **Result:** every step passed. There were no crashes during the validated flow, and saved data survived AR sessions and a cold relaunch. Details: [`docs/12_ANDROID_BUILD_SPEC.md`](docs/12_ANDROID_BUILD_SPEC.md), decision log D-033 and D-035.
+- **Automated tests:** web 72/72, shell 6/6, Unity 26/26.
 
-**P3-M2 (2026-09-30):** a **release** APK signed with a local, non-production key passed the same journey offline on the same phone, with no behavioral differences.
+## Release APK (known-good build)
+| | |
+|---|---|
+| File | `android-shell/app/build/outputs/apk/release/app-release.apk` (built locally; APKs are not committed) |
+| Package | `com.surakshaar.app` |
+| Version | `0.4.0-m4` (versionCode 4) |
+| ABI | arm64-v8a |
+| SDK | min 29 (Android 10), target 34 |
+| Size | 22.8 MB (22,798,055 bytes) |
+| Permissions | CAMERA, VIBRATE (no INTERNET) |
+| Signing | **Local prototype key; NOT production or store signing** (D-031, D-035) |
+| SHA-256 | `e69b221623d34397c86dec0a4be369f7040384da12dc5353d0eb7c83d9276fd0` |
 
-Details: [`docs/12_ANDROID_BUILD_SPEC.md`](docs/12_ANDROID_BUILD_SPEC.md) and [`docs/24_DECISION_LOG.md`](docs/24_DECISION_LOG.md) (D-033, D-035). Milestone status: [`docs/21_PHASE_PLAN.md`](docs/21_PHASE_PLAN.md).
+Install with `adb install app-release.apk`. If a debug build is installed, uninstall it first: the signing keys differ, and uninstalling deletes the app's saved data.
 
-## Android app (Phase 2)
+## Known limitations
+- **D-032 (open, deferred until after the hackathon):** on a fresh install, denying the first camera prompt can trigger a native crash in Google's ARCore. The app recovers without data loss, but after a denial AR stays unavailable until the app restarts. **Grant camera permission before launching AR.**
+- **D-034 (open):** inside the APK, the web app's service-worker offline-cache registration fails. It is non-blocking: the app is loaded from the APK itself and works fully offline without it.
+- **Santali** content is mostly the Hindi fallback. No native-speaker-approved Santali safety content exists, so none has been invented (D-018, D-036). **Present the demo in Hindi.**
+- **Certificate signing is demo-only** (see the security disclosure below).
+- **ARCore dependency:** needs an ARCore-supported phone with Google Play Services for AR installed. Installing it needs internet once.
+- **Hindi TTS dependency:** without a Hindi text-to-speech voice, AR is text-only.
+- **One physical phone model tested** (Redmi Note 11).
+- If no floor plane is found, AR content is **placed automatically** about 3 s later. Point the phone ahead.
+- **Dashboard URL:** not currently deployed. The dashboard is fully usable inside the app, or locally with `npm start` → `http://127.0.0.1:5173/#/dashboard`.
 
-`com.surakshaar.app` is a single APK:
-- a Kotlin WebView shell hosting `web-app/`;
-- Unity AR (Unity 2022.3, AR Foundation/ARCore 5.1) as a library, running in its own process.
+## Demo
+The 3–5 minute demo order, presenter constraints and the final demo-phone checklist are in [`docs/19_DEMO_SCRIPT.md`](docs/19_DEMO_SCRIPT.md). The submission checklist is in [`docs/17_DEPLOYMENT.md`](docs/17_DEPLOYMENT.md).
 
-It needs Android 10+ (API 29) with ARCore, and asks only for **Camera** and **Vibrate**. It builds with the JDK/SDK/NDK/Gradle bundled with Unity's Android Build Support; **Android Studio is not required**.
+## Architecture
+```text
+com.surakshaar.app (single APK)
+├── Kotlin shell: MainActivity + WebView serving web-app/ from the APK's own assets
+│   (https://appassets.androidplatform.net/assets/web/, WebViewAssetLoader)
+├── web-app/: UI, languages, scoring, certificate + QR, verification, retention, dashboard (localStorage)
+└── Unity AR trainer (Unity 2022.3, AR Foundation / ARCore 5.1) as a library, in its own ":unity" process
+    Web → Android.launchAR(module, lang) → Unity → result → web re-validates and scores
+```
+More detail: [`docs/02_ARCHITECTURE.md`](docs/02_ARCHITECTURE.md) and [`docs/07_API_AND_BRIDGE_CONTRACTS.md`](docs/07_API_AND_BRIDGE_CONTRACTS.md), plus decisions D-028 and D-029.
+
+## Build
+Everything builds with the JDK/SDK/NDK/Gradle bundled with Unity 2022.3.62f3's Android Build Support. **Android Studio is not required.**
 
 ```bash
 unity-ar/build.sh export      # Unity -> unity-ar/Builds/AndroidExport
@@ -44,16 +85,11 @@ android-shell/build.sh        # debug APK -> android-shell/app/build/outputs/apk
 SURAKSHAAR_SIGNING=<path to keystore.properties> android-shell/build.sh release
                               # release APK -> android-shell/app/build/outputs/apk/release/app-release.apk
 ```
+Release signing notes:
+- The keystore and its `keystore.properties` (`storeFile`, `storePassword`, `keyAlias`, `keyPassword`) are kept on the developer machine, outside the repository, and are never committed.
+- Without `SURAKSHAAR_SIGNING`, Gradle signs a release build with the debug key.
 
-- **Install:** with `adb install -r <apk>`. Debug and release builds are signed with different keys, so **uninstall first** when switching between them (this deletes the app's saved data).
-- **Signing:** the validated release APK (P3-M2, D-035) uses a **local, non-production** prototype key.
-  - The keystore and its `keystore.properties` (`storeFile`, `storePassword`, `keyAlias`, `keyPassword`) are kept outside the repository and are never committed.
-  - Without `SURAKSHAAR_SIGNING`, Gradle signs a release build with the debug key.
-  - There is no store/Play signing setup (D-031).
-- **Demo checklist:** see the demo runbook in [`docs/19_DEMO_SCRIPT.md`](docs/19_DEMO_SCRIPT.md). It covers clearing storage, pre-granting the camera, ARCore and the Hindi voice, and airplane mode.
-
-## Run the web app in a browser (Phase 1)
-
+## Run the web app in a browser
 Requires Node.js 20+. The app itself has no runtime dependencies.
 
 ```bash
@@ -63,28 +99,12 @@ npm start          # http://127.0.0.1:5173
 npm test           # unit + integration tests (node:test)
 ```
 
-To test on a phone on the same Wi-Fi, run `npm run start:lan` and open `http://<computer-LAN-IP>:5173/`.
-
-The app also runs by opening `web-app/index.html` directly (`file://`). Inside the Android app it is instead served from the APK's own assets at `https://appassets.androidplatform.net/assets/web/` (D-028).
-
-After the page has loaded, the whole flow works without network: language → worker → training → result → certificate → verify. When the app is served from `localhost`, a service worker also allows offline reloads. Inside the APK the service-worker registration fails, and it doesn't need to work: the app loads from the APK and works offline without it (known issue D-034).
-
-### Demo path
-1. **Start Training** → choose a language → enter worker name and ID.
-2. **Fire & Explosion** → Start → answer 3 steps → Result.
-3. **Get Certificate** → QR + certificate code.
-4. **Verify this certificate** → **Verify** → `VALID`.
-5. **Change 1 character (demo)** → **Verify** → `INVALID`.
-6. **Gas Leak & Confined Space**: same engine, same flow.
-7. Home → **Supervisor dashboard** → **Simulate +7 Days** → risk and status rise, `Refresher Due` appears → **Reset time**.
+To test on a phone on the same Wi-Fi, run `npm run start:lan` and open `http://<computer-LAN-IP>:5173/`. The app also runs by opening `web-app/index.html` directly (`file://`). In a browser served from `localhost`, a service worker also allows offline reloads.
 
 ## ⚠ Security disclosure: demo signature only
-
 Certificates are signed with **HMAC-SHA256 using a secret embedded in the app** (first 16 hex characters). This demonstrates tamper detection only: changing any character makes verification fail.
 
-**It is not real security.** Anyone can extract the secret from the app and forge certificates.
-
-A production system must:
+**It is not real security.** Anyone can extract the secret from the app and forge certificates. A production system must:
 - sign server-side with an asymmetric key (the private key never ships to devices);
 - verify with the public key;
 - use HTTPS, key management, an audit trail and revocation.
@@ -92,25 +112,21 @@ A production system must:
 See [`docs/04_SECURITY.md`](docs/04_SECURITY.md) and [`docs/09_CERTIFICATE_QR.md`](docs/09_CERTIFICATE_QR.md). No real credentials or API keys are in this repository.
 
 ## Privacy
+Only the worker name and worker ID are collected. Everything is stored on the device (`localStorage` key `sa_v1`), and nothing is sent anywhere. Camera frames never leave the device. See [`docs/16_PRIVACY.md`](docs/16_PRIVACY.md).
 
-Only the worker name and worker ID are collected. Everything is stored on the device (`localStorage` key `sa_v1`), and nothing is sent anywhere. See [`docs/16_PRIVACY.md`](docs/16_PRIVACY.md).
+## Status
+| Phase | Scope | State |
+|---|---|---|
+| 1 | Web/business layer | Complete |
+| 2 | Unity AR + single-APK Android shell | Complete, frozen at git tag `phase2-complete` |
+| 3 | Validation, release and submission | **In progress.** P3-M1 PASS, P3-M2 PASS, P3-M3 PASS WITH DEFERRALS. P3-M4 (submission package) in progress. P3-M5 (final phone, rehearsal, video, freeze) pending. |
+
+Milestones: [`docs/21_PHASE_PLAN.md`](docs/21_PHASE_PLAN.md). Decisions and known issues: [`docs/24_DECISION_LOG.md`](docs/24_DECISION_LOG.md).
 
 ## Repository layout
-
 ```text
 docs/           specification, decision log, scenario content (source of truth)
 web-app/        web/business layer (vanilla HTML/CSS/JS); the dashboard is #/dashboard
 unity-ar/       Unity AR trainer (Fire and Gas on one shared scenario engine)
 android-shell/  Kotlin WebView shell + Unity as a Library -> single APK
 ```
-
-## Known issues and limitations
-
-- **D-032 (open):** on a fresh install, denying the first camera prompt can trigger a native ARCore crash. It recovers without data loss. After a camera denial, AR stays unavailable until the app restarts. **Grant the camera before a demo.**
-- **D-034:** the service-worker offline-cache registration fails inside the APK. It is non-blocking: the app loads from the APK and works offline without it.
-- The release APK is signed with a **local, non-production** key (D-035). It is not store/production signing (D-031).
-- **Santali** is mostly shown in Hindi: only the greeting and module titles are Santali, pending native-speaker review (D-018).
-- Certificate signing is **demo-only** (see the security disclosure above).
-- The phone needs **Google Play Services for AR** installed (installing it needs internet once) and a **Hindi text-to-speech voice**. If the voice is missing, AR is text-only.
-- If no floor plane is found, the AR content is **placed automatically** about 3 s later. Point the phone ahead.
-- Only **one physical phone model** has been tested: the Redmi Note 11, Android 13.

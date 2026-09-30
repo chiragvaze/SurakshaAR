@@ -50,16 +50,17 @@ Exit: final DoD.
 
 ## Execution status (updated 2026-09-30)
 - **Phase 1: complete.** Web/business layer.
-- **Phase 2: complete and frozen at git tag `phase2-complete`.** Milestones 1–5.
+- **Phase 2: COMPLETE / FROZEN** at git tag `phase2-complete`. Milestones 1–5.
   - Phase 2 also delivered the Android shell integration listed above under Phase 3: the single APK with WebView and Unity as a Library, Milestone 4, D-028.
   - Phase 2 Milestone 5 then validated the offline end-to-end flow, the certificate verification and the error handling.
-- **Phase 3: in progress. Not complete.**
+- **Phase 3: IN PROGRESS. Not complete.**
 
 | Milestone | Scope | Status |
 |---|---|---|
 | P3-M1 | Full demo-journey validation on the physical phone, no code changes | **COMPLETE: PASS** (2026-09-30, D-033). Dashboard, +7 days, Refresher Due and Reset time were physically verified inside the APK. |
 | P3-M2 | Release build validation: build and sign the `release` build type with a local key, then run the offline smoke test on the phone | **COMPLETE: PASS** (2026-09-30, D-035). It behaves the same as P3-M1. |
-| (not yet numbered) | Camera-permission startup fix (D-032) | Pending (optional). The P3-M1 proposal called this "P3-M2"; that number went to the release validation instead. |
-| (not yet numbered) | Santali content | Pending. Only if native-speaker-approved text is supplied (D-018). |
-| (not yet numbered) | README/documentation cleanup | Pending. The README and status docs were refreshed after P3-M1 and P3-M2; a full cleanup is still to do. |
-| (not yet numbered) | Dashboard URL, timed rehearsal, demo video, final freeze | Pending |
+| P3-M3 | Robustness and Santali decision: investigate D-032; look for approved Santali content | **COMPLETE: PASS WITH DEFERRALS** (2026-09-30, D-036). No product code changed. The D-032 fix is **deferred** (the cause is inside ARCore and not proven, and the fix would change every AR start-up). Santali: **no approved content** exists, so the fallback stays. |
+| P3-M4 | Submission package: documentation cleanup, dashboard availability, demo runbook, demo-phone and submission checklists. No product code. | **IN PROGRESS** (2026-09-30, D-037). Dashboard URL **not deployed**: the repository is private and Pages is not enabled (`17_DEPLOYMENT.md`). |
+| P3-M5 | Final demo phone reset and checklist, timed rehearsal, demo video, final freeze. Also the dashboard deployment and public repository, if the owner approves. | **PENDING** |
+| (post-hackathon) | Camera-permission startup fix (D-032) | Deferred (D-036). Workaround: grant camera permission before launching AR. |
+| (post-hackathon, or when approved text arrives) | Santali content | Deferred. Only with native-speaker-approved text (D-018, D-036). |
