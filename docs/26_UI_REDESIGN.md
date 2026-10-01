@@ -75,3 +75,75 @@ Following the brief's rule 53, screens that need these get an **honest local ver
 - Existing element ids used by tests and the demo script are kept.
 - New local data lives in new validated keys; `sa_v1` is never extended (its sanitiser drops unknown fields).
 - No dependencies, web fonts or remote assets: system font stack, in-repo SVG icons.
+
+## Implementation status (2026-10-01, branch `ui-redesign`)
+
+| Phase | Commit | State |
+|---|---|---|
+| 0 Audit | `phase-0-audit` | Done |
+| 1 Design system | `phase-1-design-system` | Done |
+| 2 App shell + navigation | `phase-2-app-shell` | Done |
+| 3 Home + LEARN → FIND → PROVE | `phase-3-mobile-training` | Done |
+| 4 AR HUD + PPE | `phase-4-ar-ppe` | Done (Unity HUD restyle is visual only; AR verified on the Redmi Note 11) |
+| 5 Passport | `phase-5-passport` | Done |
+| 6 SOS + near-miss | `phase-6-emergency` | Done (local logging only, nothing is sent) |
+| 7 Coach + language | `phase-7-ai-language` | Done (offline content-based guide, not AI; voice input not available) |
+| 8–10 Web dashboard, operations, analytics | `phase-8-9-10-dashboard` | Done |
+| 11–12 Polish, performance, accessibility | `phase-11-12-polish-a11y` | Done |
+| 13 Final QA | this document | Done (see below) |
+
+### Design system
+- **Tokens:** `web-app/css/tokens.css` defines colour, radius, spacing, type, shadow, blur, motion and gradient tokens. The light and dark sets are test-enforced to match.
+- **Themes:** `html[data-theme]` selects the theme. Light is always the default; the device's dark mode is not followed. The user's choice is stored under `sa_ui_v1` by `js/services/prefs.js`, which is loaded in `<head>` so there is no flash on load.
+- **Low-performance fallback:** `html[data-effects="reduced"]` removes blur and makes surfaces opaque. It is chosen:
+  - automatically on devices with 2 GB of memory or less, or 2 CPU cores or fewer;
+  - by the user in Settings;
+  - when `backdrop-filter` is unsupported.
+- **Icons:** `js/components/icons.js` draws inline SVG icons using Lucide geometry (ISC licence). There is no dependency and no network access.
+- **Components:** `js/components/ui.js` provides:
+  - GlassCard, the buttons, IconButton, StatusBadge, chips and Avatar;
+  - ProgressRing, MetricCard and bars;
+  - the LEARN/FIND/PROVE stepper;
+  - Toast, BottomSheet/Modal, skeleton, empty and error states;
+  - the segmented control and ThemeToggle;
+  - the NavigationBar and the app bar with a notifications bell.
+- **Stylesheets:**
+  - `tokens.css`, `base.css`, `components.css`;
+  - `screens.css` (onboarding, settings, library), `training.css` (home and training), `safety.css`, `passport.css`;
+  - `manage.css` (dashboard shell) and `manage-pages.css` (dashboard pages and charts).
+
+### New local data (each in its own validated key; `sa_v1` unchanged)
+- **`sa_ui_v1`:** `{theme, effects}`.
+- **`sa_safety_v1`:**
+  - `{ppe[], nearmiss[], sos[], audit[]}`, sanitised field by field.
+  - SOS records can only ever have the status `logged`.
+  - `audit` is append-only.
+
+### AR HUD (Unity)
+- `TrainerHUD.cs` now has rounded, translucent dark "glass" panels (a 9-slice sprite generated in code) and indigo primary buttons.
+- Panels are inset from the edges, and the safe area is taken from `Screen.safeArea`.
+- Events, the scenario flow, scoring and the bridge are unchanged.
+
+### Android shell
+- The window theme is now light.
+- An optional `Android.setDarkTheme(boolean)` call lets the web app colour the status and navigation bars. No data crosses this call.
+- Nothing else changed: no permission, package, version, signing or Gradle changes.
+
+### Final QA results
+- **Automated:**
+  - web 114/114 (the 86 pre-redesign tests are unchanged and pass);
+  - Unity EditMode 26/26;
+  - Android shell 6/6.
+- **Real browser (headless Edge):**
+  - The existing 14-step worker flow regression passes: Hindi → Fire 100 → certificate + QR → VALID → tamper INVALID → Gas → dashboard → +7 days → Reset → reload.
+  - No console errors and no external requests.
+- **Accessibility and layout audit:**
+  - 36 routes at 320, 393, 820 and 1440 px, in light and dark;
+  - 0 issues: accessible names, 44×44 px touch targets, no duplicate ids, no horizontal overflow, one h1 per screen;
+  - WCAG AA contrast checked for the token pairs.
+- **Redmi Note 11 (Android 13, airplane mode), debug build:**
+  - install and launch work, and the light status bar follows the theme;
+  - Fire AR 100 and Gas AR 100 with the restyled HUD; both results reached the web app;
+  - certificate, Passport QR, theme toggle and SOS cancel work;
+  - no crashes;
+  - one bug was fixed (no duration shown for AR attempts). See D-041.

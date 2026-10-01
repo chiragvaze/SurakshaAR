@@ -329,3 +329,30 @@ Investigation and decision only. **No product code changed**, and the P3-M2 rele
 - **CSP:** the bars set their width with `element.style`, not a style attribute, because the dev server's strict CSP (`style-src 'self'`) blocks the latter.
 - **Not changed:** Unity, the Android shell, Gradle, permissions, signing, package or version. The frozen `v1.0.0-sih-final` release APK (`e69b2216…d9276fd0`) does **not** contain this milestone; a new APK build is needed to ship it.
 - **Tests:** web 86/86 (72 existing + 14 new, with a minimal fake DOM so the role screens render in Node), shell 6/6, Unity 26/26. A real-browser (headless Edge) end-to-end pass covered all three roles, assignments, role switching, Logout and +7/Reset, plus the full existing worker flow.
+
+## D-041 — Post-freeze: Suraksha Drishti UI/UX redesign (2026-10-01)
+- **Scope:** a premium, unified design system across the worker app, the web dashboard and the Unity AR HUD, on branch `ui-redesign` (phased commits). The full map and status are in `docs/26_UI_REDESIGN.md`.
+- **Architecture unchanged:** vanilla JS app in the WebView, Unity AR library and local storage.
+  - No React, Tailwind, backend, Firebase, TFLite, Vosk or Vuforia was introduced. These systems do not exist in this repository, and the redesign does not pretend they do.
+  - Scoring, retention, certificate signing and verification, the bridge contract and `sa_v1` are unchanged.
+- **Honest local versions** of requested features that need missing systems, each labelled on screen:
+  - **PPE Check:** a manual self-check. "Not sure" goes to a trainer review queue; nobody is failed automatically.
+  - **Safety Coach:** answers only from the approved training content. It is not an AI model, and voice input is disabled.
+  - **SOS:** two steps, logged on the phone with an audit entry. It never claims an alert was sent, and tells the worker to get help in person.
+  - **Near-miss:** reports are stored on the device only, with no photos. Officers track Open / Investigating / Resolved.
+  - **Zone clearance:** a demo rule (a valid certificate and no refresher due).
+  - **Haadsa Replay / Pressure Drill:** practice only; nothing is scored or stored.
+  - **Planned languages:** Khortha, Nagpuri, Ho and Mundari are listed but cannot be selected (D-018).
+- **New keys:** `sa_ui_v1` (display preferences) and `sa_safety_v1` (safety records), both validated on load.
+- **Unity:** visual-only HUD restyle (TrainerHUD.cs). The export was rebuilt; EditMode tests 26/26.
+- **Android shell:** light window theme plus an optional `setDarkTheme(boolean)` bridge call for the system bars. No permission, signing, package or version changes.
+- **Device validation (Redmi Note 11, Android 13, airplane mode, debug build):**
+  - install and launch work;
+  - the light status bar follows the theme;
+  - Fire AR and Gas AR both scored 100 with the restyled HUD, and both results reached the web app (shell log + stored attempts);
+  - Home showed readiness 100%;
+  - certificate and Passport QR work;
+  - theme toggle and SOS cancel work;
+  - no crashes.
+  - One bug was found and fixed: AR results carry no start time, so the result screen showed "Time taken 1 s". It now shows "—".
+- **Not changed:** the frozen `v1.0.0-sih-final` release APK (`e69b2216…d9276fd0`) does not contain the redesign; shipping it needs a new release build. D-032, D-034, Santali and demo-only signing are unchanged.

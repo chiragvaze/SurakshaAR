@@ -65,6 +65,22 @@ A separate **management mode** at `#/manage`, reached from the "Management porta
   - The management UI is English-only for now; the worker app keeps its Hindi.
 - **Workers shown:** the 8 seeded demo workers, plus this device's current worker (seeded workers only record their latest module).
 
+## Suraksha Drishti UI/UX redesign (post-freeze, branch `ui-redesign`)
+One design system across the worker app, the web dashboard and the Unity AR HUD. Light theme is the default, with an optional dark theme; glass surfaces are used selectively, and there is a reduced-effects mode for low-end phones. Details: [`docs/26_UI_REDESIGN.md`](docs/26_UI_REDESIGN.md) and decision D-041.
+
+| Worker app | Web dashboard (`#/manage`, `#/dashboard`) |
+|---|---|
+| Home command centre (readiness ring, Retention Guard, continue training, quick actions, today's safety) | Role login (prototype, not authentication), glass sidebar, header search, theme toggle |
+| LEARN → FIND → PROVE training, result with score ring and real metrics | Worker table and profile, assessments, modules |
+| Suraksha Passport with QR and zone clearance (demo rule), offline Verify | Trainer Mode with the PPE review queue, alerts by severity, near-miss workflow, zone clearance |
+| PPE self-check, Emergency SOS (logged locally, never "sent"), near-miss report, notifications | Analytics: 7D/30D/3M/1Y ranges, line, donut and heatmap charts (inline SVG) |
+| Safety Coach (offline guide from training content, **not AI**), Haadsa Replay and Pressure Drill (practice only) | Supervisor dashboard restyled; +7 days / Reset unchanged |
+
+- **Unchanged:** scoring, retention, certificates, the bridge, `sa_v1`, permissions and signing.
+- **New local keys:** `sa_ui_v1` and `sa_safety_v1`.
+- **Tests:** web 114/114, Unity 26/26, shell 6/6.
+- **Not in the frozen APK:** the frozen SIH release APK below does **not** include the redesign.
+
 ## Release APK (known-good build)
 | | |
 |---|---|
