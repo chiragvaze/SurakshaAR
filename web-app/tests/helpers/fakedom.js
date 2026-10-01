@@ -17,7 +17,7 @@ class FakeNode {
     this.value = '';
     this._text = text === undefined ? null : String(text);
   }
-  appendChild(child) { this.children.push(child); return child; }
+  appendChild(child) { this.children.push(child); if (child && typeof child === 'object') child._parent = this; return child; }
   replaceChildren(...nodes) { this.children = nodes; }
   setAttribute(name, value) { this.attributes[name] = String(value); if (name === 'id') this.id = String(value); }
   getAttribute(name) { return Object.prototype.hasOwnProperty.call(this.attributes, name) ? this.attributes[name] : null; }
@@ -28,13 +28,31 @@ class FakeNode {
   get textContent() { return this._text !== null ? this._text : this.children.map((c) => c.textContent).join(''); }
   set textContent(v) { this._text = String(v); this.children = []; }
   focus() {}
+  querySelector(sel) { return sel.charAt(0) === '#' ? byId(this, sel.slice(1)) : null; }
+  get classList() {
+    const self = this;
+    const list = () => self.className.split(/\s+/).filter(Boolean);
+    return {
+      add: (c) => { if (!list().includes(c)) self.className = list().concat(c).join(' '); },
+      remove: (c) => { self.className = list().filter((x) => x !== c).join(' '); },
+      contains: (c) => list().includes(c)
+    };
+  }
+  get parentNode() { return this._parent || null; }
+  removeChild(c) { this.children = this.children.filter((x) => x !== c); c._parent = null; return c; }
 }
 
 function install() {
   const document = {
     createElement: (tag) => new FakeNode(tag),
     createTextNode: (text) => new FakeNode(null, text),
+    createElementNS: (ns, tag) => new FakeNode(tag),
     getElementById: () => null,
+    body: new FakeNode('body'),
+    activeElement: null,
+    addEventListener() {},
+    removeEventListener() {},
+    querySelectorAll: (sel) => (sel.charAt(0) === '.' ? byClass(document.body, sel.slice(1)) : []),
     documentElement: { lang: '' }
   };
   globalThis.document = document;

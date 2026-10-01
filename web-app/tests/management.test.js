@@ -11,7 +11,7 @@ const dom = require('./helpers/fakedom');
 
 const SA = load();
 dom.install();
-['js/components/dom.js', 'js/components/ui.js', 'js/i18n/mgmt-strings.js', 'js/services/management.js', 'js/screens/management.js']
+['js/services/prefs.js', 'js/components/dom.js', 'js/components/icons.js', 'js/components/ui.js', 'js/i18n/mgmt-strings.js', 'js/services/management.js', 'js/screens/management.js', 'js/services/safety.js', 'js/services/insights.js', 'js/screens/management-pages.js']
   .forEach((f) => require(path.join(__dirname, '..', f)));
 
 const DAY = SA.clock.DAY_MS;
@@ -278,4 +278,98 @@ test('management actions never modify the worker app state; no worker -> seeded 
   const sum = M.summary(SA.store.get());
   assert.equal(sum.total, SA.SEED_WORKERS.length);
   assert.ok(sum.workers.every((x) => x.seeded));
+});
+
+// ---- redesigned web dashboard pages (management-pages.js) ----
+const navIds = (node) => dom.findAll(node, (n) => (n.getAttribute('id') || '').startsWith('mtab-')).map((n) => n.getAttribute('id').slice(5));
+
+test('role-based visibility: each role only gets its own pages; other pages fall back to its dashboard', () => {
+  setup({ train: true });
+  M.setRole('trainer');
+  assert.deepEqual(navIds(render('trainer').node), ['dashboard', 'workers', 'training', 'assessments', 'modules', 'trainer', 'analytics', 'alerts', 'settings']);
+  M.setRole('officer');
+  assert.deepEqual(navIds(render('officer').node), ['dashboard', 'risk', 'certificates', 'nearmiss', 'zones', 'analytics', 'alerts', 'settings']);
+  M.setRole('contractor');
+  assert.deepEqual(navIds(render('contractor').node), ['dashboard', 'workers', 'certificates', 'alerts', 'settings']);
+  // A contractor asking for the trainer review queue just gets the contractor dashboard.
+  const r = render('contractor', { view: 'trainer' }).node;
+  assert.ok(dom.byId(r, 'mgmt-pending'));
+  assert.equal(dom.byId(r, 'tr-sec-review'), null);
+});
+
+test('worker profile: real records; contractor view hides scores and risk', () => {
+  setup({ train: true });
+  M.setRole('trainer');
+  const tr = render('trainer', { view: 'worker', id: 'JH-2001' }).node;
+  assert.ok(dom.byId(tr, 'mgmt-worker'));
+  assert.match(text(dom.byId(tr, 'wp-latest')), /^100/);
+  assert.ok(dom.byId(tr, 'wp-qr'), 'passport QR for this device\'s certificate');
+  assert.equal(dom.byAttr(dom.byId(tr, 'wp-history'), 'href').length + dom.byClass(dom.byId(tr, 'wp-history'), 'row').length >= 2, true);
+  M.setRole('contractor');
+  const co = render('contractor', { view: 'worker', id: 'JH-2001' }).node;
+  assert.equal(dom.byId(co, 'wp-latest'), null);
+  assert.equal(dom.byId(co, 'wp-risk'), null);
+  assert.ok(text(co).includes('2/2'));
+  assert.ok(dom.byId(render('contractor', { view: 'worker', id: 'NOPE-1' }).node, 'mgmt-worker-missing'));
+});
+
+test('search filters the worker list', () => {
+  setup({ train: true });
+  M.setRole('trainer');
+  const node = render('trainer', { view: 'workers', q: 'soren' }).node;
+  assert.deepEqual(dom.byAttr(node, 'data-worker').map((n) => n.getAttribute('data-worker')), ['JH-1004']);
+  assert.ok(dom.byId(render('trainer', { view: 'workers', q: 'zzz' }).node, 'mgmt-workers-empty'));
+});
+
+test('trainer mode: "not sure" PPE checks are reviewed manually and the decision is audited', () => {
+  setup({ train: true });
+  SA.safety.init(memoryStorage());
+  const now = SA.clock.now(SA.store.get());
+  const p = SA.safety.addPpe('JH-2001', { helmet: 'yes', vest: 'yes', gloves: 'unsure', shoes: 'yes', goggles: 'yes' }, now);
+  M.setRole('trainer');
+  const node = render('trainer', { view: 'trainer' }).node;
+  assert.equal(dom.byAttr(node, 'data-ppe').length, 1);
+  dom.byId(node, 'ppe-approve-' + p.id).click();
+  assert.equal(SA.safety.reviewQueue().length, 0);
+  assert.equal(SA.safety.get().ppe[0].review.decision, 'approved');
+  assert.equal(SA.safety.get().audit.slice(-1)[0].action, 'ppe.review.approved');
+  assert.ok(dom.byId(render('trainer', { view: 'trainer' }).node, 'tr-review-empty'));
+});
+
+test('officer: near-miss workflow, alerts by severity (SOS critical), zone clearance', () => {
+  setup({ train: true });
+  SA.safety.init(memoryStorage());
+  const now = SA.clock.now(SA.store.get());
+  const nm = SA.safety.addNearMiss({ id: 'JH-2001', name: 'Ramesh Kumar' }, { severity: 'high', location: 'Zone 4', desc: 'Loose rock fell near the conveyor' }, now);
+  SA.safety.logSos('JH-2001', 'fire', now);
+  M.setRole('officer');
+  const dash = render('officer').node;
+  assert.ok(text(dom.byId(dash, 'mgmt-sec-nearmiss')).includes('1 open'));
+  const page = render('officer', { view: 'nearmiss' }).node;
+  dom.byId(page, 'nm-' + nm.id + '-investigating').click();
+  assert.equal(SA.safety.get().nearmiss[0].status, 'investigating');
+  const alerts = render('officer', { view: 'alerts' }).node;
+  const sev = dom.byAttr(alerts, 'data-sev').map((n) => n.getAttribute('data-sev'));
+  assert.equal(sev[0], 'critical');
+  assert.ok(text(alerts).includes('Not sent anywhere'));
+  assert.deepEqual([...sev].sort((a, b) => ['critical', 'high', 'medium', 'info'].indexOf(a) - ['critical', 'high', 'medium', 'info'].indexOf(b)), sev, 'sorted by severity');
+  const zones = render('officer', { view: 'zones' }).node;
+  const me = dom.findAll(zones, (n) => n.getAttribute('data-worker') === 'JH-2001')[0];
+  assert.ok(text(me).includes('CLEARED'));
+  const seeded = dom.findAll(zones, (n) => n.getAttribute('data-worker') === 'JH-1001')[0];
+  assert.ok(!text(seeded).includes('Expires'), 'seeded workers have no certificates, so no clearance');
+});
+
+test('analytics and assessments are computed from local data (device attempts + seeded latest)', () => {
+  setup({ train: true });
+  M.setRole('trainer');
+  const as = render('trainer', { view: 'assessments' }).node;
+  assert.equal(dom.byAttr(as, 'data-assessment').length, 2 + SA.SEED_WORKERS.length);
+  const fireOnly = render('trainer', { view: 'assessments', m: 'fire_explosion' }).node;
+  assert.ok(dom.byAttr(fireOnly, 'data-assessment').length < dom.byAttr(as, 'data-assessment').length);
+  const an = render('trainer', { view: 'analytics', r: '7d' }).node;
+  assert.ok(dom.byId(an, 'an-heatmap'));
+  assert.match(text(dom.byId(an, 'an-attempts')), /^\d+/);
+  const mods = render('trainer', { view: 'modules' }).node;
+  assert.equal(dom.byAttr(mods, 'data-module').length, 2);
 });

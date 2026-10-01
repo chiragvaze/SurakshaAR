@@ -1,0 +1,222 @@
+/*
+ * Suraksha Drishti design tokens (docs/26_UI_REDESIGN.md). Every component reads these;
+ * no component should hard-code colours, radii, shadows or durations.
+ *
+ *   html[data-theme="light"]   default (light is ALWAYS the default, never auto-dark)
+ *   html[data-theme="dark"]    chosen in Settings / ThemeToggle, persisted in sa_ui_v1
+ *   html[data-effects="reduced"]  no backdrop blur, opaque surfaces (low-end devices / user choice)
+ *
+ * No web fonts are downloaded (offline-first): the stack prefers Inter / SF Pro if installed.
+ */
+:root,
+html[data-theme="light"] {
+  color-scheme: light;
+
+  /* surfaces */
+  --color-bg: #F6F8FB;
+  --color-bg-2: #FFFFFF;
+  --color-surface: rgba(255, 255, 255, 0.72);
+  --color-surface-solid: #FFFFFF;
+  --color-surface-glass: rgba(255, 255, 255, 0.58);
+  --color-surface-sunken: rgba(16, 24, 40, 0.04);
+  --color-surface-hover: rgba(16, 24, 40, 0.035);
+  --color-overlay: rgba(16, 24, 40, 0.36);
+
+  /* text */
+  --color-text: #101828;
+  --color-text-secondary: #667085;
+  --color-text-muted: #98A2B3;
+  --color-text-on-primary: #FFFFFF;
+
+  /* lines */
+  --color-border: rgba(16, 24, 40, 0.08);
+  --color-border-strong: rgba(16, 24, 40, 0.14);
+  --color-glass-border: rgba(255, 255, 255, 0.65);
+
+  /* brand + semantic */
+  --color-primary: #4F46E5;
+  --color-primary-2: #6366F1;
+  --color-primary-soft: rgba(79, 70, 229, 0.10);
+  --color-primary-text: #4338CA;
+  --color-blue: #3B82F6;
+  --color-teal: #14B8A6;
+  --color-purple: #8B5CF6;
+  --color-success: #16A34A;
+  --color-success-soft: rgba(22, 163, 74, 0.10);
+  --color-success-text: #15803D;
+  --color-warning: #F59E0B;
+  --color-warning-soft: rgba(245, 158, 11, 0.13);
+  --color-warning-text: #B45309;
+  --color-danger: #EF4444;
+  --color-danger-soft: rgba(239, 68, 68, 0.10);
+  --color-danger-text: #B91C1C;
+  --color-amber: #F5A524;
+  --color-fire: #F97316;
+  --color-gas: #14B8A6;
+  --color-teal-text: #0F766E;
+  --color-fire-text: #C2410C;
+  --color-purple-text: #6D28D9;
+  --color-blue-text: #1D4ED8;
+  --color-success-solid: #15803D;
+
+  /* ambient background (barely visible) */
+  --ambient-1: rgba(99, 102, 241, 0.10);
+  --ambient-2: rgba(20, 184, 166, 0.08);
+
+  /* elevation */
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-lg: 0 8px 40px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(16, 24, 40, 0.04);
+  --shadow-primary: 0 8px 24px rgba(79, 70, 229, 0.28);
+  --shadow-danger: 0 8px 24px rgba(239, 68, 68, 0.28);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: #070B12;
+  --color-bg-2: #0D1420;
+  --color-surface: rgba(255, 255, 255, 0.06);
+  --color-surface-solid: #111A28;
+  --color-surface-glass: rgba(255, 255, 255, 0.08);
+  --color-surface-sunken: rgba(255, 255, 255, 0.04);
+  --color-surface-hover: rgba(255, 255, 255, 0.05);
+  --color-overlay: rgba(0, 0, 0, 0.6);
+
+  --color-text: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
+  --color-text-on-primary: #FFFFFF;
+
+  --color-border: rgba(255, 255, 255, 0.10);
+  --color-border-strong: rgba(255, 255, 255, 0.16);
+  --color-glass-border: rgba(255, 255, 255, 0.12);
+
+  --color-primary: #818CF8;
+  --color-primary-2: #6366F1;
+  --color-primary-soft: rgba(129, 140, 248, 0.16);
+  --color-primary-text: #A5B4FC;
+  --color-blue: #60A5FA;
+  --color-teal: #2DD4BF;
+  --color-purple: #A78BFA;
+  --color-success: #34D399;
+  --color-success-soft: rgba(52, 211, 153, 0.14);
+  --color-success-text: #34D399;
+  --color-warning: #FBBF24;
+  --color-warning-soft: rgba(251, 191, 36, 0.14);
+  --color-warning-text: #FBBF24;
+  --color-danger: #FB7185;
+  --color-danger-soft: rgba(251, 113, 133, 0.14);
+  --color-danger-text: #FB7185;
+  --color-amber: #FBBF24;
+  --color-fire: #FB923C;
+  --color-gas: #2DD4BF;
+  --color-teal-text: #2DD4BF;
+  --color-fire-text: #FB923C;
+  --color-purple-text: #C4B5FD;
+  --color-blue-text: #93C5FD;
+  --color-success-solid: #15803D;
+
+  --ambient-1: rgba(99, 102, 241, 0.14);
+  --ambient-2: rgba(20, 184, 166, 0.08);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.45);
+  --shadow-primary: 0 8px 28px rgba(99, 102, 241, 0.35);
+  --shadow-danger: 0 8px 28px rgba(251, 113, 133, 0.3);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+:root {
+  /* gradients (same in both themes: they sit on their own coloured surfaces) */
+  --gradient-primary: linear-gradient(180deg, #5A5CF0, #4F46E5);
+  --gradient-brand: linear-gradient(135deg, #6366F1 0%, #4F46E5 45%, #14B8A6 130%);
+  --gradient-danger: linear-gradient(180deg, #DC2626, #B91C1C);
+  --gradient-success: linear-gradient(180deg, #22C55E, #16A34A);
+  --gradient-avatar-0: linear-gradient(135deg, #818CF8, #4F46E5);
+  --gradient-avatar-1: linear-gradient(135deg, #2DD4BF, #0D9488);
+  --gradient-avatar-2: linear-gradient(135deg, #A78BFA, #7C3AED);
+  --gradient-avatar-3: linear-gradient(135deg, #60A5FA, #2563EB);
+  --gradient-avatar-4: linear-gradient(135deg, #FBBF24, #D97706);
+
+  /* glass */
+  --blur-sm: 8px;
+  --blur-md: 20px;
+  --blur-lg: 32px;
+  --glass-filter: blur(var(--blur-md)) saturate(140%);
+
+  /* radius */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-btn: 16px;
+  --radius-pill: 999px;
+
+  /* spacing (4px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 64px;
+
+  /* typography */
+  --font-sans: "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Roboto Mono", Consolas, monospace;
+  --text-display: clamp(2rem, 1.6rem + 2vw, 2.5rem);
+  --text-h1: clamp(1.75rem, 1.55rem + 1vw, 2rem);
+  --text-h2: clamp(1.375rem, 1.3rem + .4vw, 1.625rem);
+  --text-h3: 1.125rem;
+  --text-body: 1rem;
+  --text-body-lg: 1.0625rem;
+  --text-sm: .875rem;
+  --text-xs: .75rem;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --tracking-tight: -0.02em;
+  --tracking-caps: 0.06em;
+
+  /* touch + layout */
+  --tap: 48px;
+  --tap-lg: 56px;
+  --content-max: 560px;
+  --content-wide: 1200px;
+  --sidebar-w: 264px;
+  --nav-h: 64px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /* motion (150–350ms) */
+  --dur-fast: 150ms;
+  --dur: 220ms;
+  --dur-slow: 350ms;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --ease-spring: cubic-bezier(.34, 1.4, .64, 1);
+}
+
+/* Low-performance fallback: no blur, opaque surfaces. Chosen automatically on low-memory
+   devices, by the user in Settings, or when backdrop-filter is unsupported. */
+html[data-effects="reduced"] {
+  --glass-filter: none;
+  --color-surface-glass: var(--color-surface-solid);
+  --color-surface: var(--color-surface-solid);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root { --glass-filter: none; --color-surface-glass: var(--color-surface-solid); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root { --glass-filter: none; --color-surface-glass: var(--color-surface-solid); }
+}

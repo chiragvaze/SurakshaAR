@@ -13,6 +13,14 @@
     language: [],
     profile: ['language'],
     home: ['language', 'worker'],
+    me: ['language', 'worker'],
+    train: ['language', 'worker'],
+    ppe: ['language', 'worker'],
+    sos: ['language', 'worker'],
+    nearmiss: ['language', 'worker'],
+    alerts: ['language', 'worker'],
+    replay: ['language', 'worker'],
+    coach: ['language', 'worker'],
     briefing: ['language', 'worker'],
     assess: ['language', 'worker'],
     result: ['language', 'worker'],
@@ -100,7 +108,10 @@
       if (root.console) root.console.error('[render] ' + route.name, e);
       node = SA.screens.error(ctx);
     }
+    if (ui.closeSheets) ui.closeSheets();
     var scrollY = root.scrollY;
+    // Subtle enter transition on navigation only (re-renders keep scroll and stay still).
+    if (!opts.keepScroll && !opts.focus && node.classList) node.classList.add('route-enter');
     appEl.replaceChildren(node);
     root.document.title = SA.i18n.t('app.name') + ' · SurakshaAR';
 
