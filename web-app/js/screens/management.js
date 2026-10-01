@@ -383,7 +383,7 @@
       primary.map(function (v) { return navLink(v, 'mbottom__item'); }),
       h('button', { type: 'button', class: 'mbottom__item', id: 'mgmt-more', onClick: function () { setDrawer(true); } }, ui.icon('menu', { size: 20 }), h('span', { class: 'mbottom__item-label' }, mt('m.more'))));
 
-    var titleText = view === 'dashboard' ? greeting(role) : mt('m.tab.' + view);
+    var titleText = view === 'dashboard' ? greeting(role) : ctx.query.view === 'worker' ? mt('m.tab.worker') : mt('m.tab.' + view);
     app.appendChild(sidebar);
     app.appendChild(h('div', { class: 'drawer-scrim', onClick: function () { setDrawer(false); }, 'aria-hidden': 'true' }));
     app.appendChild(h('div', { class: 'mmain' },
@@ -392,7 +392,7 @@
         h('div', { class: 'mhead' },
           h('p', { class: 'eyebrow' }, mt('m.role.' + role) + ' · ' + mt('m.portal.sub')),
           h('h1', { class: 'page__title', tabindex: '-1' }, titleText),
-          h('p', { class: 'page__sub' }, view === 'dashboard' ? mt('m.overview') : mt('m.protoNote'))),
+          h('p', { class: 'page__sub' }, view === 'dashboard' ? mt('m.overview') : mt('m.pageSub'))),
         content)));
     app.appendChild(bottom);
     return app;

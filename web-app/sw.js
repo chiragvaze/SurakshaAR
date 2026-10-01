@@ -17,7 +17,7 @@ var ASSETS = [
   'css/safety.css',
   'css/passport.css',
   'css/manage.css',
-  'css/legacy.css',
+  'css/manage-pages.css',
   'js/services/prefs.js',
   'js/utils/codec.js',
   'js/utils/sha256.js',
@@ -56,6 +56,7 @@ var ASSETS = [
   'js/screens/certificate.js',
   'js/screens/dashboard.js',
   'js/screens/management.js',
+  'js/screens/management-pages.js',
   'js/app.js'
 ];
 
