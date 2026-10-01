@@ -343,3 +343,60 @@ h1:focus, h2:focus, p:focus { outline: none; }
   .time-bar { flex-direction: row; align-items: center; justify-content: space-between; }
   .time-bar .btn-row { min-width: 380px; }
 }
+
+/* ---------- Local Role-Based Dashboard Prototype (management mode) ---------- */
+.welcome__manage { align-self: center; font-size: .95rem; }
+.mgmt .appbar__brand { color: var(--sand); text-decoration: none; }
+.mactions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.mrole { font-weight: 700; }
+.mtabs { display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+.mtab { flex: 0 0 auto; min-height: 44px; display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 999px;
+  border: 2px solid var(--slate-2); color: var(--sand); text-decoration: none; font-weight: 600; }
+.mtab.is-active { background: var(--amber); border-color: var(--amber); color: var(--ink); }
+.mrolecard { width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.msection { display: flex; flex-direction: column; gap: 10px; }
+.msub { margin: 6px 0 0; font-size: 1rem; color: var(--sand-muted); }
+.mbig { margin: 0; font-family: var(--font-mono); font-size: 2.6rem; font-weight: 800; line-height: 1; }
+.mcards { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.mcard { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: var(--radius);
+  background: var(--slate-3); border: 1px solid var(--slate-2); }
+.mcard--local { border-color: var(--amber); }
+.mcard__head { display: flex; flex-direction: column; }
+.mcard__name { font-weight: 800; font-size: 1.1rem; }
+.mcard__id { font-family: var(--font-mono); font-size: .8rem; color: var(--sand-muted); }
+.mcard__line { margin: 0; color: var(--sand-muted); font-size: .9rem; }
+.mcard__badges { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.mfacts { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 2px 14px; margin: 0; }
+.mfacts dt { grid-row: 1; color: var(--sand-muted); font-size: .8rem; }
+.mfacts dd { grid-row: 2; margin: 0; font-family: var(--font-mono); font-weight: 800; font-size: 1.15rem; }
+.mpill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; font-size: .8rem;
+  font-weight: 800; letter-spacing: .02em; border: 2px solid currentColor; }
+.mpill--completed, .mpill--current { color: #8fd6a9; }
+.mpill--inProgress { color: var(--amber); }
+.mpill--pending, .mpill--muted { color: var(--sand-muted); border-style: dashed; }
+.mpill--refresher { color: #ff9ea0; }
+.badge--none { background: transparent; color: var(--sand-muted); border: 2px dashed var(--sand-muted); }
+.mbars { display: flex; flex-direction: column; gap: 8px; }
+.mbar { display: grid; grid-template-columns: minmax(120px, 34%) 1fr auto; align-items: center; gap: 10px; }
+.mbar__label { font-size: .9rem; }
+.mbar__track { height: 14px; border-radius: 7px; background: var(--slate-2); overflow: hidden; }
+.mbar__fill { display: block; height: 100%; min-width: 2px; background: var(--amber); }
+.mbar__fill--green, .mbar__fill--completed { background: var(--green); }
+.mbar__fill--amber, .mbar__fill--inProgress { background: var(--amber); }
+.mbar__fill--red { background: var(--red); }
+.mbar__fill--refresher { background: #ff9ea0; }
+.mbar__fill--pending { background: var(--sand-muted); }
+.mbar__fill--fire_explosion { background: #E4572E; }
+.mbar__fill--gas_confined { background: #7FB069; }
+.mbar__value { font-family: var(--font-mono); font-weight: 700; font-size: .9rem; white-space: nowrap; }
+.mform { display: flex; flex-direction: column; gap: 6px; }
+.mselect { min-height: var(--tap); padding: 10px 12px; border-radius: 10px; border: 2px solid var(--sand-muted);
+  background: var(--seam-black); color: var(--sand); font: inherit; font-size: 1rem; }
+.mselect:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+@media (min-width: 600px) {
+  .mcards { grid-template-columns: repeat(2, 1fr); }
+  .mform { max-width: 520px; }
+}
+@media (min-width: 960px) {
+  .mcards { grid-template-columns: repeat(3, 1fr); }
+}

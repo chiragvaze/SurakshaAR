@@ -24,6 +24,7 @@
     'welcome.purpose': 'Practise fire and gas safety in short steps and earn a certificate that can be checked without internet.',
     'welcome.start': 'Start Training',
     'welcome.offline': 'Works offline · Hindi · Santali · English',
+    'welcome.manage': 'Management portal (prototype)',
 
     'lang.title': 'Choose your language',
     'lang.hint': 'You can change this later from the top bar.',
@@ -53,6 +54,7 @@
     'home.verify': 'Verify',
     'home.verify.sub': 'Check a certificate offline',
     'home.dashboard': 'Supervisor dashboard',
+    'home.manage': 'Management portal (prototype)',
     'home.changeWorker': 'Change worker',
 
     'retention.title': 'Retention Guard',
@@ -224,6 +226,7 @@
     'welcome.purpose': 'छोटे-छोटे चरणों में आग और गैस सुरक्षा का अभ्यास करें और ऐसा प्रमाणपत्र पाएँ जिसे बिना इंटरनेट जाँचा जा सके।',
     'welcome.start': 'प्रशिक्षण शुरू करें',
     'welcome.offline': 'बिना इंटरनेट चलता है · हिन्दी · संताली · English',
+    'welcome.manage': 'प्रबंधन पोर्टल (प्रोटोटाइप)',
 
     'lang.title': 'अपनी भाषा चुनें',
     'lang.hint': 'आप इसे बाद में ऊपर की पट्टी से बदल सकते हैं।',
@@ -253,6 +256,7 @@
     'home.verify': 'जाँचें',
     'home.verify.sub': 'बिना इंटरनेट प्रमाणपत्र जाँचें',
     'home.dashboard': 'पर्यवेक्षक डैशबोर्ड',
+    'home.manage': 'प्रबंधन पोर्टल (प्रोटोटाइप)',
     'home.changeWorker': 'कर्मचारी बदलें',
 
     'retention.title': 'रिटेंशन गार्ड',

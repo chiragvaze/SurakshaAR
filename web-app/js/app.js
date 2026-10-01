@@ -18,7 +18,8 @@
     result: ['language', 'worker'],
     certificate: ['language', 'worker'],
     verify: ['language'],
-    dashboard: ['language']
+    dashboard: ['language'],
+    manage: [] // Local Role-Based Dashboard Prototype: separate from the worker flow, English UI
   };
 
   var appEl = null;

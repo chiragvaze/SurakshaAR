@@ -315,3 +315,17 @@ Investigation and decision only. **No product code changed**, and the P3-M2 rele
   - **Certificate signing** remains demo-only.
   - **One physical device** remains the tested hardware.
 - **Not part of the freeze:** the 3–5 minute demo video, which the team records using the sequence prepared in P3-M5.
+
+## D-040 — Post-freeze milestone: Local Role-Based Dashboard Prototype (2026-10-01)
+- **Scope:** a separate management mode in the web app with three roles: Trainer, Mine Safety Officer and Contractor.
+  - Routes: `#/manage` (role selection) and `#/manage/<trainer|officer|contractor>?view=<tab>`.
+  - The worker flow is unchanged, apart from a "Management portal (prototype)" link on Welcome and Home.
+- **Data:** no new copy of worker or training data.
+  - `js/services/management.js` builds every figure from `sa_v1` through the existing `SA.retention.dashboardRows()` (risk formula, thresholds, 7-day refresher), `SA.scoring` and `SA.certificate.verify()` at logical time. So +7 days and Reset time move every role's view.
+  - The role session and module assignments live in a separate, validated key, `sa_mgmt_v1`. `store.js` and `sa_v1` are unchanged.
+- **Security:** role selection is a prototype convenience, **not authentication** (no credentials). Certificate signing and verification are unchanged (demo HMAC).
+- **Near-miss:** a labelled "Near-Miss Reports — Prototype" placeholder only. There are no records, no upload and no fabricated data.
+- **Language:** the management UI is English-only for now (`SA.MGMT_STRINGS` via `SA.i18n.tFor`). The worker app's Hindi tables gain only the two link labels.
+- **CSP:** the bars set their width with `element.style`, not a style attribute, because the dev server's strict CSP (`style-src 'self'`) blocks the latter.
+- **Not changed:** Unity, the Android shell, Gradle, permissions, signing, package or version. The frozen `v1.0.0-sih-final` release APK (`e69b2216…d9276fd0`) does **not** contain this milestone; a new APK build is needed to ship it.
+- **Tests:** web 86/86 (72 existing + 14 new, with a minimal fake DOM so the role screens render in Node), shell 6/6, Unity 26/26. A real-browser (headless Edge) end-to-end pass covered all three roles, assignments, role switching, Logout and +7/Reset, plus the full existing worker flow.

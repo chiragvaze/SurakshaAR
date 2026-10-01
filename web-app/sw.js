@@ -18,6 +18,7 @@ var ASSETS = [
   'js/data/seed-workers.js',
   'js/i18n/strings.js',
   'js/i18n/i18n.js',
+  'js/i18n/mgmt-strings.js',
   'js/scenario/scoring.js',
   'js/scenario/validator.js',
   'js/scenario/engine.js',
@@ -27,6 +28,7 @@ var ASSETS = [
   'js/services/retention.js',
   'js/services/training.js',
   'js/services/bridge.js',
+  'js/services/management.js',
   'js/components/dom.js',
   'js/components/ui.js',
   'js/screens/onboarding.js',
@@ -34,6 +36,7 @@ var ASSETS = [
   'js/screens/training.js',
   'js/screens/certificate.js',
   'js/screens/dashboard.js',
+  'js/screens/management.js',
   'js/app.js'
 ];
 

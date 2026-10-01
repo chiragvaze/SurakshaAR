@@ -79,6 +79,7 @@
           h('span', { class: 'card__meta' }, t('home.verify.sub')))),
       h('nav', { class: 'home-links' },
         h('a', { href: '#/dashboard', class: 'link', id: 'home-dashboard' }, t('home.dashboard')),
+        h('a', { href: '#/manage', class: 'link', id: 'home-manage' }, t('home.manage')),
         h('a', { href: '#/profile', class: 'link' }, t('home.changeWorker')))
     ]);
   };

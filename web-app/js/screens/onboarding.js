@@ -23,7 +23,8 @@
         h('p', { class: 'welcome__purpose' }, t('welcome.purpose')),
         secondary,
         ui.btn(t('welcome.start'), { href: '#/language?next=' + encodeURIComponent('#/profile'), id: 'start-training' }),
-        h('p', { class: 'welcome__offline' }, t('welcome.offline'))
+        h('p', { class: 'welcome__offline' }, t('welcome.offline')),
+        h('a', { class: 'link welcome__manage', href: '#/manage', id: 'welcome-manage' }, t('welcome.manage'))
       )
     ]);
   };

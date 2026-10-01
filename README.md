@@ -48,6 +48,23 @@ Not built, by design: a backend or cloud sync, live QR camera scanning, AI or PP
 
 On a first visit, the site asks for a language, then opens the dashboard.
 
+## Local Role-Based Dashboard Prototype (post-freeze milestone)
+A separate **management mode** at `#/manage`, reached from the "Management portal (prototype)" link on Welcome and Home. The worker training flow is unchanged.
+
+| Role | Shows |
+|---|---|
+| **Trainer** | Total workers, training completed, average score, refresher due; Fire / Gas / overall progress; per-worker Fire and Gas scores, status, risk and refresher; **Assign module** (stored on the device) |
+| **Mine Safety Officer** | Compliance summary; Green/Amber/Red risk distribution; training-status, score and refresher summaries; certificate status (valid / attention / recent); a clearly labelled **Near-Miss Reports — Prototype** placeholder with no records |
+| **Contractor** | Workforce summary, completion %, per-worker completion, latest score, certificate status and risk |
+
+- **Same data as everything else:** every figure is computed from the data already on the device (`sa_v1`) using the existing retention formula, `dashboardRows()` and certificate `verify()`. So all three roles, the supervisor dashboard, and +7 days / Reset time always agree.
+- **New local key:** only the selected role and module assignments are new. They are stored under `sa_mgmt_v1`.
+- **Prototype limits:**
+  - Choosing a role is **not authentication**: no passwords, nothing is secured.
+  - It works offline with no backend, cloud or network calls.
+  - The management UI is English-only for now; the worker app keeps its Hindi.
+- **Workers shown:** the 8 seeded demo workers, plus this device's current worker (seeded workers only record their latest module).
+
 ## Release APK (known-good build)
 | | |
 |---|---|
