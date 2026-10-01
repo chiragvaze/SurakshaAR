@@ -15,6 +15,7 @@ var ASSETS = [
   'css/screens.css',
   'css/training.css',
   'css/safety.css',
+  'css/passport.css',
   'css/manage.css',
   'css/legacy.css',
   'js/services/prefs.js',

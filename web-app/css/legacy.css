@@ -1,39 +1,4 @@
 /* Transitional: pre-redesign screen styles mapped onto tokens. Removed screen by screen in later phases. */
-/* ---------- certificate ---------- */
-.cert {
-  position: relative; overflow: hidden;
-  padding: 26px 16px 16px; border-radius: var(--radius-md);
-  background: var(--color-text); color: var(--color-text);
-  display: flex; flex-direction: column; gap: 10px;
-}
-.cert__band { position: absolute; top: 0; left: 0; right: 0; height: 10px;
-  background: var(--gradient-brand); }
-.cert__brand { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; letter-spacing: .03em; }
-.cert .facts dt { color: var(--color-text-secondary); }
-.qr { width: 100%; max-width: 280px; margin: 6px auto; background: #fff; padding: 4px; border-radius: 8px; }
-.qr svg { display: block; width: 100%; height: auto; }
-.cert__payload-label { color: var(--color-text); }
-.payload {
-  width: 100%; padding: 10px; border-radius: 8px; resize: vertical;
-  font-family: var(--font-mono); font-size: .8rem; line-height: 1.4; word-break: break-all;
-  background: #fff; color: var(--color-text); border: 2px solid var(--color-border-strong);
-}
-.payload--edit { font-size: .9rem; border-color: var(--color-text-secondary); }
-.demo-note { margin: 0; font-size: .9rem; color: var(--color-text-secondary); }
-
-/* ---------- verify ---------- */
-.verify-hint { margin: 0; color: var(--color-primary); font-weight: 600; }
-.verify-hint:empty { display: none; }
-.verify-out:empty { display: none; }
-.verdict { padding: 16px; border-radius: var(--radius-md); border: 4px solid; }
-.verdict--valid { border-color: var(--color-success); background: var(--color-success-soft); }
-.verdict--invalid { border-color: var(--color-danger); background: var(--color-danger-soft); border-style: double; border-width: 6px; }
-.verdict__label { margin: 0; font-family: var(--font-display); font-size: 2.4rem; font-weight: 800; letter-spacing: .06em; }
-.verdict--valid .verdict__label { color: var(--color-success-text); }
-.verdict--invalid .verdict__label { color: var(--color-danger-text); }
-.verdict__reason { margin: 4px 0 0; font-weight: 600; }
-.verdict__offline { margin: 10px 0 0; font-size: .9rem; color: var(--color-text-secondary); }
-
 /* ---------- dashboard ---------- */
 .time-bar { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: var(--radius-md); background: var(--color-surface); border: 2px solid var(--color-border); }
 .time-bar__label { margin: 0; font-family: var(--font-mono); font-weight: 700; font-size: 1.1rem; color: var(--color-primary); }

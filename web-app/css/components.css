@@ -349,3 +349,4 @@ select.mselect { appearance: none; -webkit-appearance: none; padding-right: 40px
 }
 .check input { width: 22px; height: 22px; accent-color: var(--color-primary); }
 .gcard > .chip { align-self: flex-start; }
+.demo-note .icon { display: inline-block; vertical-align: -2px; }
