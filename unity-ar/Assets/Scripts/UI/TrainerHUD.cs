@@ -8,6 +8,9 @@ namespace SurakshaAR
     /// Screen overlay for the AR trainer (built in code). Top: exit, module, "Step n/3",
     /// progress, mute. Prompt card under it. Bottom: hint / feedback / result with large buttons.
     /// Colour is never the only signal: every state also has a ✓/✕ symbol and text.
+    /// Visual style follows the Suraksha Drishti design system (docs/26_UI_REDESIGN.md):
+    /// dark translucent "glass" panels with rounded corners so the camera view stays visible,
+    /// indigo primary actions, safe-area aware. Behaviour and events are unchanged.
     /// </summary>
     public class TrainerHUD : MonoBehaviour
     {
@@ -16,7 +19,26 @@ namespace SurakshaAR
         public event Action SecondaryPressed;
         public event Action MuteToggled;
 
-        static readonly Color PanelBg = new Color32(0x0F, 0x14, 0x19, 0xE8);
+        // Design tokens (mirrors web-app/css/tokens.css, dark theme over the camera image).
+        static class Hud
+        {
+            public static readonly Color Glass = new Color32(0x0D, 0x14, 0x20, 0xD6);
+            public static readonly Color GlassStrong = new Color32(0x0D, 0x14, 0x20, 0xF0);
+            public static readonly Color Control = new Color32(0xFF, 0xFF, 0xFF, 0x24);
+            public static readonly Color Primary = new Color32(0x63, 0x66, 0xF1, 0xFF);
+            public static readonly Color PrimarySoft = new Color32(0xA5, 0xB4, 0xFC, 0xFF);
+            public static readonly Color Success = new Color32(0x16, 0xA3, 0x4A, 0xFF);
+            public static readonly Color Danger = new Color32(0xEF, 0x44, 0x44, 0xFF);
+            public static readonly Color SuccessGlass = new Color32(0x0A, 0x2E, 0x1E, 0xF0);
+            public static readonly Color DangerGlass = new Color32(0x3B, 0x10, 0x16, 0xF0);
+            public static readonly Color Pending = new Color32(0xFF, 0xFF, 0xFF, 0x2E);
+            public static readonly Color Text = new Color32(0xF8, 0xFA, 0xFC, 0xFF);
+            public static readonly Color TextSecondary = new Color32(0xCB, 0xD5, 0xE1, 0xFF);
+            public static readonly Color Light = new Color32(0xFF, 0xFF, 0xFF, 0xF2);
+            public static readonly Color Ink = new Color32(0x10, 0x18, 0x28, 0xFF);
+        }
+        static readonly Color PanelBg = Hud.Glass;
+        static Sprite s_Round;
         const float Width = 1080f;
 
         Canvas m_Canvas;
@@ -35,17 +57,17 @@ namespace SurakshaAR
 
         public void SetHeader(string moduleTitle, string stepText, int stepIndex, bool?[] answers, string exitLabel)
         {
-            m_Title.Set(moduleTitle, 38, Palette.Sand, true);
-            m_Step.Set(stepText, 42, Palette.Amber, true);
-            m_ExitLabel.Set("✕  " + exitLabel, 34, Palette.Sand, true);
+            m_Title.Set(moduleTitle, 38, Hud.Text, true);
+            m_Step.Set(stepText, 42, Hud.PrimarySoft, true);
+            m_ExitLabel.Set("✕  " + exitLabel, 34, Hud.Text, true);
             m_Progress.SetActive(answers != null);
             if (answers == null) return;
             if (m_Segments.Length != answers.Length) BuildSegments(answers.Length);
             for (int i = 0; i < answers.Length; i++)
             {
                 bool? a = answers[i];
-                m_Segments[i].color = a == null ? (i == stepIndex ? Palette.Amber : Palette.Slate) : a.Value ? Palette.Green : Palette.Red;
-                m_SegmentText[i].Set(a == null ? (i + 1).ToString() : a.Value ? "✓" : "✕", 30, a == null && i == stepIndex ? Color.black : Color.white, true);
+                m_Segments[i].color = a == null ? (i == stepIndex ? Hud.Primary : Hud.Pending) : a.Value ? Hud.Success : Hud.Danger;
+                m_SegmentText[i].Set(a == null ? (i + 1).ToString() : a.Value ? "✓" : "✕", 30, Color.white, true);
             }
         }
 
@@ -63,18 +85,18 @@ namespace SurakshaAR
         public void ShowFeedback(bool correct, string heading, string why, string buttonLabel)
         {
             ShowBottom((correct ? "✓  " : "✕  ") + heading, why, null, buttonLabel, null,
-                correct ? new Color32(0x17, 0x38, 0x26, 0xF2) : new Color32(0x3F, 0x15, 0x17, 0xF2), false);
+                correct ? Hud.SuccessGlass : Hud.DangerGlass, false);
         }
 
         public void ShowComplete(string heading, string body, string note, bool passed, string primary, string secondary)
         {
             ShowBottom((passed ? "✓  " : "✕  ") + heading, body, note, primary, secondary,
-                passed ? new Color32(0x17, 0x38, 0x26, 0xF2) : new Color32(0x3F, 0x15, 0x17, 0xF2), true);
+                passed ? Hud.SuccessGlass : Hud.DangerGlass, true);
         }
 
         public void ShowError(string message, string buttonLabel)
         {
-            m_ErrorText.Set(message, 46, Palette.Sand, true);
+            m_ErrorText.Set(message, 46, Hud.Text, true);
             m_ErrorButtonLabel.Set(buttonLabel, 44, Color.white, true);
             m_ErrorPanel.SetActive(true);
         }
@@ -90,12 +112,12 @@ namespace SurakshaAR
             m_Bottom.SetActive(true);
             m_BottomBg.color = bg;
             m_Heading.Set(heading, bigHeading ? 60 : 50, Color.white, true);
-            m_Body.Set(body, 42, Palette.Sand);
-            m_Note.Set(note, 32, Palette.Sand);
+            m_Body.Set(body, 42, Hud.TextSecondary);
+            m_Note.Set(note, 32, Hud.TextSecondary);
             m_Primary.SetActive(!string.IsNullOrEmpty(primary));
-            if (!string.IsNullOrEmpty(primary)) m_PrimaryLabel.Set(primary, 46, Color.black, true);
+            if (!string.IsNullOrEmpty(primary)) m_PrimaryLabel.Set(primary, 46, Color.white, true);
             m_Secondary.SetActive(!string.IsNullOrEmpty(secondary));
-            if (!string.IsNullOrEmpty(secondary)) m_SecondaryLabel.Set(secondary, 42, Color.black, true);
+            if (!string.IsNullOrEmpty(secondary)) m_SecondaryLabel.Set(secondary, 42, Hud.Ink, true);
         }
 
         void Build()
@@ -111,19 +133,22 @@ namespace SurakshaAR
             var root = (RectTransform)canvasGo.transform;
             Canvas.ForceUpdateCanvases();
 
-            // Safe-area-ish top padding for status bar / notch.
-            const float top = 70f;
+            // Safe area (status bar / notch / gesture bar) in canvas units (canvas matches width).
+            float unitsPerPixel = Width / Mathf.Max(1f, Screen.width);
+            Rect safe = Screen.safeArea;
+            float top = Mathf.Max(40f, (Screen.height - safe.yMax) * unitsPerPixel + 16f);
+            float bottomInset = Mathf.Max(0f, safe.yMin * unitsPerPixel);
 
             // ---- top bar
-            var bar = Panel(root, "TopBar", PanelBg);
-            Anchor(bar, 0, 1, 1, 1, new Vector2(0, -top - 150), new Vector2(0, -top));
-            var exit = Button(bar, "Exit", new Color32(0x2D, 0x3A, 0x45, 0xFF), () => ExitPressed?.Invoke(), out m_ExitLabel, 230);
+            var bar = Panel(root, "TopBar", PanelBg, true);
+            Anchor(bar, 0, 1, 1, 1, new Vector2(24, -top - 150), new Vector2(-24, -top));
+            var exit = Button(bar, "Exit", Hud.Control, () => ExitPressed?.Invoke(), out m_ExitLabel, 230);
             Anchor((RectTransform)exit.transform, 0, 0, 0, 1, new Vector2(16, 16), new Vector2(246, -16));
             var titleCol = VStack(bar, "Titles", 4);
             Anchor(titleCol, 0, 0, 1, 1, new Vector2(262, 8), new Vector2(-150, -8));
             m_Title = UIText.Create(titleCol, "Module", 660);
             m_Step = UIText.Create(titleCol, "Step", 660);
-            var mute = Button(bar, "Mute", new Color32(0x2D, 0x3A, 0x45, 0xFF), () => MuteToggled?.Invoke(), out _, 118);
+            var mute = Button(bar, "Mute", Hud.Control, () => MuteToggled?.Invoke(), out _, 118);
             Anchor((RectTransform)mute.transform, 1, 0, 1, 1, new Vector2(-134, 16), new Vector2(-16, -16));
             m_MuteText = UIText.Create(mute.transform, "Icon", 100);
             var mrt = (RectTransform)m_MuteText.transform;
@@ -134,7 +159,7 @@ namespace SurakshaAR
             m_Progress = new GameObject("Progress", typeof(RectTransform), typeof(HorizontalLayoutGroup));
             var prt = (RectTransform)m_Progress.transform;
             prt.SetParent(root, false);
-            Anchor(prt, 0, 1, 1, 1, new Vector2(16, -top - 210), new Vector2(-16, -top - 160));
+            Anchor(prt, 0, 1, 1, 1, new Vector2(24, -top - 212), new Vector2(-24, -top - 166));
             var hl = m_Progress.GetComponent<HorizontalLayoutGroup>();
             hl.spacing = 10; hl.childForceExpandWidth = true; hl.childForceExpandHeight = true; hl.childControlWidth = true; hl.childControlHeight = true;
 
@@ -143,42 +168,42 @@ namespace SurakshaAR
             m_Diag.alignment = TextAnchor.UpperRight;
 
             // ---- prompt card
-            var promptRt = VStack(root, "PromptCard", 0, PanelBg, 24);
+            var promptRt = VStack(root, "PromptCard", 0, PanelBg, 28, true);
             Anchor(promptRt, 0, 1, 1, 1, Vector2.zero, Vector2.zero);
             promptRt.pivot = new Vector2(0.5f, 1f);
             promptRt.anchoredPosition = new Vector2(0, -top - 262);
-            promptRt.sizeDelta = new Vector2(-32, 0);
+            promptRt.sizeDelta = new Vector2(-48, 0);
             Fit(promptRt);
             m_PromptCard = promptRt.gameObject;
-            m_Prompt = UIText.Create(promptRt, "Prompt", Width - 80);
+            m_Prompt = UIText.Create(promptRt, "Prompt", Width - 104);
             m_PromptCard.SetActive(false);
 
             // ---- bottom panel
-            var bottom = VStack(root, "Bottom", 18, PanelBg, 30);
+            var bottom = VStack(root, "Bottom", 18, PanelBg, 32, true);
             m_BottomBg = bottom.GetComponent<Image>();
             Anchor(bottom, 0, 0, 1, 0, Vector2.zero, Vector2.zero);
             bottom.pivot = new Vector2(0.5f, 0f);
-            bottom.anchoredPosition = new Vector2(0, 24);
-            bottom.sizeDelta = new Vector2(-32, 0);
+            bottom.anchoredPosition = new Vector2(0, 24 + bottomInset);
+            bottom.sizeDelta = new Vector2(-48, 0);
             Fit(bottom);
             m_Bottom = bottom.gameObject;
-            m_Heading = UIText.Create(bottom, "Heading", Width - 92);
-            m_Body = UIText.Create(bottom, "Body", Width - 92);
-            m_Note = UIText.Create(bottom, "Note", Width - 92);
-            m_Primary = Button(bottom, "Primary", Palette.Amber, () => PrimaryPressed?.Invoke(), out m_PrimaryLabel, Width - 92);
-            m_Secondary = Button(bottom, "Secondary", Palette.Sand, () => SecondaryPressed?.Invoke(), out m_SecondaryLabel, Width - 92);
+            m_Heading = UIText.Create(bottom, "Heading", Width - 112);
+            m_Body = UIText.Create(bottom, "Body", Width - 112);
+            m_Note = UIText.Create(bottom, "Note", Width - 112);
+            m_Primary = Button(bottom, "Primary", Hud.Primary, () => PrimaryPressed?.Invoke(), out m_PrimaryLabel, Width - 112);
+            m_Secondary = Button(bottom, "Secondary", Hud.Light, () => SecondaryPressed?.Invoke(), out m_SecondaryLabel, Width - 112);
             m_Primary.SetActive(false);
             m_Secondary.SetActive(false);
 
             // ---- error overlay
-            var err = Panel(root, "Error", new Color32(0x0F, 0x14, 0x19, 0xF5));
+            var err = Panel(root, "Error", Hud.GlassStrong);
             Anchor(err, 0, 0, 1, 1, Vector2.zero, Vector2.zero);
             var errStack = VStack(err, "ErrorStack", 60, null, 60);
             Anchor(errStack, 0, 0.5f, 1, 0.5f, Vector2.zero, Vector2.zero);
             errStack.sizeDelta = new Vector2(0, 0);
             Fit(errStack);
             m_ErrorText = UIText.Create(errStack, "ErrorText", Width - 160);
-            Button(errStack, "ErrorButton", Palette.Red, () => ExitPressed?.Invoke(), out m_ErrorButtonLabel, Width - 160);
+            Button(errStack, "ErrorButton", Hud.Primary, () => ExitPressed?.Invoke(), out m_ErrorButtonLabel, Width - 160);
             m_ErrorPanel = err.gameObject;
             m_ErrorPanel.SetActive(false);
         }
@@ -190,7 +215,7 @@ namespace SurakshaAR
             m_SegmentText = new UIText[n];
             for (int i = 0; i < n; i++)
             {
-                var seg = Panel((RectTransform)m_Progress.transform, "Seg" + i, Palette.Slate);
+                var seg = Panel((RectTransform)m_Progress.transform, "Seg" + i, Hud.Pending, true, 2f);
                 m_Segments[i] = seg.GetComponent<Image>();
                 var lbl = UIText.Create(seg, "N", 300);
                 var rt = (RectTransform)lbl.transform;
@@ -202,7 +227,7 @@ namespace SurakshaAR
 
         // ------------------------------------------------------------------ builders
 
-        static RectTransform Panel(RectTransform parent, string name, Color color)
+        static RectTransform Panel(RectTransform parent, string name, Color color, bool rounded = false, float radiusDivider = 1f)
         {
             var go = new GameObject(name, typeof(RectTransform), typeof(Image));
             var rt = (RectTransform)go.transform;
@@ -210,12 +235,39 @@ namespace SurakshaAR
             var img = go.GetComponent<Image>();
             img.color = color;
             img.raycastTarget = color.a > 0.01f;
+            if (rounded)
+            {
+                img.sprite = RoundSprite();
+                img.type = Image.Type.Sliced;
+                img.pixelsPerUnitMultiplier = radiusDivider;
+            }
             return rt;
         }
 
-        static RectTransform VStack(RectTransform parent, string name, float spacing, Color? bg = null, int padding = 0)
+        /// <summary>White rounded-rectangle sprite (48-unit corner radius), anti-aliased, 9-sliced.</summary>
+        static Sprite RoundSprite()
         {
-            var rt = bg.HasValue ? Panel(parent, name, bg.Value) : (RectTransform)new GameObject(name, typeof(RectTransform)).transform;
+            if (s_Round != null) return s_Round;
+            const int size = 128, r = 48;
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp, filterMode = FilterMode.Bilinear };
+            var px = new Color32[size * size];
+            for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                {
+                    float cx = Mathf.Clamp(x + 0.5f, r, size - r), cy = Mathf.Clamp(y + 0.5f, r, size - r);
+                    float d = Mathf.Sqrt((x + 0.5f - cx) * (x + 0.5f - cx) + (y + 0.5f - cy) * (y + 0.5f - cy));
+                    byte a = (byte)(Mathf.Clamp01(r - d + 0.5f) * 255f);
+                    px[y * size + x] = new Color32(255, 255, 255, a);
+                }
+            tex.SetPixels32(px);
+            tex.Apply(false, true);
+            s_Round = Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect, new Vector4(r, r, r, r));
+            return s_Round;
+        }
+
+        static RectTransform VStack(RectTransform parent, string name, float spacing, Color? bg = null, int padding = 0, bool rounded = false)
+        {
+            var rt = bg.HasValue ? Panel(parent, name, bg.Value, rounded) : (RectTransform)new GameObject(name, typeof(RectTransform)).transform;
             if (!bg.HasValue) rt.SetParent(parent, false);
             var v = rt.gameObject.AddComponent<VerticalLayoutGroup>();
             v.spacing = spacing;
@@ -242,7 +294,7 @@ namespace SurakshaAR
 
         GameObject Button(RectTransform parent, string name, Color bg, Action onClick, out UIText label, float width)
         {
-            var rt = Panel(parent, name, bg);
+            var rt = Panel(parent, name, bg, true, 1.3f);
             var le = rt.gameObject.AddComponent<LayoutElement>();
             le.preferredWidth = width;
             le.minHeight = 130;

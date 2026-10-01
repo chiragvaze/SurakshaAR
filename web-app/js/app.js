@@ -15,6 +15,7 @@
     home: ['language', 'worker'],
     me: ['language', 'worker'],
     train: ['language', 'worker'],
+    ppe: ['language', 'worker'],
     briefing: ['language', 'worker'],
     assess: ['language', 'worker'],
     result: ['language', 'worker'],

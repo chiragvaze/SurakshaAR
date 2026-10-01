@@ -2,6 +2,7 @@ package com.surakshaar.shell
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.WindowCompat
 import androidx.webkit.ServiceWorkerClientCompat
 import androidx.webkit.ServiceWorkerControllerCompat
 import androidx.webkit.WebViewAssetLoader
@@ -61,6 +63,7 @@ class MainActivity : ComponentActivity() {
 
         webView = WebView(this)
         setContentView(webView)
+        applySystemBars(dark = false) // light is the default theme; the page reports changes via setDarkTheme
         with(webView.settings) {
             javaScriptEnabled = true
             domStorageEnabled = true            // localStorage "sa_v1"
@@ -115,6 +118,24 @@ class MainActivity : ComponentActivity() {
         @JavascriptInterface
         fun launchAR(module: String?, lang: String?) {
             runOnUiThread { startAr(module, lang) }
+        }
+
+        /** Optional (UI redesign): match status/navigation bars to the web app theme. No data crosses. */
+        @JavascriptInterface
+        fun setDarkTheme(dark: Boolean) {
+            runOnUiThread { applySystemBars(dark) }
+        }
+    }
+
+    @Suppress("DEPRECATION") // statusBarColor: still honoured below targetSdk 35 (this app targets 34)
+    private fun applySystemBars(dark: Boolean) {
+        val bg = Color.parseColor(if (dark) "#070B12" else "#F6F8FB")
+        window.statusBarColor = bg
+        window.navigationBarColor = bg
+        webView.setBackgroundColor(bg)
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = !dark
+            isAppearanceLightNavigationBars = !dark
         }
     }
 
