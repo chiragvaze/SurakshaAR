@@ -348,3 +348,4 @@ select.mselect { appearance: none; -webkit-appearance: none; padding-right: 40px
   border-radius: var(--radius-md); border: 1px solid var(--color-border); background: var(--color-surface); cursor: pointer;
 }
 .check input { width: 22px; height: 22px; accent-color: var(--color-primary); }
+.gcard > .chip { align-self: flex-start; }
