@@ -13,6 +13,7 @@ const FILES = [
   'js/data/scenarios.js',
   'js/data/seed-workers.js',
   'js/i18n/strings.js',
+  'js/i18n/ui-strings.js',
   'js/i18n/i18n.js',
   'js/scenario/scoring.js',
   'js/scenario/validator.js',

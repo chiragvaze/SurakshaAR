@@ -34,6 +34,7 @@ function install() {
   const document = {
     createElement: (tag) => new FakeNode(tag),
     createTextNode: (text) => new FakeNode(null, text),
+    createElementNS: (ns, tag) => new FakeNode(tag),
     getElementById: () => null,
     documentElement: { lang: '' }
   };

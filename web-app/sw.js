@@ -5,11 +5,15 @@
  * tests/assets.test.js checks this list matches every file index.html loads.
  */
 'use strict';
-var CACHE = 'surakshaar-v1';
+var CACHE = 'surakshaar-v2';
 var ASSETS = [
   './',
   'index.html',
-  'css/app.css',
+  'css/tokens.css',
+  'css/base.css',
+  'css/components.css',
+  'css/legacy.css',
+  'js/services/prefs.js',
   'js/utils/codec.js',
   'js/utils/sha256.js',
   'js/utils/qr.js',
@@ -17,6 +21,7 @@ var ASSETS = [
   'js/data/scenarios.js',
   'js/data/seed-workers.js',
   'js/i18n/strings.js',
+  'js/i18n/ui-strings.js',
   'js/i18n/i18n.js',
   'js/i18n/mgmt-strings.js',
   'js/scenario/scoring.js',
@@ -30,6 +35,7 @@ var ASSETS = [
   'js/services/bridge.js',
   'js/services/management.js',
   'js/components/dom.js',
+  'js/components/icons.js',
   'js/components/ui.js',
   'js/screens/onboarding.js',
   'js/screens/home.js',

@@ -11,7 +11,7 @@ const dom = require('./helpers/fakedom');
 
 const SA = load();
 dom.install();
-['js/components/dom.js', 'js/components/ui.js', 'js/i18n/mgmt-strings.js', 'js/services/management.js', 'js/screens/management.js']
+['js/services/prefs.js', 'js/components/dom.js', 'js/components/icons.js', 'js/components/ui.js', 'js/i18n/mgmt-strings.js', 'js/services/management.js', 'js/screens/management.js']
   .forEach((f) => require(path.join(__dirname, '..', f)));
 
 const DAY = SA.clock.DAY_MS;
