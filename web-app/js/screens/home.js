@@ -59,7 +59,7 @@
   SA.screens.home = function (ctx) {
     var t = ctx.t;
     var w = ctx.state.worker;
-    return ui.page(ctx, {}, [
+    return ui.page(ctx, { tab: 'home' }, [
       h('div', { class: 'worker-head' },
         h('h1', { class: 'page__title', tabindex: '-1' }, t('home.greeting', { name: w.name })),
         h('p', { class: 'worker-head__id' }, t('home.workerId', { id: w.id }))),

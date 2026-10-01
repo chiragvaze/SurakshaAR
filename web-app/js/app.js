@@ -13,6 +13,8 @@
     language: [],
     profile: ['language'],
     home: ['language', 'worker'],
+    me: ['language', 'worker'],
+    train: ['language', 'worker'],
     briefing: ['language', 'worker'],
     assess: ['language', 'worker'],
     result: ['language', 'worker'],

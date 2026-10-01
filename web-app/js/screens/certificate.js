@@ -103,7 +103,7 @@
         h('p', { class: 'verdict__offline' }, t('verify.offline'))));
     }
 
-    return ui.page(ctx, { back: ctx.state.worker ? '#/home' : '#/welcome' }, [
+    return ui.page(ctx, ctx.state.worker ? { tab: 'verify' } : { back: '#/welcome' }, [
       ui.title(t('verify.title'), t('verify.hint')),
       h('label', { class: 'field__label', for: 'verify-input' }, t('verify.input')),
       input,
