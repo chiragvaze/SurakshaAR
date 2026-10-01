@@ -19,6 +19,8 @@
     sos: ['language', 'worker'],
     nearmiss: ['language', 'worker'],
     alerts: ['language', 'worker'],
+    replay: ['language', 'worker'],
+    coach: ['language', 'worker'],
     briefing: ['language', 'worker'],
     assess: ['language', 'worker'],
     result: ['language', 'worker'],

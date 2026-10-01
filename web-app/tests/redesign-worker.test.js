@@ -203,3 +203,43 @@ test('near-miss form validates input and stores the report locally', () => {
   assert.deepEqual([r[0].severity, r[0].status, r[0].name], ['medium', 'open', 'Ramesh Kumar']);
   assert.ok(text(SA.screens.nearmiss(ctx())).includes('Loose rock fell near the conveyor'));
 });
+
+test('Safety Coach answers only from approved training content (offline, not AI)', () => {
+  require(path.join(__dirname, '..', 'js/services/coach.js'));
+  setup({ gas: ['correct', 'wrong', 'correct'] });
+  const c = ctx();
+  assert.equal(SA.coach.matchStep('What if the corridor fills with smoke?', 'en').step.id, 'fire_03_smoke');
+  assert.equal(SA.coach.matchStep('धुआँ भर गया तो क्या करूँ', 'hi').step.id, 'fire_03_smoke');
+  assert.equal(SA.coach.matchStep('which extinguisher for an electrical fire', 'en').step.id, 'fire_02_extinguisher');
+  const step = SA.coach.answer('smoke in the corridor', c);
+  assert.equal(step.kind, 'step');
+  assert.equal(step.cards[0].why, SA.i18n.t('scn.fire_03_smoke.why'));
+  assert.equal(step.cards[0].safe, SA.i18n.t('scn.fire_03_smoke.opt.crawl_low'), 'the correct option from the scenario');
+  const why = SA.coach.answer(SA.i18n.t('coach.prompt.why'), c);
+  assert.equal(why.kind, 'why');
+  assert.equal(why.cards.length, 3);
+  assert.ok(why.text.includes('1'));
+  assert.equal(SA.coach.answer('what is the cricket score', c).kind, 'unknown');
+  assert.equal(SA.coach.answer(SA.i18n.t('coach.prompt.ppe'), c).kind, 'ppe');
+  assert.equal(SA.coach.answer(SA.i18n.t('coach.prompt.explain'), c).choices.length, 6);
+});
+
+test('Haadsa Replay / Pressure Drill is practice only: nothing is scored or stored', () => {
+  require(path.join(__dirname, '..', 'js/screens/practice.js'));
+  const { ws } = setup({});
+  const before = ws.getItem(SA.store.KEY);
+  const sc = SA.scenario.get('gas_confined');
+  for (let i = 0; i < sc.steps.length; i++) {
+    const node = SA.screens.replay(ctx('gas_confined'));
+    dom.findAll(node, (n) => n.getAttribute('data-option') === sc.steps[i].correct)[0].click();
+    const after = SA.screens.replay(ctx('gas_confined'));
+    assert.ok(text(dom.byId(after, 'replay-consequence')).includes(SA.i18n.t('scn.' + sc.steps[i].id + '.why')));
+    dom.byId(after, 'replay-next').click();
+  }
+  const summary = SA.screens.replay(ctx('gas_confined'));
+  assert.ok(dom.byId(summary, 'replay-summary'));
+  assert.ok(text(summary).includes(SA.i18n.t('replay.doneText', { n: 3, total: 3 })));
+  assert.equal(ws.getItem(SA.store.KEY), before, 'no attempt, certificate or session written');
+  dom.byId(summary, 'replay-again').click();
+  assert.ok(!dom.byId(SA.screens.replay(ctx('gas_confined')), 'replay-summary'), 'replay again restarts');
+});
