@@ -398,6 +398,15 @@
     return app;
   }
 
+  // Escape closes the phone drawer.
+  if (root.document && root.document.addEventListener) {
+    root.document.addEventListener('keydown', function (ev) {
+      if (ev.key !== 'Escape') return;
+      var open = root.document.querySelector && root.document.querySelector('.mgmt.is-drawer-open');
+      if (open) open.classList.remove('is-drawer-open');
+    });
+  }
+
   function portal(ctx) {
     var M = SA.management;
     var sum = M.summary(ctx.state);

@@ -6,7 +6,7 @@
 .home-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-3); }
 .home-head__text { min-width: 0; }
 .home-head__avatar { flex: none; border-radius: 50%; }
-.worker-head__id { margin: var(--space-1) 0 0; font-size: var(--text-xs); color: var(--color-text-muted); font-weight: var(--weight-medium); }
+.worker-head__id { margin: var(--space-1) 0 0; font-size: var(--text-xs); color: var(--color-text-secondary); font-weight: var(--weight-medium); }
 
 .status-card { flex-direction: row; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-5); overflow: hidden; }
 .status-card::before { content: ""; position: absolute; right: -60px; top: -60px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, var(--color-primary-soft), transparent 70%); pointer-events: none; }

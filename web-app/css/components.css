@@ -7,11 +7,11 @@
 .tone-success { --tone: var(--color-success); --tone-soft: var(--color-success-soft); --tone-text: var(--color-success-text); }
 .tone-warning { --tone: var(--color-warning); --tone-soft: var(--color-warning-soft); --tone-text: var(--color-warning-text); }
 .tone-danger  { --tone: var(--color-danger);  --tone-soft: var(--color-danger-soft);  --tone-text: var(--color-danger-text); }
-.tone-teal    { --tone: var(--color-teal);    --tone-soft: rgba(20, 184, 166, 0.12); --tone-text: var(--color-teal); }
-.tone-purple  { --tone: var(--color-purple);  --tone-soft: rgba(139, 92, 246, 0.12); --tone-text: var(--color-purple); }
-.tone-blue    { --tone: var(--color-blue);    --tone-soft: rgba(59, 130, 246, 0.12); --tone-text: var(--color-blue); }
-.tone-fire    { --tone: var(--color-fire);    --tone-soft: rgba(249, 115, 22, 0.12); --tone-text: var(--color-fire); }
-.tone-gas     { --tone: var(--color-gas);     --tone-soft: rgba(20, 184, 166, 0.12); --tone-text: var(--color-gas); }
+.tone-teal    { --tone: var(--color-teal);    --tone-soft: rgba(20, 184, 166, 0.12); --tone-text: var(--color-teal-text); }
+.tone-purple  { --tone: var(--color-purple);  --tone-soft: rgba(139, 92, 246, 0.12); --tone-text: var(--color-purple-text); }
+.tone-blue    { --tone: var(--color-blue);    --tone-soft: rgba(59, 130, 246, 0.12); --tone-text: var(--color-blue-text); }
+.tone-fire    { --tone: var(--color-fire);    --tone-soft: rgba(249, 115, 22, 0.12); --tone-text: var(--color-fire-text); }
+.tone-gas     { --tone: var(--color-gas);     --tone-soft: rgba(20, 184, 166, 0.12); --tone-text: var(--color-teal-text); }
 .tone-neutral { --tone: var(--color-text-muted); --tone-soft: var(--color-surface-sunken); --tone-text: var(--color-text-secondary); }
 
 /* ---------- buttons ---------- */
@@ -133,7 +133,7 @@ button.gcard { width: 100%; font: inherit; }
 .badge--danger { color: var(--color-danger-text); background: var(--color-danger-soft); }
 .badge--primary { color: var(--color-primary-text); background: var(--color-primary-soft); }
 .badge--neutral, .badge--none { color: var(--color-text-secondary); background: var(--color-surface-sunken); }
-.badge--solid.badge--success { color: #fff; background: var(--color-success); }
+.badge--solid.badge--success { color: #fff; background: var(--color-success-solid); }
 
 /* ---------- notices ---------- */
 .notice {
@@ -189,7 +189,7 @@ html[data-theme="light"] .ring__track { stroke: rgba(16, 24, 40, 0.07); }
 .metric__value { font-size: 1.75rem; font-weight: var(--weight-bold); line-height: 1.1; letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums; }
 .metric__unit { font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--color-text-secondary); margin-left: 2px; }
 .metric__label { font-size: var(--text-sm); color: var(--color-text-secondary); font-weight: var(--weight-medium); padding-right: 36px; }
-.metric__sub { font-size: var(--text-xs); color: var(--color-text-muted); }
+.metric__sub { font-size: var(--text-xs); color: var(--color-text-secondary); }
 .metric__icon {
   position: absolute; top: var(--space-3); right: var(--space-3);
   display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px;
@@ -351,3 +351,8 @@ select.mselect { appearance: none; -webkit-appearance: none; padding-right: 40px
 .gcard > .chip { align-self: flex-start; }
 .demo-note .icon { display: inline-block; vertical-align: -2px; }
 .stack > .badge, .gcard > .badge { align-self: flex-start; }
+
+/* ---------- a11y: 44×44 minimum touch targets (audit) ---------- */
+.segmented__opt { min-height: 44px; }
+.chip-btn { min-height: 44px; }
+.chip.appbar__lang { min-height: 44px; }

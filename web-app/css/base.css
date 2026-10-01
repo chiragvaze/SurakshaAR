@@ -159,7 +159,7 @@ h1:focus, h2:focus, p:focus { outline: none; }
   max-width: 520px;
   height: var(--nav-h);
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   align-items: center;
   padding: 0 var(--space-2);
   border-radius: var(--radius-lg);
@@ -193,3 +193,14 @@ html[data-effects="reduced"] .tabbar { border-color: var(--color-border); }
 @media (min-width: 600px) {
   .page { padding: var(--space-6) var(--space-6) var(--space-9); gap: var(--space-6); }
 }
+
+/* ---------- route transition (navigation only, not re-renders) ---------- */
+.route-enter .page, .route-enter .mcontent, .route-enter .mlogin { animation: route-in var(--dur-slow) var(--ease) both; }
+@keyframes route-in { from { opacity: 0; transform: translateY(8px); } }
+
+/* ---------- boot skeleton (static markup in index.html, replaced by the first render) ---------- */
+.boot { max-width: var(--content-max); margin: 0 auto; padding: calc(var(--space-6) + var(--safe-top)) var(--space-4); display: flex; flex-direction: column; gap: var(--space-4); }
+.boot__bar { height: 28px; width: 55%; border-radius: var(--radius-xs); }
+.boot__card { height: 140px; border-radius: var(--radius-lg); }
+.boot__card--sm { height: 84px; }
+.boot__bar, .boot__card { background: linear-gradient(90deg, var(--color-surface-sunken) 0%, var(--color-surface-hover) 40%, var(--color-surface-sunken) 80%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }

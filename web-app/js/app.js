@@ -110,6 +110,8 @@
     }
     if (ui.closeSheets) ui.closeSheets();
     var scrollY = root.scrollY;
+    // Subtle enter transition on navigation only (re-renders keep scroll and stay still).
+    if (!opts.keepScroll && !opts.focus && node.classList) node.classList.add('route-enter');
     appEl.replaceChildren(node);
     root.document.title = SA.i18n.t('app.name') + ' · SurakshaAR';
 
