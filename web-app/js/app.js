@@ -16,6 +16,9 @@
     me: ['language', 'worker'],
     train: ['language', 'worker'],
     ppe: ['language', 'worker'],
+    sos: ['language', 'worker'],
+    nearmiss: ['language', 'worker'],
+    alerts: ['language', 'worker'],
     briefing: ['language', 'worker'],
     assess: ['language', 'worker'],
     result: ['language', 'worker'],
@@ -103,6 +106,7 @@
       if (root.console) root.console.error('[render] ' + route.name, e);
       node = SA.screens.error(ctx);
     }
+    if (ui.closeSheets) ui.closeSheets();
     var scrollY = root.scrollY;
     appEl.replaceChildren(node);
     root.document.title = SA.i18n.t('app.name') + ' · SurakshaAR';

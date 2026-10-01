@@ -20,3 +20,38 @@
 .ppe-result__icon { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; color: var(--tone-text); background: var(--color-surface-solid); box-shadow: var(--shadow-sm); }
 .ppe-result__title { margin: 0; font-size: var(--text-h2); font-weight: var(--weight-bold); }
 .ppe-result__text { margin: 0; color: var(--color-text); max-width: 40ch; }
+
+/* ---------- emergency SOS (red only for the emergency itself) ---------- */
+.sos-head { display: flex; align-items: center; gap: var(--space-4); }
+.sos-head__icon { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 20px; color: #fff; background: var(--gradient-danger); box-shadow: var(--shadow-danger); }
+.sos-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+.sos-type {
+  display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3);
+  min-height: 112px; padding: var(--space-4); border-radius: var(--radius-lg);
+  text-align: left; cursor: pointer; color: var(--color-text);
+  background: var(--color-surface-solid); border: 1.5px solid var(--color-danger-soft); box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.sos-type:hover { border-color: var(--color-danger); }
+.sos-type:active { transform: scale(.97); }
+.sos-type:last-child:nth-child(odd) { grid-column: 1 / -1; min-height: 72px; flex-direction: row; align-items: center; }
+.sos-type__icon { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 15px; color: var(--color-danger-text); background: var(--color-danger-soft); }
+.sos-type__label { font-size: var(--text-body-lg); font-weight: var(--weight-bold); }
+.sos-facts { padding: var(--space-4); border-radius: var(--radius-md); background: var(--color-surface-sunken); }
+.sos-done { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-3); padding-top: var(--space-4); }
+.sos-done .facts { align-self: stretch; text-align: left; }
+.sos-done .btn { align-self: stretch; }
+.sos-done__icon { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 50%; color: var(--color-success-text); background: var(--color-success-soft); }
+.sos-done__text { margin: 0; font-weight: var(--weight-semibold); max-width: 36ch; }
+
+/* ---------- near-miss ---------- */
+.nm-list { display: flex; flex-direction: column; gap: var(--space-3); }
+.nm-card { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-4); border-radius: var(--radius-md); background: var(--color-surface); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm); }
+.nm-card__head { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.nm-card__desc { margin: 0; }
+.nm-card__meta { margin: 0; display: flex; align-items: center; gap: 6px; font-size: var(--text-xs); color: var(--color-text-secondary); }
+
+/* ---------- notifications bell (app bar) ---------- */
+.appbar__bell { position: relative; }
+.appbar__bell-dot { position: absolute; top: 8px; right: 9px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: var(--radius-pill); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: var(--weight-bold); color: #fff; background: var(--color-danger); box-shadow: 0 0 0 2px var(--color-surface-solid); }
+.sos-done .sheet__title { color: var(--color-text); }

@@ -49,6 +49,7 @@ var ASSETS = [
   'js/screens/me.js',
   'js/screens/train.js',
   'js/screens/ppe.js',
+  'js/screens/safety-tools.js',
   'js/screens/training.js',
   'js/screens/certificate.js',
   'js/screens/dashboard.js',

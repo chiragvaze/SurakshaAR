@@ -43,6 +43,14 @@
     return btnEl;
   }
 
+  /** Notifications bell with a count of local reminders (only when that screen exists). */
+  function bell(ctx) {
+    if (!SA.screens || !SA.screens.alerts || !SA.insights || !ctx.state || !ctx.state.worker) return null;
+    var n = SA.insights.alerts(ctx.state).length;
+    return h('a', { class: 'icon-btn icon-btn--glass appbar__bell', href: '#/alerts', id: 'appbar-alerts', 'aria-label': ctx.t('alerts.title') + (n ? ' (' + n + ')' : '') },
+      icon('bell'), n ? h('span', { class: 'appbar__bell-dot', 'aria-hidden': 'true' }, String(n)) : null);
+  }
+
   function appBar(ctx, opts) {
     opts = opts || {};
     var t = ctx.t;
@@ -54,6 +62,7 @@
       left,
       opts.barTitle ? h('span', { class: 'appbar__title' }, opts.barTitle) : null,
       h('div', { class: 'appbar__actions' },
+        opts.tab ? bell(ctx) : null,
         h('a', { class: 'chip chip--glass appbar__lang', href: '#/language?next=' + here, 'aria-label': t('nav.language') },
           icon('language', { size: 16 }), h('span', null, LANG_SHORT[ctx.lang] || 'EN')),
         themeIconButton(t))
@@ -309,6 +318,13 @@
     return { close: close, el: panel };
   }
 
+  /** Remove any open sheet (called by the router on every navigation). */
+  function closeSheets() {
+    var doc = root.document;
+    if (!doc || !doc.querySelectorAll) return;
+    Array.prototype.forEach.call(doc.querySelectorAll('.sheet-overlay'), function (o) { if (o.parentNode) o.parentNode.removeChild(o); });
+  }
+
   /** Skeleton loader shaped like the final card. kind: card | row | metric */
   function skeleton(kind, count) {
     var n = count || 1;
@@ -397,6 +413,7 @@
     stepper: stepper,
     toast: toast,
     sheet: sheet,
+    closeSheets: closeSheets,
     skeleton: skeleton,
     empty: empty,
     errorState: errorState,

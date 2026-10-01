@@ -166,3 +166,40 @@ test('language selector: planned languages are listed but not selectable', () =>
   assert.deepEqual(planned.map((n) => n.getAttribute('data-planned')), ['kho', 'nag', 'ho', 'mun']);
   assert.ok(planned.every((n) => n.tagName === 'DIV' && n.getAttribute('aria-disabled') === 'true'));
 });
+
+test('SOS: two steps (type, then confirm), logged on this phone, never reported as sent', () => {
+  require(path.join(__dirname, '..', 'js/screens/safety-tools.js'));
+  setup({});
+  const node = SA.screens.sos(ctx());
+  assert.deepEqual(dom.byAttr(node, 'data-sos-type').map((n) => n.getAttribute('data-sos-type')), ['injury', 'fire', 'gas', 'equipment', 'other']);
+  assert.ok(text(dom.byId(node, 'sos-proto')).includes(SA.i18n.t('sos.proto')), 'honest prototype notice on the screen');
+  dom.byId(node, 'sos-gas').click();
+  assert.equal(SA.safety.get().sos.length, 0, 'choosing a type alone logs nothing');
+  const sheet = dom.byId(document.body, 'sos-sheet');
+  assert.ok(sheet, 'confirmation sheet opened');
+  assert.ok(text(sheet).includes(SA.i18n.t('sos.statusLogged')));
+  dom.byId(sheet, 'sos-confirm').click();
+  const ev = SA.safety.get().sos;
+  assert.equal(ev.length, 1);
+  assert.deepEqual([ev[0].type, ev[0].workerId, ev[0].status], ['gas', 'JH-2001', 'logged']);
+  assert.ok(text(sheet).includes(SA.i18n.t('sos.loggedText')));
+  assert.ok(!/sent successfully|alert sent|भेज दिया/i.test(text(sheet)));
+  assert.equal(SA.safety.get().audit.slice(-1)[0].action, 'sos.logged');
+  SA.ui.closeSheets();
+  assert.equal(dom.byId(document.body, 'sos-sheet'), null, 'router closes sheets on navigation');
+});
+
+test('near-miss form validates input and stores the report locally', () => {
+  setup({});
+  const node = SA.screens.nearmiss(ctx());
+  dom.byId(node, 'nm-form').dispatch('submit');
+  assert.equal(SA.safety.get().nearmiss.length, 0);
+  assert.equal(dom.byId(node, 'nm-loc-error').hidden, false);
+  dom.byId(node, 'nm-location').value = 'Crusher area';
+  dom.byId(node, 'nm-desc').value = 'Loose rock fell near the conveyor';
+  dom.byId(node, 'nm-form').dispatch('submit');
+  const r = SA.safety.get().nearmiss;
+  assert.equal(r.length, 1);
+  assert.deepEqual([r[0].severity, r[0].status, r[0].name], ['medium', 'open', 'Ramesh Kumar']);
+  assert.ok(text(SA.screens.nearmiss(ctx())).includes('Loose rock fell near the conveyor'));
+});
