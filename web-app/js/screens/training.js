@@ -217,7 +217,7 @@
       ui.metric({ label: t('res.metric.safe'), value: safe + '/' + attempt.steps, icon: 'shieldCheck', tone: 'success', id: 'result-safe' }),
       ui.metric({ label: t('res.metric.accuracy'), value: Math.round(100 * safe / attempt.steps), unit: '%', icon: 'target', tone: 'primary', id: 'result-accuracy' }),
       ui.metric({ label: t('res.metric.mistakes'), value: attempt.wrong, icon: 'alert', tone: attempt.wrong ? 'danger' : 'neutral', id: 'result-mistakes' }),
-      ui.metric({ label: t('res.metric.time'), value: SA.trainUI.duration(t, attempt.completedMs - attempt.startedMs), icon: 'timer', tone: 'teal', id: 'result-time' }));
+      ui.metric({ label: t('res.metric.time'), value: SA.trainUI.measuredMs(attempt) !== null ? SA.trainUI.duration(t, SA.trainUI.measuredMs(attempt)) : null, icon: 'timer', tone: 'teal', id: 'result-time' }));
 
     return ui.page(ctx, { back: '#/home' }, [
       stages(t, attempt.passed ? 3 : 2),

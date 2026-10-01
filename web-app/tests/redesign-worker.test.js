@@ -243,3 +243,10 @@ test('Haadsa Replay / Pressure Drill is practice only: nothing is scored or stor
   dom.byId(summary, 'replay-again').click();
   assert.ok(!dom.byId(SA.screens.replay(ctx('gas_confined')), 'replay-summary'), 'replay again restarts');
 });
+
+test('AR results carry no start time: no duration is invented', () => {
+  setup({});
+  SA.training.completeAssessment({ module: 'fire_explosion', wrong: 0, completed: true, score: 100 }); // AR result shape
+  const node = SA.screens.result(ctx());
+  assert.ok(text(dom.byId(node, 'result-time')).startsWith('—'));
+});

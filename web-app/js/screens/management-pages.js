@@ -33,7 +33,7 @@
     var names = {};
     sum.workers.forEach(function (w) { names[w.id] = w.name; });
     var list = state.attempts.map(function (a) {
-      return { id: a.id, workerId: a.workerId, name: names[a.workerId] || a.workerId, module: a.module, score: a.score, passed: a.passed, wrong: a.wrong, steps: a.steps, ms: a.completedMs, durMs: a.completedMs - a.startedMs, source: 'device' };
+      return { id: a.id, workerId: a.workerId, name: names[a.workerId] || a.workerId, module: a.module, score: a.score, passed: a.passed, wrong: a.wrong, steps: a.steps, ms: a.completedMs, durMs: a.completedMs > a.startedMs ? a.completedMs - a.startedMs : null, source: 'device' };
     });
     SA.SEED_WORKERS.forEach(function (s) {
       list.push({ id: 'seed-' + s.id, workerId: s.id, name: s.name, module: s.module, score: s.score, passed: SA.scoring.isPass(s.score), ms: sum.nowMs - (s.daysAgo + sum.offsetDays) * DAY, durMs: null, source: 'seeded' });

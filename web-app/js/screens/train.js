@@ -14,6 +14,9 @@
     gas_confined: { icon: 'wind', tone: 'gas' }
   };
 
+  /** Measured duration, or null when the trainer did not report a start time (AR results). */
+  function measuredMs(a) { return a && a.completedMs > a.startedMs ? a.completedMs - a.startedMs : null; }
+
   function look(id) { return MODULE_LOOK[id] || { icon: 'shield', tone: 'primary' }; }
 
   /** "2 min 5 s" from milliseconds. */
@@ -50,7 +53,7 @@
         h('span', { class: 'tcard__meta' },
           ui.chip(t('train.steps', { n: scenario ? scenario.steps.length : 0 }), { icon: 'layers' }),
           SA.bridge.isARAvailable() ? ui.chip(t('train.ar'), { icon: 'cube', tone: 'primary' }) : null,
-          last ? ui.chip(t('train.yourTime', { time: duration(t, last.completedMs - last.startedMs) }), { icon: 'timer' }) : null),
+          measuredMs(last) !== null ? ui.chip(t('train.yourTime', { time: duration(t, measuredMs(last)) }), { icon: 'timer' }) : null),
         h('span', { class: 'tcard__status' }, statusBadge(t, st))),
       h('span', { class: 'row__chev' }, ui.icon('chevronRight', { size: 20 }))
     ];
@@ -82,5 +85,5 @@
     ]);
   };
 
-  SA.trainUI = { trainingCard: trainingCard, look: look, duration: duration, statusBadge: statusBadge };
+  SA.trainUI = { trainingCard: trainingCard, look: look, duration: duration, measuredMs: measuredMs, statusBadge: statusBadge };
 })(typeof globalThis !== 'undefined' ? globalThis : window);
