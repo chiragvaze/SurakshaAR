@@ -27,13 +27,14 @@
     ], stage, { label: t('lfp.label'), id: 'lfp' });
   }
 
-  function moduleHead(ctx, moduleId, sub) {
+  function moduleHead(ctx, moduleId, subKey) {
     var L = SA.trainUI.look(moduleId);
     return h('div', { class: 'module-head' },
       h('span', { class: 'module-head__icon tone-' + L.tone, 'aria-hidden': 'true' }, ui.icon(L.icon, { size: 28, stroke: 1.8 })),
       h('div', { class: 'module-head__text' },
         h('h1', { class: 'page__title', tabindex: '-1' }, ui.moduleTitle(moduleId, ctx.lang)),
-        sub ? h('p', { class: 'page__sub' }, sub) : null));
+        subKey ? h('p', { class: 'page__sub' }, ctx.t(subKey), ui.satRef(ctx, subKey)) : null,
+        subKey ? ui.voiceControl(ctx, [subKey], { id: 'voice-purpose' }) : null));
   }
 
   // ---------------- Briefing (LEARN) ----------------
@@ -47,6 +48,7 @@
     var status = h('div', { class: 'briefing__status', role: 'status' });
 
     function start(fresh) {
+      if (SA.voice) SA.voice.stop();
       // AR (Android shell) runs its own session in Unity; only the browser trainer needs a web session.
       var mode = SA.bridge.launch(moduleId, ctx.lang);
       if (mode === 'ar') {
@@ -64,11 +66,11 @@
           h('span', { class: 'hazard__n' }, done ? ui.icon('check', { size: 14, stroke: 3 }) : String(i + 1)),
           h('span', { class: 'hazard__body' },
             h('span', { class: 'hazard__label' }, t('briefing.hazard', { n: i + 1 })),
-            h('span', { class: 'hazard__text' }, t('scn.' + s.id + '.prompt'))));
+            h('span', { class: 'hazard__text' }, t('scn.' + s.id + '.prompt'), ui.satRef(ctx, 'scn.' + s.id + '.prompt'))));
       }));
 
     return ui.page(ctx, { back: '#/home' }, [
-      moduleHead(ctx, moduleId, t('module.' + moduleId + '.purpose')),
+      moduleHead(ctx, moduleId, 'module.' + moduleId + '.purpose'),
       stages(t, 0),
       h('section', { class: 'gcard', 'aria-labelledby': 'learn-h' },
         h('div', { class: 'card-head' }, h('span', { class: 'row__icon tone-primary' }, ui.icon('book', { size: 18 })), h('h2', { class: 'section-title', id: 'learn-h' }, t('briefing.learn.title'))),
@@ -163,7 +165,7 @@
           onClick: function () { choose(opt); }
         },
         h('span', { class: 'option__letter', 'aria-hidden': 'true' }, 'ABC'.charAt(i)),
-        h('span', { class: 'option__text' }, h('span', { class: 'option__label' }, t(key + '.opt.' + opt)), tag));
+        h('span', { class: 'option__text' }, h('span', { class: 'option__label' }, t(key + '.opt.' + opt)), ui.satRef(ctx, key + '.opt.' + opt), tag));
       }));
 
     var feedback = null;
@@ -172,7 +174,8 @@
       feedback = h('section', { class: 'feedback feedback--' + (ok ? 'correct' : 'wrong'), role: 'status' },
         h('h2', { class: 'feedback__title', id: 'feedback-title', tabindex: '-1' },
           h('span', { class: 'feedback__icon' }, ui.icon(ok ? 'checkCircle' : 'xCircle', { size: 22 })), ok ? t('assess.correct') : t('assess.wrong')),
-        h('p', { class: 'feedback__why' }, t(key + '.why')),
+        h('p', { class: 'feedback__why' }, t(key + '.why'), ui.satRef(ctx, key + '.why')),
+        ui.voiceControl(ctx, [ok ? 'assess.correct' : 'assess.wrong', key + '.why'], { id: 'voice-why' }),
         ui.btn(step.isLast ? t('assess.finish') : t('assess.continue'), { onClick: next, id: 'assess-next', icon: step.isLast ? 'award' : 'chevronRight' }));
     }
 
@@ -182,7 +185,8 @@
         h('p', { class: 'assess-head__module' }, ui.chip(t('lfp.find'), { icon: 'target', tone: 'primary' })),
         h('p', { class: 'assess-head__step tabular', id: 'step-count' }, t('assess.step', { n: step.index + 1, total: step.total }))),
       progress,
-      h('h1', { class: 'prompt', id: 'step-prompt', tabindex: '-1' }, t(key + '.prompt')),
+      h('h1', { class: 'prompt', id: 'step-prompt', tabindex: '-1' }, t(key + '.prompt'), ui.satRef(ctx, key + '.prompt')),
+      step.answered ? null : ui.voiceControl(ctx, [key + '.prompt'], { id: 'voice-prompt' }),
       options,
       feedback
     ]);
@@ -232,7 +236,8 @@
         h('h1', { class: 'result__headline', tabindex: '-1' }, headline),
         h('p', { class: 'result__verdict', id: 'result-verdict' },
           ui.icon(attempt.passed ? 'checkCircle' : 'xCircle', { size: 18 }), attempt.passed ? t('result.passed') : t('result.failed')),
-        h('p', { class: 'result__passmark' }, t('result.passMark', { mark: SA.scoring.PASS_MARK }))),
+        h('p', { class: 'result__passmark' }, t('result.passMark', { mark: SA.scoring.PASS_MARK })),
+        ui.voiceControl(ctx, [attempt.passed ? 'result.passed' : 'result.failed'], { id: 'voice-result' })),
       metrics,
       ui.notice(attempt.wrong ? t('res.practiceAgain') : t('res.wellDone'), attempt.wrong ? 'warning' : 'success'),
       h('dl', { class: 'facts gcard gcard--sm' },

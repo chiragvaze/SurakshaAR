@@ -46,6 +46,42 @@ namespace SurakshaAR
 
         string T(string key, params (string, object)[] args) => m_Content.T(key, m_Lang, args);
 
+        const string HindiLabel = "हिन्दी · ";
+
+        /// <summary>Text in the trainer language, plus the Hindi original while Santali is unreviewed.</summary>
+        string WithRef(LocalizedText t)
+        {
+            if (t == null) return "";
+            return t.NeedsHindiReference(m_Lang) ? t.Get(m_Lang) + "\n" + HindiLabel + t.hi : t.Get(m_Lang);
+        }
+
+        string TRef(string key) => m_Content.Text(key) is LocalizedText t ? WithRef(t) : key;
+
+        string Hi(string key) => m_Content.Text(key)?.hi ?? "";
+
+        /// <summary>A spoken line built from UI keys, for every language (Santali clips keyed by the same keys).</summary>
+        Narrator.Line UiLine(params string[] keys)
+        {
+            var parts = new List<string>();
+            var hindi = new List<string>();
+            string lang = "en";
+            foreach (var k in keys)
+            {
+                var t = m_Content.Text(k);
+                parts.Add(t != null ? t.Get(m_Lang) : k);
+                hindi.Add(Hi(k));
+                if (t != null) lang = t.ResolvedLanguage(m_Lang);
+            }
+            return new Narrator.Line { text = string.Join(". ", parts), lang = lang, satKeys = keys, hindi = string.Join(". ", hindi) };
+        }
+
+        void OnVoiceFallback(bool hindiStandsIn)
+        {
+            if (!hindiStandsIn) { hud.SetVoiceNote(null); return; }
+            // Shown in Santali AND Hindi so nobody mistakes the Hindi voice for Santali.
+            hud.SetVoiceNote(T("ar.voiceFallback") + "\n" + Hi("ar.voiceFallback"));
+        }
+
         void Awake()
         {
             m_Palette = new Palette(opaqueTemplate, translucentTemplate, textTemplate);
@@ -57,6 +93,8 @@ namespace SurakshaAR
             hud.PrimaryPressed += OnPrimary;
             hud.SecondaryPressed += OnSecondary;
             hud.MuteToggled += () => { narrator.SetMuted(!narrator.Muted); hud.SetMuted(narrator.Muted); };
+            hud.ReplayPressed += () => { narrator.Replay(); hud.SetMuted(narrator.Muted); };
+            narrator.VoiceFallback += OnVoiceFallback;
         }
 
         // ------------------------------------------------------------------ start-up (called by ARBootstrap)
@@ -84,8 +122,9 @@ namespace SurakshaAR
                 return false;
             }
             m_Session = new ScenarioSession(m_Module);
+            narrator.content = m_Content;
             hud.SetHeader(m_Module.title.Get(m_Lang), "", 0, null, T("ar.exit"));
-            hud.ShowHint(T("ar.placeHint"));
+            hud.ShowHint(TRef("ar.placeHint"));
             return true;
         }
 
@@ -105,7 +144,7 @@ namespace SurakshaAR
             if (m_Phase == Phase.Error) return;
             m_Phase = Phase.Placing;
             m_Ready = true;
-            narrator.Say(T("ar.placeHint"), m_Lang == "en" ? "en" : "hi");
+            narrator.Say(UiLine("ar.placeHint"));
         }
 
         // ------------------------------------------------------------------ frame loop
@@ -122,7 +161,7 @@ namespace SurakshaAR
             if (m_Phase == Phase.Placing && placement.Mode == ARPlacementController.PlacementMode.None)
             {
                 float c = placement.FallbackCountdown;
-                hud.ShowHint(c >= 0f ? T("ar.placeHint") + "\n" + T("ar.autoPlaceIn", ("s", Mathf.CeilToInt(c))) : T("ar.placeHint"));
+                hud.ShowHint(c >= 0f ? TRef("ar.placeHint") + "\n" + T("ar.autoPlaceIn", ("s", Mathf.CeilToInt(c))) : TRef("ar.placeHint"));
             }
 
             if (!TryGetTap(out Vector2 tap)) return;
@@ -209,13 +248,17 @@ namespace SurakshaAR
             m_Phase = Phase.Asking;
             UpdateHeader();
             string prompt = step.prompt.Get(m_Lang);
-            hud.SetPrompt(prompt);
+            hud.SetPrompt(WithRef(step.prompt));
             // Every step sets its own hint (also after "Train again", which reuses the placed area).
             bool fallback = placement.Mode == ARPlacementController.PlacementMode.Fallback;
-            string hint = T("ar.tapOption");
-            if (fallback) hint = (m_Session.StepIndex == 0 ? T("ar.lookAhead") + "\n" : "") + hint + "\n" + T("ar.moveHint");
+            string hint = TRef("ar.tapOption");
+            if (fallback) hint = (m_Session.StepIndex == 0 ? TRef("ar.lookAhead") + "\n" : "") + hint + "\n" + TRef("ar.moveHint");
             hud.ShowHint(hint);
-            narrator.Say(prompt, step.prompt.ResolvedLanguage(m_Lang));
+            narrator.Say(new Narrator.Line
+            {
+                text = prompt, lang = step.prompt.ResolvedLanguage(m_Lang),
+                satKeys = new[] { "scn." + step.id + ".prompt" }, hindi = step.prompt.hi
+            });
         }
 
         OptionTag BuildOption(ScenarioStep step, string optionId, Vector3 localPos)
@@ -252,7 +295,8 @@ namespace SurakshaAR
                 if (r != null) m_Palette.Release(r.sharedMaterial);
                 Destroy(option.label.gameObject);
             }
-            string text = step.TextFor(option.optionId)?.Get(m_Lang) ?? option.optionId;
+            var optionText = step.TextFor(option.optionId);
+            string text = optionText != null ? WithRef(optionText) : option.optionId;
             Color fg = Color.black, bg = Palette.Sand;
             switch (state)
             {
@@ -294,10 +338,15 @@ namespace SurakshaAR
 
             UpdateHeader();
             ScenarioStep step = m_Session.CurrentStep;
-            string heading = correct ? T("assess.correct") : T("assess.wrong");
+            string headingKey = correct ? "assess.correct" : "assess.wrong";
+            string heading = T(headingKey);
             string why = step.why.Get(m_Lang);
-            hud.ShowFeedback(correct, heading, why, m_Session.IsLastStep ? T("assess.finish") : T("assess.continue"));
-            narrator.Say(heading + ". " + why, step.why.ResolvedLanguage(m_Lang));
+            hud.ShowFeedback(correct, heading, WithRef(step.why), m_Session.IsLastStep ? T("assess.finish") : T("assess.continue"));
+            narrator.Say(new Narrator.Line
+            {
+                text = heading + ". " + why, lang = step.why.ResolvedLanguage(m_Lang),
+                satKeys = new[] { headingKey, "scn." + step.id + ".why" }, hindi = Hi(headingKey) + ". " + step.why.hi
+            });
             Debug.Log($"[Scenario] {step.id}: chose {chosen.optionId} correct={correct}");
         }
 
@@ -333,7 +382,11 @@ namespace SurakshaAR
             string verdict = m_Session.Passed ? T("result.passed") : T("result.failed");
             string body = $"{T("result.score")}: {score}/100\n{T("result.wrong")}: {T("result.wrongOf", ("wrong", wrong), ("steps", steps))}\n{T("result.passMark", ("mark", ScenarioSession.PassMark))}";
             hud.ShowComplete(T("ar.complete") + " · " + verdict, body, null, m_Session.Passed, T("ar.finish"), null);
-            narrator.Say(T("ar.complete") + ". " + verdict + ". " + T("result.score") + " " + score, m_Lang == "en" ? "en" : "hi");
+            // Santali clips cover the fixed words; the score is on screen (and in the Hindi fallback).
+            var line = UiLine("ar.complete", m_Session.Passed ? "result.passed" : "result.failed");
+            if (line.lang != "sat") line.text += ". " + T("result.score") + " " + score;
+            line.hindi += ". " + Hi("result.score") + " " + score;
+            narrator.Say(line);
             Debug.Log($"[Scenario] complete module={m_Module.id} steps={steps} wrong={wrong} score={score}");
         }
 

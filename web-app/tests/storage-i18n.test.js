@@ -22,7 +22,7 @@ test('TC-002 fallback chain sat -> hi -> en', () => {
 });
 
 test('removing a real Santali string falls back to Hindi', () => {
-  assert.equal(SA.i18n.tFor('sat', 'home.greeting', { name: 'X' }), 'जोहार, X');
+  assert.equal(SA.i18n.tFor('sat', 'home.greeting', { name: 'X' }), 'ᱡᱚᱦᱟᱨ, X');
   const dict = { en: SA.STRINGS.en, hi: SA.STRINGS.hi, sat: {} };
   assert.equal(SA.i18n.tFor('sat', 'home.greeting', { name: 'X' }, dict), 'नमस्ते, X');
 });
@@ -30,7 +30,7 @@ test('removing a real Santali string falls back to Hindi', () => {
 test('scenario titles use the same fallback', () => {
   assert.equal(SA.i18n.pick({ en: 'E', hi: 'H' }, 'sat'), 'H');
   assert.equal(SA.i18n.pick({ en: 'E' }, 'sat'), 'E');
-  assert.equal(SA.i18n.pick(SA.scenario.get('gas_confined').title, 'sat'), 'गैस रिसाव आर सीमित ठाँव');
+  assert.equal(SA.i18n.pick(SA.scenario.get('gas_confined').title, 'sat'), 'ᱜᱮᱥ ᱞᱤᱠ ᱟᱨ ᱵᱚᱸᱫ ᱡᱟᱭᱜᱟ');
 });
 
 test('interpolation', () => {

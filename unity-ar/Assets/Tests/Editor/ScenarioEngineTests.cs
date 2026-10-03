@@ -110,10 +110,56 @@ namespace SurakshaAR.Tests
 
             var c = Content;
             var prompt = c.Module("fire_explosion").steps[0].prompt;
-            Assert.AreEqual(prompt.hi, prompt.Get("sat"), "Santali prompt falls back to Hindi");
-            Assert.AreEqual("आग आर विस्फोट", c.Module("fire_explosion").title.Get("sat"), "Santali title is used when present");
+            Assert.IsNotEmpty(prompt.sat, "Santali (provisional Ol Chiki) prompt is exported");
+            Assert.AreEqual(prompt.sat, prompt.Get("sat"), "Santali text is used when present");
+            Assert.AreEqual("sat", prompt.ResolvedLanguage("sat"));
+            Assert.AreEqual("ᱥᱮᱸᱜᱮᱞ ᱟᱨ ᱵᱤᱥᱯᱷᱚᱴ", c.Module("fire_explosion").title.Get("sat"), "Santali title is used when present");
             Assert.AreEqual("Step 2/3", c.T("assess.step", "en", ("n", 2), ("total", 3)));
-            Assert.AreEqual("चरण 2/3", c.T("assess.step", "sat", ("n", 2), ("total", 3)));
+            Assert.AreEqual("चरण 2/3", c.T("assess.step", "hi", ("n", 2), ("total", 3)));
+            Assert.AreEqual("ᱫᱷᱟᱯ 2/3", c.T("assess.step", "sat", ("n", 2), ("total", 3)));
+        }
+
+        [Test]
+        public void UnreviewedSantaliShowsTheHindiOriginal()
+        {
+            var t = new LocalizedText { en = "E", hi = "H", sat = "S", satReview = "native-review-required" };
+            Assert.IsTrue(t.NeedsHindiReference("sat"));
+            Assert.IsFalse(t.NeedsHindiReference("hi"), "Hindi mode is unchanged");
+            Assert.IsFalse(t.NeedsHindiReference("en"));
+            t.satReview = LocalizedText.Reviewed;
+            Assert.IsFalse(t.NeedsHindiReference("sat"), "a native-reviewed text stands alone");
+            Assert.IsFalse(new LocalizedText { en = "E", hi = "H", sat = "" }.NeedsHindiReference("sat"), "fallback text is already Hindi");
+
+            // Exported content: no Santali text claims a native review that has not happened.
+            foreach (var m in Content.modules)
+            foreach (var st in m.steps)
+            {
+                Assert.AreEqual("native-review-required", st.prompt.satReview, st.id);
+                Assert.IsTrue(st.prompt.NeedsHindiReference("sat"), st.id);
+                Assert.IsTrue(st.why.NeedsHindiReference("sat"), st.id);
+                Assert.IsTrue(st.optionText.All(o => o.NeedsHindiReference("sat")), st.id);
+            }
+        }
+
+        [Test]
+        public void SantaliVoiceResolvesOnlyRecordedClips()
+        {
+            var c = Content;
+            Assert.IsNotNull(c.voice);
+            Assert.That(c.voice.Select(v => v.key), Has.Member("scn.fire_01_exit.prompt").And.Member("scn.gas_03_buddy.why").And.Member("ar.placeHint"));
+            Assert.IsTrue(c.voice.All(v => v.file.StartsWith("audio/sat/") && v.file.EndsWith(".ogg")));
+            // No clips are recorded yet: nothing resolves, so the Narrator uses the labelled Hindi fallback.
+            Assert.IsTrue(c.voice.All(v => v.status == "recording-pending"));
+            Assert.IsNull(c.VoiceFiles("scn.fire_01_exit.prompt"));
+
+            var json = UnityEngine.JsonUtility.ToJson(c);
+            var withClip = ScenarioContent.Parse(json);
+            withClip.voice.First(v => v.key == "assess.correct").status = VoiceClip.Recorded;
+            withClip.voice.First(v => v.key == "scn.fire_01_exit.why").status = VoiceClip.Recorded;
+            CollectionAssert.AreEqual(new[] { "audio/sat/common/sat_assess_correct.ogg", "audio/sat/fire/sat_fire_exit_why.ogg" },
+                withClip.VoiceFiles("assess.correct", "scn.fire_01_exit.why"));
+            Assert.IsNull(withClip.VoiceFiles("assess.correct", "scn.fire_01_exit.prompt"), "a partly recorded line is not played");
+            Assert.IsNull(withClip.VoiceFiles("no.such.key"));
         }
 
         [Test]

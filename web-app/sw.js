@@ -5,7 +5,7 @@
  * tests/assets.test.js checks this list matches every file index.html loads.
  */
 'use strict';
-var CACHE = 'surakshaar-v2';
+var CACHE = 'surakshaar-v3';
 var ASSETS = [
   './',
   'index.html',
@@ -27,6 +27,8 @@ var ASSETS = [
   'js/data/seed-workers.js',
   'js/i18n/strings.js',
   'js/i18n/ui-strings.js',
+  'js/i18n/santali.js',
+  'js/i18n/santali-audio.js',
   'js/i18n/i18n.js',
   'js/i18n/mgmt-strings.js',
   'js/scenario/scoring.js',
@@ -38,6 +40,7 @@ var ASSETS = [
   'js/services/retention.js',
   'js/services/training.js',
   'js/services/bridge.js',
+  'js/services/voice.js',
   'js/services/management.js',
   'js/services/safety.js',
   'js/services/insights.js',

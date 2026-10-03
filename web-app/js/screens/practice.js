@@ -141,8 +141,8 @@
         h('h2', { class: 'consequence__title', id: 'replay-consequence-title', tabindex: '-1' },
           ui.icon(cur.safe ? 'shieldCheck' : 'alert', { size: 22 }),
           cur.timedOut ? t('replay.timeUp') : cur.safe ? t('replay.safe') : t('replay.unsafe')),
-        !cur.safe ? h('p', { class: 'consequence__safe' }, ui.icon('check', { size: 16, stroke: 3 }), t(key + '.opt.' + cur.step.correct)) : null,
-        h('p', { class: 'consequence__why' }, t(key + '.why')),
+        !cur.safe ? h('p', { class: 'consequence__safe' }, ui.icon('check', { size: 16, stroke: 3 }), t(key + '.opt.' + cur.step.correct), ui.satRef(ctx, key + '.opt.' + cur.step.correct)) : null,
+        h('p', { class: 'consequence__why' }, t(key + '.why'), ui.satRef(ctx, key + '.why')),
         ui.btn(r.index < r.steps.length - 1 ? t('replay.next') : t('replay.finish'), { onClick: next, id: 'replay-next', icon: 'chevronRight' }));
     }
 
@@ -152,7 +152,7 @@
           h('span', { class: 'eyebrow' }, ui.moduleTitle(moduleId, ctx.lang)),
           h('span', { class: 'chip chip--glass' }, ui.icon('replay', { size: 14 }), t('replay.moment', { n: r.index + 1, total: r.steps.length }))),
         timeline(r),
-        h('p', { class: 'replay-scene__prompt', id: 'replay-prompt' }, t(key + '.prompt'))),
+        h('p', { class: 'replay-scene__prompt', id: 'replay-prompt' }, t(key + '.prompt'), ui.satRef(ctx, key + '.prompt'))),
       clock,
       h('h1', { class: 'replay-ask', tabindex: '-1' }, t('replay.ask')),
       h('div', { class: 'options', role: 'group', 'aria-labelledby': 'replay-prompt' },
@@ -161,7 +161,7 @@
           if (answered) cls += opt === cur.step.correct ? ' is-correct' : opt === cur.choice ? ' is-wrong' : ' is-dim';
           return h('button', { type: 'button', class: cls, disabled: answered, 'data-option': opt, onClick: function () { pick(opt); } },
             h('span', { class: 'option__letter', 'aria-hidden': 'true' }, 'ABC'.charAt(i)),
-            h('span', { class: 'option__text' }, h('span', { class: 'option__label' }, t(key + '.opt.' + opt))));
+            h('span', { class: 'option__text' }, h('span', { class: 'option__label' }, t(key + '.opt.' + opt)), ui.satRef(ctx, key + '.opt.' + opt)));
         })),
       consequence,
       h('p', { class: 'demo-note' }, t('replay.note'))
@@ -189,9 +189,9 @@
           a.text ? h('p', { class: 'msg__text' }, a.text) : null,
           (a.cards || []).map(function (c) {
             return h('div', { class: 'msg-card', 'data-step': c.stepId },
-              h('p', { class: 'msg-card__q' }, c.prompt),
-              h('p', { class: 'msg-card__safe' }, ui.icon('checkCircle', { size: 16 }), c.safe),
-              h('p', { class: 'msg-card__why' }, c.why));
+              h('p', { class: 'msg-card__q' }, c.prompt, ui.satRef(ctx, 'scn.' + c.stepId + '.prompt')),
+              h('p', { class: 'msg-card__safe' }, ui.icon('checkCircle', { size: 16 }), c.safe, ui.satRef(ctx, c.safeKey)),
+              h('p', { class: 'msg-card__why' }, c.why, ui.satRef(ctx, 'scn.' + c.stepId + '.why')));
           }),
           a.choices ? h('div', { class: 'chips' }, a.choices.map(function (c) {
             return h('button', { type: 'button', class: 'chip chip--primary chip-btn', 'data-explain': c.stepId, onClick: function () { pushAnswer(c.label, SA.coach.explainStep(c.stepId, ctx)); } }, c.label);

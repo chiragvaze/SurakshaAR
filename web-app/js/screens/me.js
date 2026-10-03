@@ -9,7 +9,7 @@
   var ui = SA.ui;
   SA.screens = SA.screens || {};
 
-  var LANG_NAME = { hi: 'हिन्दी', sat: 'Santali', en: 'English' };
+  var LANG_NAME = { hi: 'हिन्दी', sat: 'ᱥᱟᱱᱛᱟᱲᱤ · Santali', en: 'English' };
 
   /** Rows for screens that exist in this build only (never a broken link). */
   function toolRows(t) {

@@ -15,7 +15,7 @@
   var SA = root.SA = root.SA || {};
   var h = SA.dom.h;
 
-  var LANG_SHORT = { hi: 'हि', sat: 'SAT', en: 'EN' };
+  var LANG_SHORT = { hi: 'हि', sat: 'ᱥᱟ', en: 'EN' };
   var STATUS_ICON = { green: 'checkCircle', amber: 'alert', red: 'xCircle' };
   var STATUS_TONE = { green: 'success', amber: 'warning', red: 'danger' };
 
@@ -389,6 +389,58 @@
     return scenario ? SA.i18n.pick(scenario.title, lang) : moduleId;
   }
 
+  /**
+   * Hindi original shown under provisional (not yet native-reviewed) safety-critical Santali
+   * text, so a worker never depends on an unreviewed translation alone. Null otherwise.
+   */
+  function satRef(ctx, key, params) {
+    if (ctx.lang !== 'sat' || !SA.santali || !SA.santali.needsReference(key)) return null;
+    return h('span', { class: 'sat-ref', lang: 'hi', 'data-ref': key },
+      h('span', { class: 'sat-ref__label', title: ctx.t('sat.reference') }, 'हिन्दी'), SA.i18n.tFor('hi', key, params));
+  }
+
+  /**
+   * Santali voice control for a group of text keys (SA.voice). Recorded clips: a Listen /
+   * Stop / Play again button. Clips not recorded yet: a plain note saying so (never a fake
+   * or substitute voice). Other languages: nothing (unchanged web behaviour).
+   */
+  function voiceControl(ctx, keys, opts) {
+    opts = opts || {};
+    if (ctx.lang !== 'sat' || !SA.voice) return null;
+    var id = opts.id || ('voice-' + keys.join('-').replace(/[^a-z0-9]+/gi, '-'));
+    var r = SA.voice.resolveAll(keys, ctx.lang);
+    if (r.status === SA.voice.STATUS.NONE) return null;
+    if (r.status !== SA.voice.STATUS.READY) {
+      return h('p', { class: 'voice voice--pending', id: id, 'data-voice-status': 'pending' },
+        icon('volumeOff', { size: 16 }), h('span', null, ctx.t('voice.unavailable')));
+    }
+    var played = false;
+    var label = h('span', { class: 'btn__label' });
+    var ic = h('span', { class: 'voice__icon' });
+    var button = h('button', {
+      type: 'button', class: 'btn btn--soft btn--sm voice voice--ready', id: id, 'data-voice-status': 'ready',
+      onClick: function () {
+        if (SA.voice.isPlaying(id)) { SA.voice.stop(); return; }
+        played = true;
+        if (SA.voice.play(keys, ctx.lang, id) === 'error') toast(ctx.t('voice.error'), 'error');
+      }
+    }, ic, label);
+    function paint(playing) {
+      ic.replaceChildren(icon(playing ? 'stop' : played ? 'replay' : 'volume', { size: 16 }));
+      label.textContent = playing ? ctx.t('voice.stop') : played ? ctx.t('voice.replay') : ctx.t('voice.play');
+      button.setAttribute('aria-pressed', playing ? 'true' : 'false');
+      button.setAttribute('aria-label', ctx.t('voice.label') + ': ' + label.textContent);
+    }
+    var off = SA.voice.onChange(function (state, who) {
+      if (button.isConnected === false) { off(); return; }
+      if (who !== id) { paint(false); return; }
+      if (state === 'error') toast(ctx.t('voice.error'), 'error');
+      paint(state === 'playing');
+    });
+    paint(false);
+    return button;
+  }
+
   SA.ui = {
     icon: icon,
     brandMark: brandMark,
@@ -420,6 +472,8 @@
     segmented: segmented,
     themeToggle: themeToggle,
     offlinePill: offlinePill,
-    moduleTitle: moduleTitle
+    moduleTitle: moduleTitle,
+    satRef: satRef,
+    voiceControl: voiceControl
   };
 })(typeof globalThis !== 'undefined' ? globalThis : window);

@@ -6,7 +6,10 @@
   var SA = root.SA = root.SA || {};
 
   var CHAINS = { sat: ['sat', 'hi', 'en'], hi: ['hi', 'en'], en: ['en'] };
-  var LOCALES = { en: 'en-IN', hi: 'hi-IN', sat: 'hi-IN' };
+  // Santali dates use the Santali locale with Latin digits where the engine has Santali data
+  // (Ol Chiki month names); otherwise English (India) rather than Hindi month names.
+  var LOCALES = { en: 'en-IN', hi: 'hi-IN', sat: 'sat-IN-u-nu-latn' };
+  var LOCALE_FALLBACK = { sat: 'en-IN' };
   var DEFAULT_LANG = 'hi';
   var current = DEFAULT_LANG;
   var warned = {};
@@ -55,9 +58,19 @@
     return current;
   }
 
+  /** BCP 47 tag for dates/times in a language, falling back when the engine lacks the data. */
+  function locale(lang) {
+    lang = lang || current;
+    var tag = LOCALES[lang] || 'en-IN';
+    try {
+      if (LOCALE_FALLBACK[lang] && !(root.Intl && Intl.DateTimeFormat.supportedLocalesOf([tag]).length)) return LOCALE_FALLBACK[lang];
+    } catch (e) { return LOCALE_FALLBACK[lang] || 'en-IN'; }
+    return tag;
+  }
+
   function formatDate(ms, lang) {
     try {
-      return new Date(ms).toLocaleDateString(LOCALES[lang || current] || 'en-IN', {
+      return new Date(ms).toLocaleDateString(locale(lang), {
         day: 'numeric', month: 'short', year: 'numeric'
       });
     } catch (e) {
@@ -74,6 +87,7 @@
     has: has,
     setLanguage: setLanguage,
     getLanguage: function () { return current; },
-    formatDate: formatDate
+    formatDate: formatDate,
+    locale: locale
   };
 })(typeof globalThis !== 'undefined' ? globalThis : window);

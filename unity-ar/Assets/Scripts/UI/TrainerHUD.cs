@@ -6,7 +6,7 @@ namespace SurakshaAR
 {
     /// <summary>
     /// Screen overlay for the AR trainer (built in code). Top: exit, module, "Step n/3",
-    /// progress, mute. Prompt card under it. Bottom: hint / feedback / result with large buttons.
+    /// progress, replay voice, mute. Prompt card under it. Bottom: hint / feedback / result with large buttons.
     /// Colour is never the only signal: every state also has a ✓/✕ symbol and text.
     /// Visual style follows the Suraksha Drishti design system (docs/26_UI_REDESIGN.md):
     /// dark translucent "glass" panels with rounded corners so the camera view stays visible,
@@ -18,6 +18,7 @@ namespace SurakshaAR
         public event Action PrimaryPressed;
         public event Action SecondaryPressed;
         public event Action MuteToggled;
+        public event Action ReplayPressed;
 
         // Design tokens (mirrors web-app/css/tokens.css, dark theme over the camera image).
         static class Hud
@@ -50,6 +51,7 @@ namespace SurakshaAR
         UIText[] m_SegmentText = new UIText[0];
         Text m_Diag;
         UIText m_MuteText;
+        UIText m_VoiceNote;
 
         void Awake() => Build();
 
@@ -105,6 +107,16 @@ namespace SurakshaAR
 
         public void SetMuted(bool muted) => m_MuteText.Set(muted ? "🔇" : "🔊", 56, Color.white);
 
+        /// <summary>
+        /// Labels the voice source when it is not the selected language (Santali clip missing ->
+        /// "Santali voice not recorded · Hindi voice"). Null/empty hides the label.
+        /// </summary>
+        public void SetVoiceNote(string text)
+        {
+            m_VoiceNote.gameObject.SetActive(!string.IsNullOrEmpty(text));
+            m_VoiceNote.Set(text, 30, Hud.PrimarySoft, true);
+        }
+
         // ------------------------------------------------------------------ internals
 
         void ShowBottom(string heading, string body, string note, string primary, string secondary, Color bg, bool bigHeading)
@@ -145,7 +157,7 @@ namespace SurakshaAR
             var exit = Button(bar, "Exit", Hud.Control, () => ExitPressed?.Invoke(), out m_ExitLabel, 230);
             Anchor((RectTransform)exit.transform, 0, 0, 0, 1, new Vector2(16, 16), new Vector2(246, -16));
             var titleCol = VStack(bar, "Titles", 4);
-            Anchor(titleCol, 0, 0, 1, 1, new Vector2(262, 8), new Vector2(-150, -8));
+            Anchor(titleCol, 0, 0, 1, 1, new Vector2(262, 8), new Vector2(-284, -8));
             m_Title = UIText.Create(titleCol, "Module", 660);
             m_Step = UIText.Create(titleCol, "Step", 660);
             var mute = Button(bar, "Mute", Hud.Control, () => MuteToggled?.Invoke(), out _, 118);
@@ -155,6 +167,9 @@ namespace SurakshaAR
             mrt.anchorMin = mrt.anchorMax = new Vector2(0.5f, 0.5f);
             m_MuteText.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             SetMuted(false);
+            var replay = Button(bar, "Replay", Hud.Control, () => ReplayPressed?.Invoke(), out var replayIcon, 118);
+            Anchor((RectTransform)replay.transform, 1, 0, 1, 1, new Vector2(-268, 16), new Vector2(-150, -16));
+            replayIcon.Set("↻", 60, Color.white, true);
 
             m_Progress = new GameObject("Progress", typeof(RectTransform), typeof(HorizontalLayoutGroup));
             var prt = (RectTransform)m_Progress.transform;
@@ -187,6 +202,8 @@ namespace SurakshaAR
             bottom.sizeDelta = new Vector2(-48, 0);
             Fit(bottom);
             m_Bottom = bottom.gameObject;
+            m_VoiceNote = UIText.Create(bottom, "VoiceNote", Width - 112);
+            m_VoiceNote.gameObject.SetActive(false);
             m_Heading = UIText.Create(bottom, "Heading", Width - 112);
             m_Body = UIText.Create(bottom, "Body", Width - 112);
             m_Note = UIText.Create(bottom, "Note", Width - 112);

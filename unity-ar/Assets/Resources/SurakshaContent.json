@@ -1,5 +1,5 @@
 {
-  "generatedFrom": "docs/25_SCENARIO_CONTENT.json + web-app/js/i18n/strings.js (npm run export:unity) - do not edit",
+  "generatedFrom": "docs/25_SCENARIO_CONTENT.json + web-app/js/i18n/{strings,santali,santali-audio}.js (npm run export:unity) - do not edit",
   "version": "1.0",
   "modules": [
     {
@@ -7,7 +7,8 @@
       "title": {
         "en": "Fire & Explosion",
         "hi": "आग और विस्फोट",
-        "sat": "आग आर विस्फोट"
+        "sat": "ᱥᱮᱸᱜᱮᱞ ᱟᱨ ᱵᱤᱥᱯᱷᱚᱴ",
+        "satReview": "native-review-required"
       },
       "steps": [
         {
@@ -21,28 +22,33 @@
           "prompt": {
             "en": "Fire alarm! Which way do you leave the building?",
             "hi": "आग का अलार्म! आप इमारत से किस रास्ते बाहर निकलेंगे?",
-            "sat": ""
+            "sat": "ᱥᱮᱸᱜᱮᱞ ᱮᱞᱟᱨᱢ! ᱚᱠᱟ ᱦᱚᱨ ᱛᱮ ᱟᱢ ᱵᱤᱞᱰᱤᱝ ᱠᱷᱚᱱ ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠᱟᱢ?",
+            "satReview": "native-review-required"
           },
           "why": {
             "en": "Always use the marked exit route. Lifts can stop during a fire and windows are not safe exits.",
             "hi": "हमेशा चिह्नित निकास मार्ग का उपयोग करें। आग में लिफ़्ट रुक सकती है और खिड़की सुरक्षित रास्ता नहीं है।",
-            "sat": ""
+            "sat": "ᱡᱟᱦᱟᱸ ᱚᱠᱛᱚ ᱦᱚᱸ ᱪᱤᱱᱦᱟᱹ ᱢᱮᱱᱟᱜ ᱚᱰᱚᱠ ᱦᱚᱨ ᱵᱮᱵᱷᱟᱨ ᱢᱮ᱾ ᱥᱮᱸᱜᱮᱞ ᱚᱠᱛᱚ ᱞᱤᱯᱷᱴ ᱛᱤᱝᱜᱩ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱟᱨ ᱡᱷᱚᱨᱠᱟ ᱫᱚ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱦᱚᱨ ᱵᱟᱝ ᱠᱟᱱᱟ᱾",
+            "satReview": "native-review-required"
           },
           "optionText": [
             {
               "en": "Follow the Exit sign",
               "hi": "निकास (Exit) चिह्न के पीछे जाएँ",
-              "sat": ""
+              "sat": "ᱚᱰᱚᱠ ᱦᱚᱨ (Exit) ᱪᱤᱱᱦᱟᱹ ᱛᱟᱭᱚᱢ ᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮ",
+              "satReview": "native-review-required"
             },
             {
               "en": "Take the lift",
               "hi": "लिफ़्ट से जाएँ",
-              "sat": ""
+              "sat": "ᱞᱤᱯᱷᱴ ᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮ",
+              "satReview": "native-review-required"
             },
             {
               "en": "Climb out of a window",
               "hi": "खिड़की से बाहर कूदें",
-              "sat": ""
+              "sat": "ᱡᱷᱚᱨᱠᱟ ᱛᱮ ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱢᱮ",
+              "satReview": "native-review-required"
             }
           ]
         },
@@ -57,28 +63,33 @@
           "prompt": {
             "en": "An electrical panel is on fire. Which extinguisher do you use?",
             "hi": "बिजली के पैनल में आग लगी है। आप कौन सा अग्निशामक इस्तेमाल करेंगे?",
-            "sat": ""
+            "sat": "ᱵᱤᱡᱞᱤ ᱯᱮᱱᱮᱞ ᱨᱮ ᱥᱮᱸᱜᱮᱞ ᱞᱟᱜᱟᱣ ᱮᱱᱟ᱾ ᱚᱠᱟ ᱥᱮᱸᱜᱮᱞ ᱧᱤᱵᱷᱟᱹᱣ ᱡᱚᱱᱛᱨᱚ ᱵᱮᱵᱷᱟᱨ ᱟᱢ?",
+            "satReview": "native-review-required"
           },
           "why": {
             "en": "Use CO₂ on electrical fires. Water and foam conduct electricity and can give an electric shock.",
             "hi": "बिजली की आग पर CO₂ का उपयोग करें। पानी और फ़ोम में बिजली बहती है, इससे करंट लग सकता है।",
-            "sat": ""
+            "sat": "ᱵᱤᱡᱞᱤ ᱥᱮᱸᱜᱮᱞ ᱨᱮ CO₂ ᱵᱮᱵᱷᱟᱨ ᱢᱮ᱾ ᱫᱟᱜ ᱟᱨ ᱯᱷᱚᱢ ᱛᱮ ᱵᱤᱡᱞᱤ ᱪᱟᱞᱟᱜᱼᱟ, ᱚᱱᱟ ᱛᱮ ᱵᱤᱡᱞᱤ ᱡᱷᱟᱴᱠᱟ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ᱾",
+            "satReview": "native-review-required"
           },
           "optionText": [
             {
               "en": "CO₂ extinguisher",
               "hi": "CO₂ अग्निशामक",
-              "sat": ""
+              "sat": "CO₂ ᱥᱮᱸᱜᱮᱞ ᱧᱤᱵᱷᱟᱹᱣ ᱡᱚᱱᱛᱨᱚ",
+              "satReview": "native-review-required"
             },
             {
               "en": "Water",
               "hi": "पानी",
-              "sat": ""
+              "sat": "ᱫᱟᱜ",
+              "satReview": "native-review-required"
             },
             {
               "en": "Foam",
               "hi": "फ़ोम",
-              "sat": ""
+              "sat": "ᱯᱷᱚᱢ",
+              "satReview": "native-review-required"
             }
           ]
         },
@@ -93,28 +104,33 @@
           "prompt": {
             "en": "The corridor is filling with smoke. How do you move?",
             "hi": "गलियारे में धुआँ भर रहा है। आप कैसे आगे बढ़ेंगे?",
-            "sat": ""
+            "sat": "ᱜᱟᱞᱤ ᱨᱮ ᱫᱷᱩᱸᱣᱟᱹ ᱯᱮᱨᱮᱡ ᱠᱟᱱᱟ᱾ ᱟᱢ ᱪᱮᱫ ᱞᱮᱠᱟ ᱪᱟᱞᱟᱜᱟᱢ?",
+            "satReview": "native-review-required"
           },
           "why": {
             "en": "Cleaner air stays near the floor. Keep low and keep moving to the exit.",
             "hi": "साफ़ हवा फ़र्श के पास रहती है। नीचे झुके रहें और निकास की ओर बढ़ते रहें।",
-            "sat": ""
+            "sat": "ᱥᱟᱯᱷᱟ ᱦᱚᱭ ᱚᱛ ᱴᱷᱮᱱ ᱛᱟᱦᱮᱸᱱᱟ᱾ ᱞᱟᱛᱟᱨ ᱛᱮ ᱛᱟᱦᱮᱸᱱ ᱠᱟᱛᱮ ᱚᱰᱚᱠ ᱦᱚᱨ ᱥᱮᱫ ᱪᱟᱞᱟᱜ ᱛᱟᱦᱮᱸᱱ ᱢᱮ᱾",
+            "satReview": "native-review-required"
           },
           "optionText": [
             {
               "en": "Crawl low under the smoke",
               "hi": "धुएँ के नीचे झुककर रेंगें",
-              "sat": ""
+              "sat": "ᱫᱷᱩᱸᱣᱟᱹ ᱞᱟᱛᱟᱨ ᱛᱮ ᱞᱟᱛᱟᱨ ᱦᱩᱭ ᱠᱟᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮ",
+              "satReview": "native-review-required"
             },
             {
               "en": "Run standing upright",
               "hi": "सीधे खड़े होकर दौड़ें",
-              "sat": ""
+              "sat": "ᱛᱤᱝᱜᱩ ᱠᱟᱛᱮ ᱫᱟᱹᱲ ᱢᱮ",
+              "satReview": "native-review-required"
             },
             {
               "en": "Go back inside",
               "hi": "वापस अंदर जाएँ",
-              "sat": ""
+              "sat": "ᱫᱚᱦᱲᱟ ᱵᱷᱤᱛᱨᱤ ᱨᱩᱣᱟᱹᱲ ᱢᱮ",
+              "satReview": "native-review-required"
             }
           ]
         }
@@ -125,7 +141,8 @@
       "title": {
         "en": "Gas Leak & Confined Space",
         "hi": "गैस रिसाव और सीमित स्थान",
-        "sat": "गैस रिसाव आर सीमित ठाँव"
+        "sat": "ᱜᱮᱥ ᱞᱤᱠ ᱟᱨ ᱵᱚᱸᱫ ᱡᱟᱭᱜᱟ",
+        "satReview": "native-review-required"
       },
       "steps": [
         {
@@ -139,28 +156,33 @@
           "prompt": {
             "en": "A gas alarm is sounding. Which area is the gas hazard zone?",
             "hi": "गैस का अलार्म बज रहा है। गैस खतरे का क्षेत्र कौन सा है?",
-            "sat": ""
+            "sat": "ᱜᱮᱥ ᱮᱞᱟᱨᱢ ᱨᱟᱜ ᱠᱟᱱᱟ᱾ ᱚᱠᱟ ᱡᱟᱭᱜᱟ ᱫᱚ ᱜᱮᱥ ᱵᱤᱯᱚᱫ ᱡᱚᱱ ᱠᱟᱱᱟ?",
+            "satReview": "native-review-required"
           },
           "why": {
             "en": "The red-marked zone is where the gas is leaking. Stay out and warn others.",
             "hi": "लाल चिह्नित क्षेत्र में गैस रिस रही है। उससे दूर रहें और दूसरों को सावधान करें।",
-            "sat": ""
+            "sat": "ᱟᱨᱟᱜ ᱪᱤᱱᱦᱟᱹ ᱡᱚᱱ ᱨᱮ ᱜᱮᱥ ᱞᱤᱠ ᱦᱩᱭ ᱠᱟᱱᱟ᱾ ᱚᱱᱟ ᱠᱷᱚᱱ ᱥᱟᱸᱝᱜᱤᱧ ᱛᱟᱦᱮᱸᱱ ᱢᱮ ᱟᱨ ᱮᱴᱟᱜ ᱦᱚᱲ ᱠᱚ ᱦᱩᱥᱤᱭᱟᱹᱨ ᱢᱮ᱾",
+            "satReview": "native-review-required"
           },
           "optionText": [
             {
               "en": "Red leak zone",
               "hi": "लाल रिसाव क्षेत्र",
-              "sat": ""
+              "sat": "ᱟᱨᱟᱜ ᱞᱤᱠ ᱡᱚᱱ",
+              "satReview": "native-review-required"
             },
             {
               "en": "Open area",
               "hi": "खुला क्षेत्र",
-              "sat": ""
+              "sat": "ᱠᱷᱚᱞᱟ ᱡᱟᱭᱜᱟ",
+              "satReview": "native-review-required"
             },
             {
               "en": "Office",
               "hi": "कार्यालय",
-              "sat": ""
+              "sat": "ᱚᱯᱷᱤᱥ",
+              "satReview": "native-review-required"
             }
           ]
         },
@@ -175,28 +197,33 @@
           "prompt": {
             "en": "You must enter a confined space. What do you wear?",
             "hi": "आपको एक सीमित स्थान (टैंक/गड्ढा) में जाना है। आप क्या पहनेंगे?",
-            "sat": ""
+            "sat": "ᱟᱢ ᱢᱤᱫᱴᱟᱹᱝ ᱵᱚᱸᱫ ᱡᱟᱭᱜᱟ (ᱴᱮᱝᱠ/ᱜᱟᱰᱟ) ᱵᱷᱤᱛᱨᱤ ᱞᱟᱹᱫᱮ ᱞᱟᱹᱠᱛᱤᱭᱟ᱾ ᱪᱮᱫ ᱯᱤᱸᱫᱷᱮ ᱞᱟᱹᱠᱛᱤᱭᱟ?",
+            "satReview": "native-review-required"
           },
           "why": {
             "en": "A confined space can have toxic gas or too little oxygen. Carry a gas detector and wear a breathing set.",
             "hi": "सीमित स्थान में ज़हरीली गैस या कम ऑक्सीजन हो सकती है। गैस डिटेक्टर रखें और श्वास उपकरण पहनें।",
-            "sat": ""
+            "sat": "ᱵᱚᱸᱫ ᱡᱟᱭᱜᱟ ᱨᱮ ᱵᱤᱥ ᱜᱮᱥ ᱥᱮ ᱠᱚᱢ ᱚᱠᱥᱤᱡᱮᱱ ᱛᱟᱦᱮᱸᱱ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ᱾ ᱜᱮᱥ ᱰᱤᱴᱮᱠᱴᱚᱨ ᱥᱟᱶᱛᱮ ᱤᱫᱤ ᱢᱮ ᱟᱨ ᱥᱟᱦᱮᱫ ᱡᱚᱱᱛᱨᱚ ᱯᱤᱸᱫᱷᱮ ᱢᱮ᱾",
+            "satReview": "native-review-required"
           },
           "optionText": [
             {
               "en": "Gas detector + breathing set",
               "hi": "गैस डिटेक्टर + श्वास उपकरण",
-              "sat": ""
+              "sat": "ᱜᱮᱥ ᱰᱤᱴᱮᱠᱴᱚᱨ + ᱥᱟᱦᱮᱫ ᱡᱚᱱᱛᱨᱚ",
+              "satReview": "native-review-required"
             },
             {
               "en": "Cap + gloves",
               "hi": "टोपी + दस्ताने",
-              "sat": ""
+              "sat": "ᱴᱩᱯᱤ + ᱜᱞᱚᱵᱥ",
+              "satReview": "native-review-required"
             },
             {
               "en": "No PPE",
               "hi": "कोई सुरक्षा उपकरण नहीं",
-              "sat": ""
+              "sat": "ᱡᱟᱦᱟᱸ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱡᱚᱱᱛᱨᱚ ᱵᱟᱝ",
+              "satReview": "native-review-required"
             }
           ]
         },
@@ -211,28 +238,33 @@
           "prompt": {
             "en": "Who must stay outside while you work in the confined space?",
             "hi": "जब आप सीमित स्थान के अंदर काम करें, तब बाहर किसे रहना चाहिए?",
-            "sat": ""
+            "sat": "ᱟᱢ ᱵᱚᱸᱫ ᱡᱟᱭᱜᱟ ᱵᱷᱤᱛᱨᱤ ᱠᱟᱹᱢᱤ ᱚᱠᱛᱚ ᱚᱠᱚᱭ ᱵᱟᱦᱨᱮ ᱛᱟᱦᱮᱸᱱ ᱞᱟᱹᱠᱛᱤᱭᱟ?",
+            "satReview": "native-review-required"
           },
           "why": {
             "en": "A standby attendant watches you the whole time and raises the alarm at once if something goes wrong.",
             "hi": "स्टैंडबाय अटेंडेंट पूरे समय आप पर नज़र रखता है और कुछ गलत होने पर तुरंत अलार्म देता है।",
-            "sat": ""
+            "sat": "ᱥᱴᱮᱱᱰᱵᱟᱭ ᱮᱴᱮᱱᱰᱮᱱᱴ ᱡᱚᱛᱚ ᱚᱠᱛᱚ ᱟᱢ ᱪᱮᱛᱟᱱ ᱧᱮᱞ ᱛᱟᱦᱮᱸᱱᱟ ᱟᱨ ᱡᱩᱫᱤ ᱪᱮᱫ ᱦᱚᱸ ᱵᱷᱩᱞ ᱦᱩᱭᱩᱜ ᱠᱷᱟᱱ ᱡᱷᱟᱴ ᱛᱮ ᱮᱞᱟᱨᱢ ᱮᱢᱟ᱾",
+            "satReview": "native-review-required"
           },
           "optionText": [
             {
               "en": "A standby attendant",
               "hi": "एक स्टैंडबाय अटेंडेंट (सहायक)",
-              "sat": ""
+              "sat": "ᱢᱤᱫᱦᱚᱲ ᱥᱴᱮᱱᱰᱵᱟᱭ ᱮᱴᱮᱱᱰᱮᱱᱴ (ᱜᱚᱲᱚᱭᱤᱭᱟᱹ)",
+              "satReview": "native-review-required"
             },
             {
               "en": "Nobody",
               "hi": "कोई नहीं",
-              "sat": ""
+              "sat": "ᱡᱟᱦᱟᱸᱭ ᱦᱚᱸ ᱵᱟᱝ",
+              "satReview": "native-review-required"
             },
             {
               "en": "Call someone later",
               "hi": "बाद में किसी को फ़ोन करेंगे",
-              "sat": ""
+              "sat": "ᱛᱟᱭᱚᱢ ᱛᱮ ᱡᱟᱦᱟᱸᱭ ᱥᱮ ᱯᱷᱚᱱ ᱢᱮ",
+              "satReview": "native-review-required"
             }
           ]
         }
@@ -244,223 +276,376 @@
       "key": "ar.autoPlaceIn",
       "en": "No floor found yet. Placing automatically in {s} s…",
       "hi": "अभी फ़र्श नहीं मिला। {s} सेकंड में अपने आप रखा जाएगा…",
-      "sat": ""
+      "sat": "ᱱᱤᱛᱚᱜ ᱦᱟᱹᱵᱤᱡ ᱚᱛ ᱵᱟᱝ ᱧᱟᱢ ᱮᱱᱟ᱾ {s} ᱥᱮᱠᱮᱱᱰ ᱨᱮ ᱟᱡ ᱛᱮᱜᱮ ᱫᱚᱦᱚᱜᱼᱟ…",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.back",
       "en": "Back to app",
       "hi": "ऐप पर लौटें",
-      "sat": ""
+      "sat": "ᱮᱯ ᱥᱮᱫ ᱨᱩᱣᱟᱹᱲ ᱢᱮ",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.complete",
       "en": "Training complete",
       "hi": "प्रशिक्षण पूरा हुआ",
-      "sat": ""
+      "sat": "ᱴᱨᱮᱱᱤᱝ ᱯᱩᱨᱟᱹᱣ ᱮᱱᱟ",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.err.badParams",
       "en": "Unknown training module or language. Returning to the app.",
       "hi": "अज्ञात प्रशिक्षण मॉड्यूल या भाषा। ऐप पर लौट रहे हैं।",
-      "sat": ""
+      "sat": "ᱵᱟᱝ ᱵᱟᱰᱟᱭ ᱴᱨᱮᱱᱤᱝ ᱢᱳᱰᱭᱩᱞ ᱥᱮ ᱯᱟᱹᱨᱥᱤ᱾ ᱮᱯ ᱥᱮᱫ ᱨᱩᱣᱟᱹᱲ ᱠᱟᱱᱟ᱾",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.err.cameraDenied",
       "en": "Camera permission is needed for AR training. Allow Camera for this app in Settings, then try again.",
       "hi": "AR प्रशिक्षण के लिए कैमरा अनुमति ज़रूरी है। सेटिंग्स में इस ऐप को कैमरा की अनुमति दें और फिर प्रयास करें।",
-      "sat": ""
+      "sat": "AR ᱴᱨᱮᱱᱤᱝ ᱞᱟᱹᱜᱤᱫ ᱠᱮᱢᱮᱨᱟ ᱦᱩᱠᱩᱢ ᱞᱟᱹᱠᱛᱤᱭᱟ᱾ ᱥᱮᱴᱤᱝ ᱨᱮ ᱱᱚᱶᱟ ᱮᱯ ᱞᱟᱹᱜᱤᱫ ᱠᱮᱢᱮᱨᱟ ᱦᱩᱠᱩᱢ ᱮᱢ ᱠᱟᱛᱮ ᱫᱚᱦᱲᱟ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.err.content",
       "en": "Training content could not be loaded.",
       "hi": "प्रशिक्षण सामग्री लोड नहीं हो सकी।",
-      "sat": ""
+      "sat": "ᱴᱨᱮᱱᱤᱝ ᱥᱟᱢᱜᱽᱨᱤ ᱵᱟᱝ ᱞᱳᱰ ᱫᱟᱲᱮᱭᱟᱜ ᱠᱟᱱᱟ᱾",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.err.unsupported",
       "en": "This phone cannot run AR (ARCore). You can train on the phone screen instead.",
       "hi": "यह फ़ोन AR (ARCore) नहीं चला सकता। आप फ़ोन स्क्रीन पर प्रशिक्षण ले सकते हैं।",
-      "sat": ""
+      "sat": "ᱱᱚᱶᱟ ᱯᱷᱚᱱ AR (ARCore) ᱵᱟᱝ ᱪᱟᱞᱟᱣ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ᱾ ᱯᱷᱚᱱ ᱥᱠᱨᱤᱱ ᱨᱮ ᱴᱨᱮᱱᱤᱝ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ᱾",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.exit",
       "en": "Exit",
       "hi": "बाहर निकलें",
-      "sat": ""
+      "sat": "ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱢᱮ",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.finish",
       "en": "Finish",
       "hi": "समाप्त करें",
-      "sat": ""
+      "sat": "ᱢᱩᱪᱟᱹᱫ ᱢᱮ",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.lookAhead",
       "en": "The training area is in front of you. Look ahead.",
       "hi": "प्रशिक्षण क्षेत्र आपके सामने है। सामने देखें।",
-      "sat": ""
+      "sat": "ᱴᱨᱮᱱᱤᱝ ᱡᱟᱭᱜᱟ ᱟᱢᱟᱜ ᱥᱟᱢᱟᱝ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱥᱟᱢᱟᱝ ᱧᱮᱞ ᱢᱮ᱾",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.moveHint",
       "en": "Tap the floor to move the training area.",
       "hi": "प्रशिक्षण क्षेत्र हटाने के लिए फ़र्श को छुएँ।",
-      "sat": ""
+      "sat": "ᱴᱨᱮᱱᱤᱝ ᱡᱟᱭᱜᱟ ᱮᱴᱟᱜ ᱥᱮᱫ ᱫᱚᱦᱚ ᱞᱟᱹᱜᱤᱫ ᱚᱛ ᱴᱮᱯ ᱢᱮ᱾",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.placeHint",
       "en": "Point the phone at the floor. When the amber area appears, tap it to place the training.",
       "hi": "फ़ोन को फ़र्श की ओर करें। पीला क्षेत्र दिखने पर उसे छूकर प्रशिक्षण रखें।",
-      "sat": ""
+      "sat": "ᱯᱷᱚᱱ ᱚᱛ ᱥᱮᱫ ᱠᱩᱞᱤᱡ ᱢᱮ᱾ ᱥᱟᱥᱟᱝ ᱡᱟᱭᱜᱟ ᱧᱮᱞᱚᱜ ᱠᱷᱟᱱ ᱚᱱᱟ ᱴᱮᱯ ᱠᱟᱛᱮ ᱴᱨᱮᱱᱤᱝ ᱫᱚᱦᱚ ᱢᱮ᱾",
+      "satReview": "native-review-required"
+    },
+    {
+      "key": "ar.replay",
+      "en": "Play again",
+      "hi": "फिर से सुनें",
+      "sat": "ᱫᱚᱦᱲᱟ ᱟᱸᱡᱚᱢ ᱢᱮ",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.sending",
       "en": "Returning to the app…",
       "hi": "ऐप पर लौट रहे हैं…",
-      "sat": ""
+      "sat": "ᱮᱯ ᱥᱮᱫ ᱨᱩᱣᱟᱹᱲ ᱠᱟᱱᱟ…",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.standalone",
       "en": "Test build: no app to return to.",
       "hi": "टेस्ट बिल्ड: लौटने के लिए कोई ऐप नहीं।",
-      "sat": ""
+      "sat": "ᱴᱮᱥᱴ ᱵᱤᱞᱰ: ᱨᱩᱣᱟᱹᱲ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱦᱟᱸ ᱮᱯ ᱵᱟᱹᱱᱩᱜᱼᱟ᱾",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.tapOption",
       "en": "Tap the safest choice.",
       "hi": "सबसे सुरक्षित विकल्प को छुएँ।",
-      "sat": ""
+      "sat": "ᱡᱚᱛᱚ ᱠᱷᱚᱱ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱵᱟᱪᱷᱟᱣ ᱴᱮᱯ ᱢᱮ᱾",
+      "satReview": "native-review-required"
     },
     {
       "key": "ar.trainAgain",
       "en": "Train again",
       "hi": "फिर से प्रशिक्षण लें",
-      "sat": ""
+      "sat": "ᱫᱚᱦᱲᱟ ᱴᱨᱮᱱᱤᱝ ᱢᱮ",
+      "satReview": "native-review-required"
+    },
+    {
+      "key": "ar.voiceFallback",
+      "en": "Santali voice not recorded · Hindi voice",
+      "hi": "संताली आवाज़ रिकॉर्ड नहीं · हिन्दी आवाज़",
+      "sat": "ᱥᱟᱱᱛᱟᱲᱤ ᱟᱲᱟᱝ ᱵᱟᱝ ᱨᱮᱠᱚᱨᱰ ᱟᱠᱟᱱᱟ · ᱦᱤᱱᱫᱤ ᱟᱲᱟᱝ",
+      "satReview": "native-review-required"
     },
     {
       "key": "assess.continue",
       "en": "Continue",
       "hi": "आगे बढ़ें",
-      "sat": ""
+      "sat": "ᱞᱟᱦᱟ ᱪᱟᱞᱟᱜ ᱢᱮ",
+      "satReview": "native-review-required"
     },
     {
       "key": "assess.correct",
       "en": "Correct · safe choice",
       "hi": "सही · सुरक्षित चुनाव",
-      "sat": ""
+      "sat": "ᱴᱷᱤᱠ · ᱨᱩᱠᱷᱤᱭᱟᱹ ᱵᱟᱪᱷᱟᱣ",
+      "satReview": "native-review-required"
     },
     {
       "key": "assess.exit",
       "en": "Exit",
       "hi": "बाहर निकलें",
-      "sat": ""
+      "sat": "ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱢᱮ",
+      "satReview": "native-review-required"
     },
     {
       "key": "assess.finish",
       "en": "See result",
       "hi": "परिणाम देखें",
-      "sat": ""
+      "sat": "ᱯᱷᱚᱞ ᱧᱮᱞ ᱢᱮ",
+      "satReview": "native-review-required"
     },
     {
       "key": "assess.safeAnswer",
       "en": "Safe answer",
       "hi": "सुरक्षित उत्तर",
-      "sat": ""
+      "sat": "ᱨᱩᱠᱷᱤᱭᱟᱹ ᱛᱮᱞᱟ",
+      "satReview": "native-review-required"
     },
     {
       "key": "assess.step",
       "en": "Step {n}/{total}",
       "hi": "चरण {n}/{total}",
-      "sat": ""
+      "sat": "ᱫᱷᱟᱯ {n}/{total}",
+      "satReview": "native-review-required"
     },
     {
       "key": "assess.wrong",
       "en": "Not safe",
       "hi": "सुरक्षित नहीं",
-      "sat": ""
+      "sat": "ᱨᱩᱠᱷᱤᱭᱟᱹ ᱵᱟᱝ",
+      "satReview": "native-review-required"
     },
     {
       "key": "module.fire_explosion.purpose",
       "en": "Leave safely during a fire and use the right extinguisher.",
       "hi": "आग लगने पर सुरक्षित बाहर निकलें और सही अग्निशामक का उपयोग करें।",
-      "sat": ""
+      "sat": "ᱥᱮᱸᱜᱮᱞ ᱞᱟᱜᱟᱣ ᱚᱠᱛᱚ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱛᱮ ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱢᱮ ᱟᱨ ᱴᱷᱤᱠ ᱥᱮᱸᱜᱮᱞ ᱧᱤᱵᱷᱟᱹᱣ ᱡᱚᱱᱛᱨᱚ ᱵᱮᱵᱷᱟᱨ ᱢᱮ᱾",
+      "satReview": "native-review-required"
     },
     {
       "key": "module.gas_confined.purpose",
       "en": "Spot a gas leak zone and enter confined spaces safely.",
       "hi": "गैस रिसाव क्षेत्र पहचानें और सीमित स्थान में सुरक्षित प्रवेश करें।",
-      "sat": ""
+      "sat": "ᱜᱮᱥ ᱞᱤᱠ ᱡᱚᱱ ᱪᱤᱱᱦᱟᱹᱣ ᱢᱮ ᱟᱨ ᱵᱚᱸᱫ ᱡᱟᱭᱜᱟ ᱵᱷᱤᱛᱨᱤ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱛᱮ ᱞᱟᱹᱫᱮ ᱢᱮ᱾",
+      "satReview": "native-review-required"
     },
     {
       "key": "result.failed",
       "en": "NOT PASSED",
       "hi": "अनुत्तीर्ण",
-      "sat": ""
+      "sat": "ᱯᱟᱥ ᱵᱟᱝ",
+      "satReview": "native-review-required"
     },
     {
       "key": "result.getCert",
       "en": "Get Certificate",
       "hi": "प्रमाणपत्र लें",
-      "sat": ""
+      "sat": "ᱥᱟᱹᱴᱤᱯᱷᱤᱠᱮᱴ ᱤᱫᱤ ᱢᱮ",
+      "satReview": "native-review-required"
     },
     {
       "key": "result.module",
       "en": "Module",
       "hi": "मॉड्यूल",
-      "sat": ""
+      "sat": "ᱢᱳᱰᱭᱩᱞ",
+      "satReview": "native-review-required"
     },
     {
       "key": "result.none",
       "en": "No result yet. Complete a training module first.",
       "hi": "अभी कोई परिणाम नहीं। पहले एक प्रशिक्षण मॉड्यूल पूरा करें।",
-      "sat": ""
+      "sat": "ᱱᱤᱛᱚᱜ ᱡᱟᱦᱟᱸ ᱯᱷᱚᱞ ᱵᱟᱹᱱᱩᱜᱼᱟ᱾ ᱯᱟᱹᱦᱤᱞ ᱢᱤᱫᱴᱟᱹᱝ ᱴᱨᱮᱱᱤᱝ ᱢᱳᱰᱭᱩᱞ ᱯᱩᱨᱟᱹᱣ ᱢᱮ᱾",
+      "satReview": "native-review-required"
     },
     {
       "key": "result.passMark",
       "en": "Pass mark: {mark}",
       "hi": "उत्तीर्ण अंक: {mark}",
-      "sat": ""
+      "sat": "ᱯᱟᱥ ᱱᱚᱢᱵᱚᱨ: {mark}",
+      "satReview": "native-review-required"
     },
     {
       "key": "result.passed",
       "en": "PASSED",
       "hi": "उत्तीर्ण",
-      "sat": ""
+      "sat": "ᱯᱟᱥ",
+      "satReview": "native-review-required"
     },
     {
       "key": "result.retry",
       "en": "Train Again",
       "hi": "फिर से प्रशिक्षण लें",
-      "sat": ""
+      "sat": "ᱫᱚᱦᱲᱟ ᱴᱨᱮᱱᱤᱝ ᱢᱮ",
+      "satReview": "native-review-required"
     },
     {
       "key": "result.score",
       "en": "Score",
       "hi": "अंक",
-      "sat": ""
+      "sat": "ᱱᱚᱢᱵᱚᱨ",
+      "satReview": "native-review-required"
     },
     {
       "key": "result.title",
       "en": "Result",
       "hi": "परिणाम",
-      "sat": ""
+      "sat": "ᱯᱷᱚᱞ",
+      "satReview": "native-review-required"
     },
     {
       "key": "result.worker",
       "en": "Worker",
       "hi": "कर्मचारी",
-      "sat": ""
+      "sat": "ᱠᱟᱹᱢᱤᱭᱟᱹ",
+      "satReview": "native-review-required"
     },
     {
       "key": "result.wrong",
       "en": "Wrong answers",
       "hi": "गलत उत्तर",
-      "sat": ""
+      "sat": "ᱵᱷᱩᱞ ᱛᱮᱞᱟ",
+      "satReview": "native-review-required"
     },
     {
       "key": "result.wrongOf",
       "en": "{wrong} of {steps}",
       "hi": "{steps} में से {wrong}",
-      "sat": ""
+      "sat": "{steps} ᱠᱷᱚᱱ {wrong}",
+      "satReview": "native-review-required"
+    }
+  ],
+  "voice": [
+    {
+      "key": "ar.complete",
+      "file": "audio/sat/common/sat_ar_complete.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "ar.placeHint",
+      "file": "audio/sat/common/sat_ar_place_hint.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "assess.correct",
+      "file": "audio/sat/common/sat_assess_correct.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "assess.wrong",
+      "file": "audio/sat/common/sat_assess_wrong.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "module.fire_explosion.purpose",
+      "file": "audio/sat/fire/sat_fire_purpose.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "module.gas_confined.purpose",
+      "file": "audio/sat/gas/sat_gas_purpose.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "result.failed",
+      "file": "audio/sat/common/sat_result_failed.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "result.passed",
+      "file": "audio/sat/common/sat_result_passed.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "scn.fire_01_exit.prompt",
+      "file": "audio/sat/fire/sat_fire_exit_prompt.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "scn.fire_01_exit.why",
+      "file": "audio/sat/fire/sat_fire_exit_why.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "scn.fire_02_extinguisher.prompt",
+      "file": "audio/sat/fire/sat_fire_extinguisher_prompt.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "scn.fire_02_extinguisher.why",
+      "file": "audio/sat/fire/sat_fire_extinguisher_why.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "scn.fire_03_smoke.prompt",
+      "file": "audio/sat/fire/sat_fire_smoke_prompt.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "scn.fire_03_smoke.why",
+      "file": "audio/sat/fire/sat_fire_smoke_why.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "scn.gas_01_zone.prompt",
+      "file": "audio/sat/gas/sat_gas_zone_prompt.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "scn.gas_01_zone.why",
+      "file": "audio/sat/gas/sat_gas_zone_why.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "scn.gas_02_ppe.prompt",
+      "file": "audio/sat/gas/sat_gas_ppe_prompt.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "scn.gas_02_ppe.why",
+      "file": "audio/sat/gas/sat_gas_ppe_why.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "scn.gas_03_buddy.prompt",
+      "file": "audio/sat/gas/sat_gas_buddy_prompt.ogg",
+      "status": "recording-pending"
+    },
+    {
+      "key": "scn.gas_03_buddy.why",
+      "file": "audio/sat/gas/sat_gas_buddy_why.ogg",
+      "status": "recording-pending"
     }
   ]
 }

@@ -44,9 +44,9 @@
     'welcome.feature.voice': 'Hindi text and voice',
 
     'lang.available': 'Available',
-    'lang.partial': 'Partly translated · rest in Hindi',
+    'lang.partial': 'Provisional translation · native review pending',
     'lang.planned': 'Planned languages',
-    'lang.plannedNote': 'Safety content is added only after review by native speakers, so these cannot be selected yet.',
+    'lang.plannedNote': 'These languages first need a native-speaker translation, so they cannot be selected yet.',
     'lang.awaiting': 'Awaiting native-speaker content',
 
     'home.ready': 'Ready for today\'s safety training?',
@@ -288,7 +288,16 @@
     'me.data': 'Data on this phone',
     'me.stats': '{attempts} attempt(s) · {certs} certificate(s)',
     'me.about': 'About',
-    'me.version': 'Prototype build · works offline'
+    'me.version': 'Prototype build · works offline',
+
+    'voice.label': 'Santali voice',
+    'voice.play': 'Listen',
+    'voice.replay': 'Play again',
+    'voice.stop': 'Stop',
+    'voice.playing': 'Playing Santali voice…',
+    'voice.unavailable': 'Santali voice not recorded yet · text only',
+    'voice.error': 'The voice clip could not be played.',
+    'sat.reference': 'Hindi original'
   };
 
   var hi = {
@@ -328,9 +337,9 @@
     'welcome.feature.voice': 'हिन्दी पाठ और आवाज़',
 
     'lang.available': 'उपलब्ध',
-    'lang.partial': 'आंशिक अनुवाद · बाकी हिन्दी में',
+    'lang.partial': 'अस्थायी अनुवाद · मूल वक्ता समीक्षा बाकी',
     'lang.planned': 'आने वाली भाषाएँ',
-    'lang.plannedNote': 'सुरक्षा सामग्री मूल वक्ताओं की समीक्षा के बाद ही जोड़ी जाती है, इसलिए इन्हें अभी चुना नहीं जा सकता।',
+    'lang.plannedNote': 'इन भाषाओं के लिए पहले मूल वक्ता का अनुवाद चाहिए, इसलिए इन्हें अभी चुना नहीं जा सकता।',
     'lang.awaiting': 'मूल वक्ता की सामग्री का इंतज़ार',
 
     'home.ready': 'क्या आप आज के सुरक्षा प्रशिक्षण के लिए तैयार हैं?',
@@ -572,7 +581,16 @@
     'me.data': 'इस फ़ोन पर डेटा',
     'me.stats': '{attempts} प्रयास · {certs} प्रमाणपत्र',
     'me.about': 'जानकारी',
-    'me.version': 'प्रोटोटाइप संस्करण · बिना इंटरनेट चलता है'
+    'me.version': 'प्रोटोटाइप संस्करण · बिना इंटरनेट चलता है',
+
+    'voice.label': 'संताली आवाज़',
+    'voice.play': 'सुनें',
+    'voice.replay': 'फिर से सुनें',
+    'voice.stop': 'रोकें',
+    'voice.playing': 'संताली आवाज़ चल रही है…',
+    'voice.unavailable': 'संताली आवाज़ अभी रिकॉर्ड नहीं हुई · केवल पाठ',
+    'voice.error': 'आवाज़ क्लिप नहीं चल सकी।',
+    'sat.reference': 'हिन्दी मूल पाठ'
   };
 
   if (!SA.STRINGS) throw new Error('ui-strings.js must load after strings.js');
