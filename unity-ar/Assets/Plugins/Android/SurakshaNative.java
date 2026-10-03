@@ -1,6 +1,10 @@
 package com.surakshaar.unity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.media.AudioAttributes;
+import android.media.MediaPlayer;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -14,6 +18,7 @@ import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 /**
  * Native helpers for the Unity AR trainer.
@@ -23,6 +28,8 @@ import java.util.Locale;
  *    as a texture.
  * 2. Text-to-speech: offline Android TTS for voice instructions. If the language voice is not
  *    installed the trainer simply stays text-only (docs/08_LOCALIZATION.md fallback).
+ * 3. Santali voice: pre-recorded clips bundled in the APK's web assets (assets/web/audio/sat/...),
+ *    played with MediaPlayer, one sequence at a time (docs/SANTALI_LOCALIZATION.md).
  * Nothing here uses the network or the camera.
  */
 public final class SurakshaNative {
@@ -146,5 +153,88 @@ public final class SurakshaNative {
         }
         ttsState = 0;
         ttsReady = false;
+    }
+
+    // ------------------------------------------------------------------ Santali voice clips
+
+    /** Only clip paths from the voice manifest shape are accepted (no arbitrary asset access). */
+    private static final Pattern CLIP_PATH = Pattern.compile("^audio/sat/[a-z]+/sat_[a-z0-9_]+\\.ogg$");
+    private static Context appContext;
+    private static MediaPlayer player;
+    private static String[] clipQueue;
+    private static int clipIndex;
+
+    public static void voiceInit(final Activity activity) {
+        if (activity != null) appContext = activity.getApplicationContext();
+    }
+
+    /** True if every clip exists in the APK (assets/web/<path>) and has an allowed path. */
+    public static boolean voiceHas(String[] paths) {
+        if (appContext == null || paths == null || paths.length == 0) return false;
+        for (String p : paths) {
+            if (p == null || !CLIP_PATH.matcher(p).matches()) return false;
+            try (AssetFileDescriptor fd = appContext.getAssets().openFd("web/" + p)) {
+                if (fd.getLength() <= 0) return false;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Plays the clips in order, stopping anything already playing. False if any clip is unusable. */
+    public static synchronized boolean voicePlay(String[] paths) {
+        voiceStop();
+        if (!voiceHas(paths)) return false;
+        clipQueue = paths.clone();
+        clipIndex = 0;
+        return playNextClip();
+    }
+
+    private static synchronized boolean playNextClip() {
+        releasePlayer();
+        if (clipQueue == null || clipIndex >= clipQueue.length) { clipQueue = null; return false; }
+        String path = clipQueue[clipIndex++];
+        MediaPlayer mp = new MediaPlayer();
+        try (AssetFileDescriptor fd = appContext.getAssets().openFd("web/" + path)) {
+            mp.setAudioAttributes(new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                    .build());
+            mp.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
+            mp.setOnCompletionListener(m -> {
+                synchronized (SurakshaNative.class) { if (player == m) playNextClip(); }
+            });
+            mp.setOnErrorListener((m, what, extra) -> {
+                Log.w(TAG, "voice clip error " + what + "/" + extra);
+                synchronized (SurakshaNative.class) { if (player == m) voiceStop(); }
+                return true;
+            });
+            mp.prepare(); // local asset: fast and synchronous
+            mp.start();
+            player = mp;
+            return true;
+        } catch (Exception e) {
+            Log.w(TAG, "voice clip failed: " + path, e);
+            mp.release();
+            clipQueue = null;
+            return false;
+        }
+    }
+
+    public static synchronized boolean voicePlaying() {
+        return player != null;
+    }
+
+    public static synchronized void voiceStop() {
+        clipQueue = null;
+        releasePlayer();
+    }
+
+    private static void releasePlayer() {
+        if (player == null) return;
+        try { player.stop(); } catch (Exception ignore) { /* not started */ }
+        player.release();
+        player = null;
     }
 }

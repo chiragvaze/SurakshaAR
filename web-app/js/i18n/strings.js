@@ -6,9 +6,8 @@
  * The JSON remains the source of truth for structure and correct answers; this file
  * only supplies display wording (see docs/24_DECISION_LOG.md D-010).
  *
- * Santali (sat): only strings reviewed with reasonable confidence are included. Every
- * missing key falls back sat -> hi -> en. Santali copy must be approved by a native
- * speaker before any public demo (docs/08_LOCALIZATION.md).
+ * Santali (sat): see santali.js (provisional Ol Chiki draft, native review pending,
+ * docs/SANTALI_LOCALIZATION.md). Every missing key falls back sat -> hi -> en.
  */
 (function (root) {
   'use strict';
@@ -157,7 +156,7 @@
     'err.arUnavailable': 'AR training could not run on this phone. Press Start again to train on the phone screen.',
     'err.certFailed': 'The certificate could not be created.',
 
-    'sat.notice': 'Santali text is under review. Some text is shown in Hindi.',
+    'sat.notice': 'Santali text is a provisional draft awaiting native-speaker review. Safety instructions also show the Hindi original.',
 
     // ---- AR trainer (Unity; exported by tools/export-unity-content.js) ----
     'ar.placeHint': 'Point the phone at the floor. When the amber area appears, tap it to place the training.',
@@ -176,6 +175,8 @@
     'ar.err.badParams': 'Unknown training module or language. Returning to the app.',
     'ar.err.content': 'Training content could not be loaded.',
     'ar.back': 'Back to app',
+    'ar.voiceFallback': 'Santali voice not recorded · Hindi voice',
+    'ar.replay': 'Play again',
 
     // ---- Fire & Explosion ----
     'scn.fire_01_exit.prompt': 'Fire alarm! Which way do you leave the building?',
@@ -359,7 +360,7 @@
     'err.arUnavailable': 'इस फ़ोन पर AR प्रशिक्षण नहीं चल सका। फ़ोन स्क्रीन पर प्रशिक्षण के लिए फिर से शुरू करें दबाएँ।',
     'err.certFailed': 'प्रमाणपत्र नहीं बन सका।',
 
-    'sat.notice': 'संताली अनुवाद की समीक्षा जारी है। कुछ पाठ हिन्दी में दिखाया गया है।',
+    'sat.notice': 'संताली पाठ अस्थायी मसौदा है, मूल वक्ता की समीक्षा बाकी है। सुरक्षा निर्देशों के साथ हिन्दी मूल पाठ भी दिखाया गया है।',
 
     'ar.placeHint': 'फ़ोन को फ़र्श की ओर करें। पीला क्षेत्र दिखने पर उसे छूकर प्रशिक्षण रखें।',
     'ar.autoPlaceIn': 'अभी फ़र्श नहीं मिला। {s} सेकंड में अपने आप रखा जाएगा…',
@@ -377,6 +378,8 @@
     'ar.err.badParams': 'अज्ञात प्रशिक्षण मॉड्यूल या भाषा। ऐप पर लौट रहे हैं।',
     'ar.err.content': 'प्रशिक्षण सामग्री लोड नहीं हो सकी।',
     'ar.back': 'ऐप पर लौटें',
+    'ar.voiceFallback': 'संताली आवाज़ रिकॉर्ड नहीं · हिन्दी आवाज़',
+    'ar.replay': 'फिर से सुनें',
 
     'scn.fire_01_exit.prompt': 'आग का अलार्म! आप इमारत से किस रास्ते बाहर निकलेंगे?',
     'scn.fire_01_exit.opt.exit_sign': 'निकास (Exit) चिह्न के पीछे जाएँ',
@@ -415,17 +418,15 @@
     'scn.gas_03_buddy.why': 'स्टैंडबाय अटेंडेंट पूरे समय आप पर नज़र रखता है और कुछ गलत होने पर तुरंत अलार्म देता है।'
   };
 
-  // Santali: intentionally partial until native-speaker review. Everything else -> Hindi -> English.
-  var sat = {
-    'home.greeting': 'जोहार, {name}'
-  };
+  // Santali lives in santali.js (Ol Chiki, provisional, with review status). Loaded after ui-strings.js.
+  var sat = {};
 
   SA.STRINGS = { en: en, hi: hi, sat: sat };
 
   // Display names for the language picker (always shown in their own script).
   SA.LANGUAGE_OPTIONS = [
     { code: 'hi', label: 'हिन्दी', sub: 'Hindi' },
-    { code: 'sat', label: 'Santali', sub: 'ᱥᱟᱱᱛᱟᱲᱤ · संताली' },
+    { code: 'sat', label: 'ᱥᱟᱱᱛᱟᱲᱤ', sub: 'Santali · संताली' },
     { code: 'en', label: 'English', sub: 'अंग्रेज़ी' }
   ];
 })(typeof globalThis !== 'undefined' ? globalThis : window);

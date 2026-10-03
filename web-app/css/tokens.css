@@ -169,8 +169,8 @@ html[data-theme="dark"] {
   --space-10: 64px;
 
   /* typography */
-  --font-sans: "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari", "Helvetica Neue", Arial, sans-serif;
-  --font-display: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari", sans-serif;
+  --font-sans: "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari", "Noto Sans Ol Chiki", "Nirmala UI", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari", "Noto Sans Ol Chiki", "Nirmala UI", sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Roboto Mono", Consolas, monospace;
   --text-display: clamp(2rem, 1.6rem + 2vw, 2.5rem);
   --text-h1: clamp(1.75rem, 1.55rem + 1vw, 2rem);

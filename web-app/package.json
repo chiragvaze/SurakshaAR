@@ -8,7 +8,8 @@
     "start:lan": "node tools/serve.js --host 0.0.0.0",
     "test": "node --test \"tests/**/*.test.js\"",
     "sync:scenarios": "node tools/sync-scenarios.js",
-    "export:unity": "node tools/export-unity-content.js"
+    "export:unity": "node tools/export-unity-content.js",
+    "santali:sheet": "node tools/santali-sheet.js"
   },
   "devDependencies": {
     "jsqr": "^1.4.0"

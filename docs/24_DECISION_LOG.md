@@ -356,3 +356,40 @@ Investigation and decision only. **No product code changed**, and the P3-M2 rele
   - no crashes.
   - One bug was found and fixed: AR results carry no start time, so the result screen showed "Time taken 1 s". It now shows "—".
 - **Not changed:** the frozen `v1.0.0-sih-final` release APK (`e69b2216…d9276fd0`) does not contain the redesign; shipping it needs a new release build. D-032, D-034, Santali and demo-only signing are unchanged.
+
+## D-042 — Post-freeze: Santali localisation and offline Santali voice (2026-10-03)
+- **Scope:** Santali (`sat`) becomes a selectable language across the worker app and the AR trainer, using the existing i18n system (no second framework). Details: [`SANTALI_LOCALIZATION.md`](SANTALI_LOCALIZATION.md). This supersedes the Santali part of D-036.
+- **Script:** Ol Chiki. The three earlier Devanagari Santali strings (greeting, two module titles) were converted. Digits stay Latin.
+- **Text:**
+  - `web-app/js/i18n/santali.js` covers **all 448 worker-app keys**, with explicit fallback keys (none).
+  - The wording is a **provisional AI draft**. Every key is `native-review-required`, and `REVIEW_LOG` is empty because no native review has happened. Tests forbid claiming a review without a record.
+  - `npm run santali:sheet` generates the reviewer sheet `docs/santali-review.csv`.
+- **Safety safeguard:** while a safety-critical key is unreviewed, the Hindi original is shown under the Santali text, on the web screens and in AR.
+- **Voice:**
+  - The offline pre-recorded clip pipeline is complete: manifest `santali-audio.js` (20 lines), `SA.voice` on the web, `Narrator` + `SurakshaNative.voicePlay` (MediaPlayer on APK assets) in AR.
+  - **0 of 20 clips are recorded.**
+  - Missing clip in AR: the Hindi text is spoken with the Hindi TTS voice, labelled "ᱥᱟᱱᱛᱟᱲᱤ ᱟᱲᱟᱝ ᱵᱟᱝ ᱨᱮᱠᱚᱨᱰ ᱟᱠᱟᱱᱟ · ᱦᱤᱱᱫᱤ ᱟᱲᱟᱝ / संताली आवाज़ रिकॉर्ड नहीं · हिन्दी आवाज़".
+  - Web screens say "Santali voice not recorded yet". No TTS, speech synthesis or network is used for Santali.
+  - New AR replay button (↻).
+- **Management portal:** stays English-only (D-040), and works with Santali selected.
+- **Android shell:**
+  - `copyWebApp` now copies `audio/**/*.ogg` uncompressed (`noCompress '.ogg'`).
+  - It is now a **Sync** task, so files deleted from `web-app` no longer linger in the APK. This was found when two test tones from the pipeline check stayed in a build.
+  - Version `0.6.0-sat` (versionCode 6). No permission or signing changes.
+- **Tests:** web 128/128 (114 + 14 new), Unity 28/28 (26 + 2 new), shell 6/6.
+  - Two Unity assertions and two web assertions that encoded "Santali falls back to Hindi" now check for the provisional Santali and its review flag. The fallback mechanism itself is still tested with synthetic data.
+- **Device validation (Redmi Note 11, Android 13, airplane mode):**
+  - **Pipeline check:** a temporary, uncommitted build with two test tones in place of clips, signed with the same key and installed in place.
+    - The web briefing tone and Play again worked.
+    - In AR question 1, the tone played through MediaPlayer about 0.4 s after placement. The "Hindi voice" label disappeared while it played, and ↻ replayed it.
+    - The placement hint and explanations used the Hindi voice with the label.
+    - Fire AR in Santali scored 100, and the result reached the app.
+    - Ol Chiki renders in the WebView and in AR (system `NotoSansOlChiki-Regular.ttf`). The Hindi lines appeared under the prompt, options and hints.
+  - **Release `0.6.0-sat`** (SHA-256 `897e1c24e803e0752166bd89894b683498d68e9107dd1a0cee79473b3dcb398a`, 22,921,944 bytes, no audio files), installed in place over the pipeline build:
+    - data and Santali persisted;
+    - the Gas briefing showed the Hindi lines and the "not recorded" note;
+    - Gas AR was run in Santali (operator-reported);
+    - switching to Hindi restored Hindi, and Gas AR in Hindi used the Hindi TTS;
+    - Hindi persisted after a force-stop and relaunch;
+    - no crashes.
+- **Not changed:** the frozen `v1.0.0-sih-final` release (`e69b2216…d9276fd0`), scoring, certificate cryptography, QR, `sa_v1`, the bridge contract.

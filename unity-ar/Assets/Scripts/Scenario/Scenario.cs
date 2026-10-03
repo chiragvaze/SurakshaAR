@@ -15,6 +15,10 @@ namespace SurakshaAR
         public string en;
         public string hi;
         public string sat;
+        /// <summary>native-review-required | native-reviewed | fallback-hindi (web santali.js).</summary>
+        public string satReview;
+
+        public const string Reviewed = "native-reviewed";
 
         static readonly Dictionary<string, string[]> Chains = new Dictionary<string, string[]>
         {
@@ -33,6 +37,15 @@ namespace SurakshaAR
                 if (!string.IsNullOrEmpty(v)) return v;
             }
             return "";
+        }
+
+        /// <summary>
+        /// True when Santali text is shown but has no native-speaker review yet: the trainer then
+        /// shows the Hindi original under it (docs/SANTALI_LOCALIZATION.md).
+        /// </summary>
+        public bool NeedsHindiReference(string lang)
+        {
+            return lang == "sat" && !string.IsNullOrEmpty(sat) && !string.IsNullOrEmpty(hi) && satReview != Reviewed;
         }
 
         /// <summary>Which language actually supplied the text (for choosing the TTS voice).</summary>
@@ -80,6 +93,18 @@ namespace SurakshaAR
         public string en;
         public string hi;
         public string sat;
+        public string satReview;
+    }
+
+    /// <summary>One Santali voice clip from web-app/js/i18n/santali-audio.js.</summary>
+    [Serializable]
+    public class VoiceClip
+    {
+        public string key;
+        public string file;   // relative to the APK's web assets, e.g. audio/sat/fire/sat_fire_exit_prompt.ogg
+        public string status; // recorded | recording-pending
+
+        public const string Recorded = "recorded";
     }
 
     [Serializable]
@@ -88,6 +113,7 @@ namespace SurakshaAR
         public string version;
         public ScenarioModule[] modules;
         public UiString[] strings;
+        public VoiceClip[] voice;
 
         [NonSerialized] Dictionary<string, LocalizedText> m_Strings;
 
@@ -112,15 +138,39 @@ namespace SurakshaAR
         /// <summary>Localized UI string with {name} parameters; returns the key if missing.</summary>
         public string T(string key, string lang, params (string name, object value)[] args)
         {
+            var lt = Text(key);
+            string text = lt != null ? lt.Get(lang) : key;
+            foreach (var (name, value) in args) text = text.Replace("{" + name + "}", Convert.ToString(value));
+            return text;
+        }
+
+        /// <summary>All languages of one UI string, or null if the key is unknown.</summary>
+        public LocalizedText Text(string key)
+        {
             if (m_Strings == null)
             {
                 m_Strings = new Dictionary<string, LocalizedText>();
                 foreach (var s in strings ?? Array.Empty<UiString>())
-                    m_Strings[s.key] = new LocalizedText { en = s.en, hi = s.hi, sat = s.sat };
+                    m_Strings[s.key] = new LocalizedText { en = s.en, hi = s.hi, sat = s.sat, satReview = s.satReview };
             }
-            string text = m_Strings.TryGetValue(key, out var lt) ? lt.Get(lang) : key;
-            foreach (var (name, value) in args) text = text.Replace("{" + name + "}", Convert.ToString(value));
-            return text;
+            return m_Strings.TryGetValue(key, out var lt) ? lt : null;
+        }
+
+        /// <summary>
+        /// Clip files for a sequence of text keys, or null unless EVERY key has a recorded clip
+        /// (a partly recorded line is never played).
+        /// </summary>
+        public string[] VoiceFiles(params string[] keys)
+        {
+            if (keys == null || keys.Length == 0 || voice == null) return null;
+            var files = new string[keys.Length];
+            for (int i = 0; i < keys.Length; i++)
+            {
+                var clip = voice.FirstOrDefault(v => v.key == keys[i]);
+                if (clip == null || clip.status != VoiceClip.Recorded || string.IsNullOrEmpty(clip.file)) return null;
+                files[i] = clip.file;
+            }
+            return files;
         }
     }
 

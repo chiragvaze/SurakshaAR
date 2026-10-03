@@ -8,21 +8,21 @@
   'use strict';
   var SA = root.SA = root.SA || {};
 
-  // Extra Hindi/English keywords per scenario step (the step's own text is always searched too).
+  // Extra Hindi/English/Santali (provisional) keywords per scenario step (the step's own text is always searched too).
   var ALIASES = {
-    fire_01_exit: ['exit', 'lift', 'elevator', 'window', 'alarm', 'escape', 'leave', 'निकास', 'लिफ्ट', 'खिड़की', 'अलार्म', 'बाहर'],
-    fire_02_extinguisher: ['extinguisher', 'co2', 'electrical', 'electric', 'panel', 'water', 'foam', 'अग्निशामक', 'बिजली', 'पानी', 'फोम', 'झाग'],
-    fire_03_smoke: ['smoke', 'crawl', 'corridor', 'breathe', 'धुआँ', 'धुआं', 'धुंआ', 'रेंग', 'गलियारे'],
-    gas_01_zone: ['gas', 'leak', 'zone', 'red', 'smell', 'गैस', 'रिसाव', 'लीक', 'ज़ोन', 'जोन', 'लाल'],
-    gas_02_ppe: ['confined', 'tank', 'pit', 'breathing', 'detector', 'oxygen', 'सीमित', 'टैंक', 'गड्ढा', 'श्वास', 'डिटेक्टर', 'ऑक्सीजन'],
-    gas_03_buddy: ['attendant', 'standby', 'buddy', 'outside', 'watch', 'अटेंडेंट', 'सहायक', 'बाहर', 'साथी']
+    fire_01_exit: ['exit', 'lift', 'elevator', 'window', 'alarm', 'escape', 'leave', 'निकास', 'लिफ्ट', 'खिड़की', 'अलार्म', 'बाहर', 'ᱚᱰᱚᱠ', 'ᱞᱤᱯᱷᱴ', 'ᱡᱷᱚᱨᱠᱟ', 'ᱮᱞᱟᱨᱢ'],
+    fire_02_extinguisher: ['extinguisher', 'co2', 'electrical', 'electric', 'panel', 'water', 'foam', 'अग्निशामक', 'बिजली', 'पानी', 'फोम', 'झाग', 'ᱧᱤᱵᱷᱟᱹᱣ', 'ᱵᱤᱡᱞᱤ', 'ᱯᱷᱚᱢ'],
+    fire_03_smoke: ['smoke', 'crawl', 'corridor', 'breathe', 'धुआँ', 'धुआं', 'धुंआ', 'रेंग', 'गलियारे', 'ᱫᱷᱩᱸᱣᱟᱹ', 'ᱜᱟᱞᱤ'],
+    gas_01_zone: ['gas', 'leak', 'zone', 'red', 'smell', 'गैस', 'रिसाव', 'लीक', 'ज़ोन', 'जोन', 'लाल', 'ᱜᱮᱥ', 'ᱞᱤᱠ', 'ᱡᱚᱱ', 'ᱟᱨᱟᱜ'],
+    gas_02_ppe: ['confined', 'tank', 'pit', 'breathing', 'detector', 'oxygen', 'सीमित', 'टैंक', 'गड्ढा', 'श्वास', 'डिटेक्टर', 'ऑक्सीजन', 'ᱵᱚᱸᱫ', 'ᱴᱮᱝᱠ', 'ᱜᱟᱰᱟ', 'ᱥᱟᱦᱮᱫ', 'ᱰᱤᱴᱮᱠᱴᱚᱨ', 'ᱚᱠᱥᱤᱡᱮᱱ'],
+    gas_03_buddy: ['attendant', 'standby', 'buddy', 'outside', 'watch', 'अटेंडेंट', 'सहायक', 'बाहर', 'साथी', 'ᱮᱴᱮᱱᱰᱮᱱᱴ', 'ᱥᱴᱮᱱᱰᱵᱟᱭ', 'ᱜᱚᱲᱚᱭᱤᱭᱟᱹ']
   };
   var INTENTS = {
-    ppe: ['ppe', 'पीपीई', 'helmet', 'हेलमेट', 'gloves', 'दस्ताने', 'vest', 'जैकेट', 'shoes', 'जूते', 'goggles', 'wear', 'पहन', 'उपकरण'],
-    refresher: ['refresher', 'रिफ्रेशर', 'revise', 'revision', 'recap', 'दोहरा', 'याद'],
-    why: ['fail', 'failed', 'फ़ेल', 'फेल', 'why', 'क्यों', 'mistake', 'गलती', 'गलत'],
-    test: ['test', 'quiz', 'exam', 'drill', 'परीक्षा', 'टेस्ट', 'अभ्यास'],
-    explain: ['explain', 'hazard', 'समझा', 'खतरा', 'खतरे']
+    ppe: ['ppe', 'पीपीई', 'helmet', 'हेलमेट', 'gloves', 'दस्ताने', 'vest', 'जैकेट', 'shoes', 'जूते', 'goggles', 'wear', 'पहन', 'उपकरण', 'ᱦᱮᱞᱢᱮᱴ', 'ᱜᱞᱚᱵᱥ', 'ᱡᱩᱛᱟ', 'ᱯᱤᱸᱫᱷᱮ', 'ᱡᱚᱱᱛᱨᱚ'],
+    refresher: ['refresher', 'रिफ्रेशर', 'revise', 'revision', 'recap', 'दोहरा', 'याद', 'ᱨᱤᱯᱷᱨᱮᱥᱚᱨ'],
+    why: ['fail', 'failed', 'फ़ेल', 'फेल', 'why', 'क्यों', 'mistake', 'गलती', 'गलत', 'ᱯᱷᱮᱞ', 'ᱪᱮᱫᱟᱜ', 'ᱵᱷᱩᱞ'],
+    test: ['test', 'quiz', 'exam', 'drill', 'परीक्षा', 'टेस्ट', 'अभ्यास', 'ᱡᱟᱺᱪ', 'ᱟᱵᱷᱭᱟᱥ'],
+    explain: ['explain', 'hazard', 'समझा', 'खतरा', 'खतरे', 'ᱵᱩᱡᱷᱟᱹᱣ', 'ᱵᱤᱯᱚᱫ']
   };
   var DRILL_SECONDS = 10;
 
@@ -52,7 +52,7 @@
     allSteps().forEach(function (x) {
       var id = x.step.id;
       var hay = [];
-      ['en', lang].forEach(function (l) {
+      (lang === 'sat' ? ['en', 'hi', 'sat'] : ['en', lang]).forEach(function (l) {
         hay.push(SA.i18n.tFor(l, 'scn.' + id + '.prompt'), SA.i18n.tFor(l, 'scn.' + id + '.why'));
         x.step.options.forEach(function (o) { hay.push(SA.i18n.tFor(l, 'scn.' + id + '.opt.' + o)); });
       });
@@ -71,6 +71,7 @@
   function stepCard(t, step) {
     return {
       stepId: step.id,
+      safeKey: 'scn.' + step.id + '.opt.' + step.correct,
       prompt: t('scn.' + step.id + '.prompt'),
       safe: t('scn.' + step.id + '.opt.' + step.correct),
       why: t('scn.' + step.id + '.why')

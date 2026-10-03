@@ -14,6 +14,8 @@ const FILES = [
   'js/data/seed-workers.js',
   'js/i18n/strings.js',
   'js/i18n/ui-strings.js',
+  'js/i18n/santali.js',
+  'js/i18n/santali-audio.js',
   'js/i18n/i18n.js',
   'js/scenario/scoring.js',
   'js/scenario/validator.js',
@@ -23,7 +25,8 @@ const FILES = [
   'js/certificate/certificate.js',
   'js/services/retention.js',
   'js/services/training.js',
-  'js/services/bridge.js'
+  'js/services/bridge.js',
+  'js/services/voice.js'
 ];
 
 function load() {

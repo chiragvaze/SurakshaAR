@@ -81,6 +81,17 @@ One design system across the worker app, the web dashboard and the Unity AR HUD.
 - **Tests:** web 114/114, Unity 26/26, shell 6/6.
 - **Not in the frozen APK:** the frozen SIH release APK below does **not** include the redesign.
 
+## Santali (ᱥᱟᱱᱛᱟᱲᱤ) localisation and offline voice (post-freeze, D-042)
+- **Text:** Santali in **Ol Chiki** covers every worker-app screen (448 keys), the module titles and the AR trainer. All of it is in one reviewable file, `web-app/js/i18n/santali.js`.
+  - The wording is a **provisional draft: native-speaker review PENDING**.
+  - Until a key is reviewed, every safety instruction also shows the Hindi original.
+  - Reviewer sheet: `npm run santali:sheet` → `docs/santali-review.csv`.
+- **Voice:** the offline pre-recorded Santali clip pipeline is built (web + AR, replay, one clip at a time), but **no clips are recorded yet (0/20)**.
+  - In AR, Santali lines are spoken by the **Hindi voice in Hindi, labelled as Hindi voice**. The web screens say the Santali voice isn't recorded yet.
+  - Drop-in steps: `web-app/audio/sat/README.md`.
+- **Management portal:** stays English-only.
+- **Release:** `0.6.0-sat` (versionCode 6). Details: [`docs/SANTALI_LOCALIZATION.md`](docs/SANTALI_LOCALIZATION.md).
+
 ## Release APK (known-good build)
 | | |
 |---|---|
@@ -99,7 +110,7 @@ Install with `adb install app-release.apk`. If a debug build is installed, unins
 ## Known limitations
 - **D-032 (open, deferred until after the hackathon):** on a fresh install, denying the first camera prompt can trigger a native crash in Google's ARCore. The app recovers without data loss, but after a denial AR stays unavailable until the app restarts. **Grant camera permission before launching AR.**
 - **D-034 (open):** inside the APK, the web app's service-worker offline-cache registration fails. It is non-blocking: the app is loaded from the APK itself and works fully offline without it.
-- **Santali** content is mostly the Hindi fallback. No native-speaker-approved Santali safety content exists, so none has been invented (D-018, D-036). **Present the demo in Hindi.**
+- **Santali** (`0.6.0-sat` and later) is a complete but **provisional, unreviewed** Ol Chiki draft, shown with the Hindi original under safety text. **No Santali voice clips are recorded** (AR uses a labelled Hindi voice). The frozen SIH APK has no Santali (D-036). Present the demo in Hindi unless a native speaker has reviewed the text (D-042).
 - **Certificate signing is demo-only** (see the security disclosure below).
 - **ARCore dependency:** needs an ARCore-supported phone with Google Play Services for AR installed. Installing it needs internet once.
 - **Hindi TTS dependency:** without a Hindi text-to-speech voice, AR is text-only.

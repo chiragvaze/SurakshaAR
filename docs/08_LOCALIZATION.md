@@ -26,5 +26,16 @@
   - There is no Santali audio.
   - The fallback stays unchanged, and no translations are to be invented. The demo is presented in Hindi.
 
+## Santali milestone (D-042, 2026-10-03)
+This supersedes the Santali status above. Full details: [`SANTALI_LOCALIZATION.md`](SANTALI_LOCALIZATION.md).
+- Santali uses Ol Chiki and covers every worker-app key (448) plus the module titles, in one reviewable file: `web-app/js/i18n/santali.js`.
+- The wording is a **provisional AI draft**. Every key is `native-review-required`; no native review has happened.
+  - While unreviewed, every safety instruction also shows the Hindi original.
+- **Santali audio:**
+  - Pre-recorded offline clips are mapped by text key in `santali-audio.js` and played on the web and in AR.
+  - **0 of 20 clips are recorded.**
+  - In AR, Santali falls back to the Hindi voice speaking the Hindi text, with a visible "Hindi voice" label. Web screens are text-only.
+- The fallback chain is still `sat -> hi -> en`. The management portal is still English-only (D-040).
+
 ## Future
 The supplied deck discusses additional Jharkhand languages. Those are roadmap scope unless explicitly promoted into the prototype.

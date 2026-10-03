@@ -114,7 +114,9 @@ namespace SurakshaAR.Tests
                 Assert.IsNotEmpty(step.prompt.hi, step.id);
                 Assert.IsNotEmpty(step.why.hi, step.id);
                 Assert.IsTrue(step.optionText.All(t => !string.IsNullOrEmpty(t.hi)), step.id);
-                Assert.AreEqual(step.prompt.hi, step.prompt.Get("sat"), "Santali falls back to Hindi (no fabricated Santali)");
+                // Santali is a provisional draft: present, but flagged for native review (never claimed reviewed).
+                Assert.IsNotEmpty(step.prompt.sat, step.id);
+                Assert.AreNotEqual(LocalizedText.Reviewed, step.prompt.satReview, "no fabricated native review");
             }
         }
     }

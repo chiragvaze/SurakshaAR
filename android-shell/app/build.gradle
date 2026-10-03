@@ -13,8 +13,8 @@ android {
         applicationId 'com.surakshaar.app'
         minSdk 29
         targetSdk 34
-        versionCode 5
-        versionName '0.5.0-ui'
+        versionCode 6
+        versionName '0.6.0-sat'
         ndk { abiFilters 'arm64-v8a' }
     }
 
@@ -55,9 +55,10 @@ android {
         main.assets.srcDirs += "$buildDir/generated/webassets"
     }
 
-    // Same as Unity's exported launcher: keep Unity data files uncompressed.
+    // Same as Unity's exported launcher: keep Unity data files uncompressed. '.ogg' (Santali voice
+    // clips) stays uncompressed so the AR trainer can stream it with AssetManager.openFd().
     aaptOptions {
-        noCompress = ['.unity3d', '.ress', '.resource', '.obb', '.bundle', '.unityexp'] + unityStreamingAssets.tokenize(', ')
+        noCompress = ['.unity3d', '.ress', '.resource', '.obb', '.bundle', '.unityexp', '.ogg'] + unityStreamingAssets.tokenize(', ')
         ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~'
     }
 
@@ -68,9 +69,9 @@ android {
 }
 
 // Copy the unchanged Phase 1 web app into assets/web (single source of truth: ../web-app).
-tasks.register('copyWebApp', Copy) {
+tasks.register('copyWebApp', Sync) {   // Sync: files deleted from web-app are removed from the APK too
     from("$rootDir/../web-app") {
-        include 'index.html', 'sw.js', 'css/**', 'js/**'
+        include 'index.html', 'sw.js', 'css/**', 'js/**', 'audio/**/*.ogg'
     }
     into "$buildDir/generated/webassets/web"
 }

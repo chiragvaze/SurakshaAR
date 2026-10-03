@@ -172,7 +172,7 @@
           h('p', { class: 'page__sub' }, t('home.ready')),
           h('p', { class: 'worker-head__id tabular' }, t('home.workerId', { id: w.id }))),
         h('a', { class: 'home-head__avatar', href: '#/me', 'aria-label': t('tab.me') }, ui.avatar(w.name, { size: 'md', seed: w.id }))),
-      ctx.lang === 'sat' ? ui.notice(t('sat.notice'), 'info') : null,
+      ctx.lang === 'sat' ? ui.notice([t('sat.notice'), h('span', { class: 'sat-ref', lang: 'hi' }, SA.i18n.tFor('hi', 'sat.notice'))], 'info', { id: 'sat-notice' }) : null,
       safetyStatus(ctx, nowMs),
       continueCard(ctx),
       quickActions(ctx),

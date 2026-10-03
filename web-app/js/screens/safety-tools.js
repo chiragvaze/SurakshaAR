@@ -19,7 +19,7 @@
 
   function fmtTime(ms, lang) {
     try {
-      return new Date(ms).toLocaleString(lang === 'en' ? 'en-IN' : 'hi-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      return new Date(ms).toLocaleString(SA.i18n.locale(lang), { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
     } catch (e) { return new Date(ms).toISOString().slice(0, 16).replace('T', ' '); }
   }
 

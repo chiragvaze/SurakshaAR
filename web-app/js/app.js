@@ -80,12 +80,19 @@
     return null;
   }
 
+  var lastRouteKey = null;
+
   function render(opts) {
     opts = opts || {};
     var state = SA.store.get();
     var route = parseHash(root.location.hash);
     var target = guard(route, state);
     if (target) { redirect(target); return; }
+
+    // A new screen never inherits the previous screen's voice clip (re-renders keep it).
+    var routeKey = route.name + '/' + (route.param || '');
+    if (routeKey !== lastRouteKey && SA.voice) SA.voice.stop();
+    lastRouteKey = routeKey;
 
     var lang = SA.i18n.setLanguage(currentLang(state));
     var ctx = {
